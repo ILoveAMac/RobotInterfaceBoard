@@ -51,7 +51,7 @@ cv::Mat aiHelperUtils::drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<
         int y2 = static_cast<int>(y_center + h / 2.0);
 
         // Draw the bounding box on the image
-        cv::rectangle(image, cv::Point(x1, y1), cv::Point(x2, y2), cv::Scalar(0, 255, 0), 2);
+        cv::rectangle(frame, cv::Point(x1, y1), cv::Point(x2, y2), cv::Scalar(0, 255, 0), 2);
 
         // Convert confidence to string and format it
         std::string label = cv::format("%.2f", c);
@@ -63,11 +63,11 @@ cv::Mat aiHelperUtils::drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<
         int label_y = std::max(y1 - label_size.height, 0);  // Display above the box
 
         // Draw the label background rectangle
-        cv::rectangle(image, cv::Point(label_x, label_y), cv::Point(label_x + label_size.width, label_y + label_size.height + baseline),
+        cv::rectangle(frame, cv::Point(label_x, label_y), cv::Point(label_x + label_size.width, label_y + label_size.height + baseline),
                       cv::Scalar(0, 255, 0), cv::FILLED);
 
         // Put the confidence text on the image
-        cv::putText(image, label, cv::Point(label_x, label_y + label_size.height),
+        cv::putText(frame, label, cv::Point(label_x, label_y + label_size.height),
                     cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0), 1);
     }
 
