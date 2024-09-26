@@ -1,4 +1,4 @@
-#include "yolo.h"
+#include "yolo.cuh"
 
 yolo::yolo(const std::string& modelPath) {
     this->mlh = ModelLoadingHelper(modelPath);
