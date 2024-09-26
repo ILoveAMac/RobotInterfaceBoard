@@ -18,6 +18,7 @@ add_executable(YOLO_CUDA
     serialHelper.cpp        # C++ source files
     positionController.cpp
     aiHelperUtils.cpp
+    yolo.cpp
 )
 
 # Enable separable compilation for CUDA
