@@ -86,21 +86,6 @@ void drawBoundingBoxes(cv::Mat &image, const float *output, const int grid_size,
 
 int main()
 {
-
-    serialHelper serial("/dev/ttyUSB0", 9600);
-
-    // Create a position controller
-    positionController controller(0.5, 10, 0.1, 0.05);
-
-    // Set the goal position
-    controller.setGoal(0, 0, 0);
-
-    // reset the position of the robot
-    serial.resetPosition();
-
-    // request poop pickup
-    serial.requestAndWaitForPoopPickup();
-
     const auto MLH = ModelLoadingHelper("/home/wihan/model/");
     std::vector<Layer *> model;
 
@@ -249,7 +234,7 @@ int main()
         // Draw the bounding boxes using the copied output
         // Convert image back to BGR for OpenCV display
         cv::cvtColor(resized_frame, resized_frame, cv::COLOR_RGB2BGR);
-        drawBoundingBoxes(resized_frame, host_output, 7, 2, 448, 448);
+        // drawBoundingBoxes(resized_frame, host_output, 7, 2, 448, 448);
 
         // Display the image
         cv::imshow("Detection", resized_frame);
