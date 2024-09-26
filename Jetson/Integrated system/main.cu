@@ -24,62 +24,6 @@
 #include "positionController.h"
 #include "serialHelper.h"
 
-void drawBoundingBoxes(cv::Mat &image, const float *output, const int grid_size, const int num_bboxes, const int img_width, const int img_height) {
-    const int S = grid_size;   // 7x7 grid in YOLOv1
-    const int B = num_bboxes;  // Number of bounding boxes per grid cell, typically 2
-
-    for (int i = 0; i < S; i++) {
-        for (int j = 0; j < S; j++) {
-            for (int b = 0; b < B; b++) {  // Loop over each bounding box in the cell
-                // Calculate the starting index for the current bounding box (5 values per bounding box)
-                const int index = (i * S + j) * (5 * B) + b * 5;
-
-                // Get confidence score for the current bounding box
-                float confidence = output[index + 4];
-
-                // If there's an object (skip low-confidence boxes)
-                if (confidence > 0.57) {
-                    // Extract x, y, width, height from the output
-                    float x_offset = output[index];            // x relative to the grid cell
-                    float y_offset = output[index + 1];        // y relative to the grid cell
-                    float w = output[index + 2] * img_width;   // Width relative to image size
-                    float h = output[index + 3] * img_height;  // Height relative to image size
-
-                    // Convert cell-relative x and y to absolute coordinates in the image
-                    float x_center = (j + x_offset) * (img_width / S);   // Absolute x-center
-                    float y_center = (i + y_offset) * (img_height / S);  // Absolute y-center
-
-                    // Calculate the top-left and bottom-right points of the bounding box
-                    int x1 = static_cast<int>(x_center - w / 2);
-                    int y1 = static_cast<int>(y_center - h / 2);
-                    int x2 = static_cast<int>(x_center + w / 2);
-                    int y2 = static_cast<int>(y_center + h / 2);
-
-                    // Draw the bounding box on the image
-                    cv::rectangle(image, cv::Point(x1, y1), cv::Point(x2, y2), cv::Scalar(0, 255, 0), 2);
-
-                    // Convert confidence to string and format it
-                    std::string label = cv::format("%.2f", confidence);
-
-                    // Set the position for the confidence label (above the top-left corner of the bounding box)
-                    int baseline = 0;
-                    cv::Size label_size = cv::getTextSize(label, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseline);
-                    int label_x = std::max(x1, 0);                      // Ensure the label is inside the image boundaries
-                    int label_y = std::max(y1 - label_size.height, 0);  // Display above the box
-
-                    // Draw the label background rectangle
-                    cv::rectangle(image, cv::Point(label_x, label_y), cv::Point(label_x + label_size.width, label_y + label_size.height + baseline),
-                                  cv::Scalar(0, 255, 0), cv::FILLED);
-
-                    // Put the confidence text on the image
-                    cv::putText(image, label, cv::Point(label_x, label_y + label_size.height),
-                                cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0), 1);
-                }
-            }
-        }
-    }
-}
-
 int main() {
     const auto MLH = ModelLoadingHelper("/home/wihan/model/");
     std::vector<Layer *> model;
@@ -223,7 +167,6 @@ int main() {
         // Draw the bounding boxes using the copied output
         // Convert image back to BGR for OpenCV display
         cv::cvtColor(resized_frame, resized_frame, cv::COLOR_RGB2BGR);
-        // drawBoundingBoxes(resized_frame, host_output, 7, 2, 448, 448);
 
         // Get the bounding boxes
         std::vector<std::vector<float>> bboxes = aiHelper.getFinalBoundingBoxes(host_output);
