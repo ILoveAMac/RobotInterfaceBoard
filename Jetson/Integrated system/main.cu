@@ -23,7 +23,7 @@
 #include "aiHelperUtils.h"
 #include "positionController.h"
 #include "serialHelper.h"
-#include "yolo.h"
+#include "yolo.cuh"
 
 int main() {
     // const auto MLH = ModelLoadingHelper("/home/wihan/model/");
