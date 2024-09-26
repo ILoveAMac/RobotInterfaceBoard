@@ -23,10 +23,11 @@
 #include "aiHelperUtils.h"
 #include "positionController.h"
 #include "serialHelper.h"
+#include "yolo.h"
 
 int main() {
-    const auto MLH = ModelLoadingHelper("/home/wihan/model/");
-    std::vector<Layer *> model;
+    // const auto MLH = ModelLoadingHelper("/home/wihan/model/");
+    // std::vector<Layer *> model;
 
     // Initialize VideoCapture with default camera (index 0)
     cv::VideoCapture cap(0);
@@ -71,35 +72,35 @@ int main() {
     // model.push_back(new FullyConnected(128 * 7 * 7, 512, MLH, "1", true));
     // model.push_back(new FullyConnected(512, 7 * 7 * 2 * 5, MLH, "4", false));
 
-    model.push_back(new Conv2D(5, 32, 2, 2, "0", MLH, 224, 224, 32, 448, 448, 3));
-    model.push_back(new MaxPool2D(224, 224, 32, 112, 112, 32));
-    model.push_back(new Conv2D(3, 64, 1, 1, "2", MLH, 112, 112, 64, 112, 112, 32));
-    model.push_back(new MaxPool2D(112, 112, 64, 56, 56, 64));
-    model.push_back(new Conv2D(1, 64, 1, 0, "4", MLH, 56, 56, 64, 56, 56, 64));
-    model.push_back(new Conv2D(3, 128, 1, 1, "5", MLH, 56, 56, 128, 56, 56, 64));
-    model.push_back(new Conv2D(1, 128, 1, 0, "6", MLH, 56, 56, 128, 56, 56, 128));
-    model.push_back(new Conv2D(3, 256, 1, 1, "7", MLH, 56, 56, 256, 56, 56, 128));
-    model.push_back(new MaxPool2D(56, 56, 256, 28, 28, 256));
-    model.push_back(new Conv2D(1, 128, 1, 0, "9", MLH, 28, 28, 128, 28, 28, 256));
-    model.push_back(new Conv2D(3, 256, 1, 1, "10", MLH, 28, 28, 256, 28, 28, 128));
-    model.push_back(new Conv2D(1, 256, 1, 0, "11", MLH, 28, 28, 256, 28, 28, 256));
-    model.push_back(new Conv2D(3, 256, 1, 1, "12", MLH, 28, 28, 256, 28, 28, 256));
-    model.push_back(new MaxPool2D(28, 28, 256, 14, 14, 256));
-    model.push_back(new Conv2D(1, 256, 1, 0, "14", MLH, 14, 14, 256, 14, 14, 256));
-    model.push_back(new Conv2D(3, 256, 1, 1, "15", MLH, 14, 14, 256, 14, 14, 256));
-    model.push_back(new Conv2D(3, 256, 2, 1, "16", MLH, 7, 7, 256, 14, 14, 256));
-    model.push_back(new Conv2D(3, 64, 1, 1, "17", MLH, 7, 7, 64, 7, 7, 256));
-    // Fully connected layers
-    model.push_back(new FullyConnected(64 * 7 * 7, 512, MLH, "1", true));
-    model.push_back(new FullyConnected(512, 7 * 7 * 2 * 5, MLH, "4", false));
+    // model.push_back(new Conv2D(5, 32, 2, 2, "0", MLH, 224, 224, 32, 448, 448, 3));
+    // model.push_back(new MaxPool2D(224, 224, 32, 112, 112, 32));
+    // model.push_back(new Conv2D(3, 64, 1, 1, "2", MLH, 112, 112, 64, 112, 112, 32));
+    // model.push_back(new MaxPool2D(112, 112, 64, 56, 56, 64));
+    // model.push_back(new Conv2D(1, 64, 1, 0, "4", MLH, 56, 56, 64, 56, 56, 64));
+    // model.push_back(new Conv2D(3, 128, 1, 1, "5", MLH, 56, 56, 128, 56, 56, 64));
+    // model.push_back(new Conv2D(1, 128, 1, 0, "6", MLH, 56, 56, 128, 56, 56, 128));
+    // model.push_back(new Conv2D(3, 256, 1, 1, "7", MLH, 56, 56, 256, 56, 56, 128));
+    // model.push_back(new MaxPool2D(56, 56, 256, 28, 28, 256));
+    // model.push_back(new Conv2D(1, 128, 1, 0, "9", MLH, 28, 28, 128, 28, 28, 256));
+    // model.push_back(new Conv2D(3, 256, 1, 1, "10", MLH, 28, 28, 256, 28, 28, 128));
+    // model.push_back(new Conv2D(1, 256, 1, 0, "11", MLH, 28, 28, 256, 28, 28, 256));
+    // model.push_back(new Conv2D(3, 256, 1, 1, "12", MLH, 28, 28, 256, 28, 28, 256));
+    // model.push_back(new MaxPool2D(28, 28, 256, 14, 14, 256));
+    // model.push_back(new Conv2D(1, 256, 1, 0, "14", MLH, 14, 14, 256, 14, 14, 256));
+    // model.push_back(new Conv2D(3, 256, 1, 1, "15", MLH, 14, 14, 256, 14, 14, 256));
+    // model.push_back(new Conv2D(3, 256, 2, 1, "16", MLH, 7, 7, 256, 14, 14, 256));
+    // model.push_back(new Conv2D(3, 64, 1, 1, "17", MLH, 7, 7, 64, 7, 7, 256));
+    // // Fully connected layers
+    // model.push_back(new FullyConnected(64 * 7 * 7, 512, MLH, "1", true));
+    // model.push_back(new FullyConnected(512, 7 * 7 * 2 * 5, MLH, "4", false));
 
-    // Load model weights
-    for (const auto layer : model) {
-        layer->loadData();
-    }
+    // // Load model weights
+    // for (const auto layer : model) {
+    //     layer->loadData();
+    // }
 
     // Allocate host memory for output (assuming output size is 7x7x10)
-    auto host_output = static_cast<float *>(malloc(7 * 7 * 10 * sizeof(float)));
+    // auto host_output = static_cast<float *>(malloc(7 * 7 * 10 * sizeof(float)));
 
     // Create a window to display the results
     cv::namedWindow("Detection", cv::WINDOW_AUTOSIZE);
@@ -107,6 +108,8 @@ int main() {
     int image_counter = 0;
 
     aiHelperUtils aiHelper;
+
+    yolo yolo("/home/wihan/model/");
 
     // Main loop
     while (true) {
@@ -143,33 +146,33 @@ int main() {
         // Transfer the data from host memory to the GPU memory (device)
         cudaMemcpy(input_image, host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
 
-        // ===== Forward Propagation =====
-        float *input = input_image;  // Input to the first layer
-        float *output = nullptr;     // Placeholder for the output
+        // // ===== Forward Propagation =====
+        // float *input = input_image;  // Input to the first layer
+        // float *output = nullptr;     // Placeholder for the output
 
-        // Record the start time
-        auto start = std::chrono::high_resolution_clock::now();
+        // // Record the start time
+        // auto start = std::chrono::high_resolution_clock::now();
 
-        for (const auto &layer : model) {
-            output = layer->forward(input);  // Perform forward propagation through each layer
-            input = output;                  // Set output of the current layer as the input to the next layer
-            cudaDeviceSynchronize();
-        }
+        // for (const auto &layer : model) {
+        //     output = layer->forward(input);  // Perform forward propagation through each layer
+        //     input = output;                  // Set output of the current layer as the input to the next layer
+        //     cudaDeviceSynchronize();
+        // }
 
-        // Record the end time
-        auto end = std::chrono::high_resolution_clock::now();
-        const std::chrono::duration<double> duration = end - start;
-        std::cout << "Time taken for forward pass: " << duration.count() << " seconds" << std::endl;
+        // // Record the end time
+        // auto end = std::chrono::high_resolution_clock::now();
+        // const std::chrono::duration<double> duration = end - start;
+        // std::cout << "Time taken for forward pass: " << duration.count() << " seconds" << std::endl;
 
-        // Copy the data from GPU to CPU
-        cudaMemcpy(host_output, output, 7 * 7 * 10 * sizeof(float), cudaMemcpyDeviceToHost);
+        // // Copy the data from GPU to CPU
+        // cudaMemcpy(host_output, output, 7 * 7 * 10 * sizeof(float), cudaMemcpyDeviceToHost);
 
         // Draw the bounding boxes using the copied output
         // Convert image back to BGR for OpenCV display
         cv::cvtColor(resized_frame, resized_frame, cv::COLOR_RGB2BGR);
 
         // Get the bounding boxes
-        std::vector<std::vector<float>> bboxes = aiHelper.getFinalBoundingBoxes(host_output);
+        std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
         // Draw the bounding boxes
         resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
 
