@@ -1,0 +1,2 @@
+#pragma code_page(65001)
+1 /* CREATEPROCESS_MANIFEST_RESOURCE_ID */ 24 /* RT_MANIFEST */ "D:/Documents/Uni Repos/PoopRobotJetson/YOLO_CUDA/cmake-build-debug/CMakeFiles/YOLO_CUDA.dir/embed.manifest"

@@ -1,0 +1,454 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineSystem.cmake:205 (message)"
+      - "CMakeLists.txt:24 (project)"
+    message: |
+      The system is: Windows - 10.0.19045 - AMD64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCompilerId.cmake:1165 (message)"
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCUDACompiler.cmake:75 (CMAKE_DETERMINE_COMPILER_ID_VENDOR)"
+      - "CMakeLists.txt:24 (project)"
+    message: |
+      Checking whether the CUDA compiler is NVIDIA using "" matched "nvcc: NVIDIA \\(R\\) Cuda compiler driver":
+      nvcc: NVIDIA (R) Cuda compiler driver
+      Copyright (c) 2005-2024 NVIDIA Corporation
+      Built on Wed_Aug_14_10:26:51_Pacific_Daylight_Time_2024
+      Cuda compilation tools, release 12.6, V12.6.68
+      Build cuda_12.6.r12.6/compiler.34714021_0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCompilerId.cmake:53 (__determine_compiler_id_test)"
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCUDACompiler.cmake:131 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:24 (project)"
+    message: |
+      Compiling the CUDA compiler identification source file "CMakeCUDACompilerId.cu" succeeded.
+      Compiler: C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/nvcc.exe 
+      Build flags: 
+      Id flags: --keep;--keep-dir;tmp -v
+      
+      The output was:
+      0
+      
+      D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA>call "E:/VisualStudio/VC/Tools/MSVC/14.41.34120/bin/HostX64/x64/../../../../../../../VC/Auxiliary/Build/vcvars64.bat" 
+      **********************************************************************
+      ** Visual Studio 2022 Developer Command Prompt v17.11.2
+      ** Copyright (c) 2022 Microsoft Corporation
+      **********************************************************************
+      [vcvarsall.bat] Environment initialized for: 'x64'
+      #$ E:/VisualStudio/VC/Tools/MSVC/14.41.34120/bin/HostX64/x64/../../../../../../../VC/Auxiliary/Build/vcvars64.bat
+      #$ ALLUSERSPROFILE=C:\\ProgramData
+      #$ AMDRMPATH=C:\\Program Files\\AMD\\RyzenMaster\\
+      #$ AMDRMSDKPATH=C:\\Program Files\\AMD\\RyzenMasterSDK\\
+      #$ APPDATA=C:\\Users\\Wihan\\AppData\\Roaming
+      #$ CDS_HOME=C:\\cds_spb_home
+      #$ ChocolateyInstall=C:\\ProgramData\\chocolatey
+      #$ ChocolateyLastPathUpdate=132904559020174499
+      #$ ChocolateyToolsLocation=C:\\tools
+      #$ CLion=C:\\Program Files\\JetBrains\\CLion 2024.2.0.1\\bin;
+      #$ CLION_IDE=TRUE
+      #$ CMAKE_COLOR_DIAGNOSTICS=ON
+      #$ CommandPromptType=Native
+      #$ CommonProgramFiles=C:\\Program Files\\Common Files
+      #$ CommonProgramFiles(x86)=C:\\Program Files (x86)\\Common Files
+      #$ CommonProgramW6432=C:\\Program Files\\Common Files
+      #$ COMPUTERNAME=DESKTOP-WIHAN
+      #$ ComSpec=C:\\Windows\\system32\\cmd.exe
+      #$ CUDA_PATH=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6
+      #$ CUDA_PATH_V12_6=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6
+      #$ DevEnvDir=E:\\VisualStudio\\Common7\\IDE\\
+      #$ DriverData=C:\\Windows\\System32\\Drivers\\DriverData
+      #$ ExtensionSdkDir=C:\\Program Files (x86)\\Microsoft SDKs\\Windows Kits\\10\\ExtensionSDKs
+      #$ EXTERNAL_INCLUDE=E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\include;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\ATLMFC\\include;E:\\VisualStudio\\VC\\Auxiliary\\VS\\include;C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.22621.0\\ucrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\um;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\shared;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\winrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\cppwinrt;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\include;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\ATLMFC\\include;E:\\VisualStudio\\VC\\Auxiliary\\VS\\include;C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.22621.0\\ucrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\um;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\shared;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\winrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\cppwinrt
+      #$ FPS_BROWSER_APP_PROFILE_STRING=Internet Explorer
+      #$ FPS_BROWSER_USER_PROFILE_STRING=Default
+      #$ Framework40Version=v4.0
+      #$ FrameworkDir=C:\\Windows\\Microsoft.NET\\Framework64\\
+      #$ FrameworkDir64=C:\\Windows\\Microsoft.NET\\Framework64\\
+      #$ FrameworkVersion=v4.0.30319
+      #$ FrameworkVersion64=v4.0.30319
+      #$ HOMEDRIVE=C:
+      #$ HOMEPATH=\\Users\\Wihan
+      #$ INCLUDE=E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\include;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\ATLMFC\\include;E:\\VisualStudio\\VC\\Auxiliary\\VS\\include;C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.22621.0\\ucrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\um;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\shared;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\winrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\cppwinrt;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\include;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\ATLMFC\\include;E:\\VisualStudio\\VC\\Auxiliary\\VS\\include;C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.22621.0\\ucrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\um;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\shared;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\winrt;C:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22621.0\\\\cppwinrt
+      #$ JAVA_HOME=C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.2.8-hotspot\\
+      #$ JETBRAINS_IDE=TRUE
+      #$ LIB=E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\ATLMFC\\lib\\x64;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\lib\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\lib\\10.0.22621.0\\ucrt\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\\\lib\\10.0.22621.0\\\\um\\x64;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\ATLMFC\\lib\\x64;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\lib\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\lib\\10.0.22621.0\\ucrt\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\\\lib\\10.0.22621.0\\\\um\\x64
+      #$ LIBPATH=E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\ATLMFC\\lib\\x64;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\lib\\x64;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\lib\\x86\\store\\references;C:\\Program Files (x86)\\Windows Kits\\10\\UnionMetadata\\10.0.22621.0;C:\\Program Files (x86)\\Windows Kits\\10\\References\\10.0.22621.0;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\ATLMFC\\lib\\x64;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\lib\\x64;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\lib\\x86\\store\\references;C:\\Program Files (x86)\\Windows Kits\\10\\UnionMetadata\\10.0.22621.0;C:\\Program Files (x86)\\Windows Kits\\10\\References\\10.0.22621.0;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319
+      #$ LOCALAPPDATA=C:\\Users\\Wihan\\AppData\\Local
+      #$ LOGONSERVER=\\\\DESKTOP-WIHAN
+      #$ NUMBER_OF_PROCESSORS=16
+      #$ OneDrive=D:\\OneDrive - University of Pretoria
+      #$ OneDriveCommercial=D:\\OneDrive - University of Pretoria
+      #$ OneDriveConsumer=D:\\OneDrive
+      #$ OS=Windows_NT
+      #$ Path=E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\HostX64\\x64;E:\\VisualStudio\\Common7\\IDE\\VC\\VCPackages;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer;E:\\VisualStudio\\MSBuild\\Current\\bin\\Roslyn;E:\\VisualStudio\\Team Tools\\DiagnosticsHub\\Collector;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64;E:\\VisualStudio\\\\MSBuild\\Current\\Bin\\amd64;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319;E:\\VisualStudio\\Common7\\IDE\\;E:\\VisualStudio\\Common7\\Tools\\;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\HostX64\\x64;E:\\VisualStudio\\Common7\\IDE\\VC\\VCPackages;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer;E:\\VisualStudio\\MSBuild\\Current\\bin\\Roslyn;E:\\VisualStudio\\Team Tools\\DiagnosticsHub\\Collector;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64;E:\\VisualStudio\\\\MSBuild\\Current\\Bin\\amd64;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319;E:\\VisualStudio\\Common7\\IDE\\;E:\\VisualStudio\\Common7\\Tools\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\bin;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\libnvvp;C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.2.8-hotspot\\bin;C:\\Program Files\\Common Files\\Oracle\\Java\\javapath;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\MinGW\\bin;C:\\ProgramData\\chocolatey\\bin;C:\\tools\\BCURRAN3;C:\\Program Files\\dotnet\\;C:\\Program Files (x86)\\dotnet\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C;E:\\Matlab\\bin;D:\\texlive\\2023\\bin\\windows;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2024.3.1\\;C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\;C:\\opencv\\build\\x64\\vc16\\bin;C:\\Users\\Wihan\\AppData\\Local\\JSONBuddy;C:\\Users\\Wihan\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Wihan\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Program Files\\Oracle\\VirtualBox;C:\\Users\\RajaRama\\Anaconda3\\Scripts;C:\\Users\\RajaRama\\Anaconda3;C:\\Users\\RajaRama\\Anaconda3\\Library\\bin;C:\\Users\\Wihan\\AppData\\Local\\gitkraken\\bin;C:\\Users\\Wihan\\AppData\\Local\\GitHubDesktop\\bin;C:\\Program Files\\JetBrains\\CLion 2024.2.0.1\\bin;;D:\\texlive\\2023\\bin\\windows;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja;E:\\VisualStudio\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe;E:\\VisualStudio\\VC\\vcpkg;E:\\CLion\\CLion 2024.2.1\\bin\\ninja\\win\\x64;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja;E:\\VisualStudio\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe;E:\\VisualStudio\\VC\\vcpkg
+      #$ PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+      #$ Platform=x64
+      #$ PROCESSOR_ARCHITECTURE=AMD64
+      #$ PROCESSOR_IDENTIFIER=AMD64 Family 23 Model 1 Stepping 1, AuthenticAMD
+      #$ PROCESSOR_LEVEL=23
+      #$ PROCESSOR_REVISION=0101
+      #$ ProgramData=C:\\ProgramData
+      #$ ProgramFiles=C:\\Program Files
+      #$ ProgramFiles(x86)=C:\\Program Files (x86)
+      #$ ProgramW6432=C:\\Program Files
+      #$ PROMPT=$P$G
+      #$ PSModulePath=C:\\Program Files\\WindowsPowerShell\\Modules;C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules;C:\\Program Files\\Intel\\Wired Networking\\
+      #$ PUBLIC=C:\\Users\\Public
+      #$ QSYS_ROOTDIR=E:\\Quartus\\quartus\\sopc_builder\\bin
+      #$ QUARTUS_ROOTDIR=E:\\Quartus\\quartus
+      #$ SESSIONNAME=Console
+      #$ SOPC_KIT_NIOS2=E:\\Quartus\\nios2eds
+      #$ STM32_PRG_PATH=C:\\Program Files\\STMicroelectronics\\STM32Cube\\STM32CubeProgrammer\\bin
+      #$ SystemDrive=C:
+      #$ SystemRoot=C:\\Windows
+      #$ UCRTVersion=10.0.22621.0
+      #$ UniversalCRTSdkDir=C:\\Program Files (x86)\\Windows Kits\\10\\
+      #$ USERDOMAIN=DESKTOP-WIHAN
+      #$ USERDOMAIN_ROAMINGPROFILE=DESKTOP-WIHAN
+      #$ USERNAME=Wihan
+      #$ USERPROFILE=C:\\Users\\Wihan
+      #$ VBOX_HWVIRTEX_IGNORE_SVM_IN_USE=1
+      #$ VCIDEInstallDir=E:\\VisualStudio\\Common7\\IDE\\VC\\
+      #$ VCINSTALLDIR=E:\\VisualStudio\\VC\\
+      #$ VCPKG_ROOT=E:\\VisualStudio\\VC\\vcpkg
+      #$ VCToolsInstallDir=E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\
+      #$ VCToolsRedistDir=E:\\VisualStudio\\VC\\Redist\\MSVC\\14.40.33807\\
+      #$ VCToolsVersion=14.41.34120
+      #$ VisualStudioVersion=17.0
+      #$ VS170COMNTOOLS=E:\\VisualStudio\\Common7\\Tools\\
+      #$ VSCMD_ARG_app_plat=Desktop
+      #$ VSCMD_ARG_HOST_ARCH=x64
+      #$ VSCMD_ARG_TGT_ARCH=x64
+      #$ VSCMD_DEBUG=
+      #$ VSCMD_SKIP_SENDTELEMETRY=1
+      #$ VSCMD_VER=17.11.2
+      #$ vsconsoleoutput=1
+      #$ VSINSTALLDIR=E:\\VisualStudio\\
+      #$ windir=C:\\Windows
+      #$ WindowsLibPath=C:\\Program Files (x86)\\Windows Kits\\10\\UnionMetadata\\10.0.22621.0;C:\\Program Files (x86)\\Windows Kits\\10\\References\\10.0.22621.0
+      #$ WindowsSdkBinPath=C:\\Program Files (x86)\\Windows Kits\\10\\bin\\
+      #$ WindowsSdkDir=C:\\Program Files (x86)\\Windows Kits\\10\\
+      #$ WindowsSDKLibVersion=10.0.22621.0\\
+      #$ WindowsSdkVerBinPath=C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\
+      #$ WindowsSDKVersion=10.0.22621.0\\
+      #$ __DOTNET_ADD_64BIT=1
+      #$ __DOTNET_PREFERRED_BITNESS=64
+      #$ __VSCMD_PREINIT_PATH=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\bin;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\libnvvp;C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.2.8-hotspot\\bin;C:\\Program Files\\Common Files\\Oracle\\Java\\javapath;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\MinGW\\bin;C:\\ProgramData\\chocolatey\\bin;C:\\tools\\BCURRAN3;C:\\Program Files\\dotnet\\;C:\\Program Files (x86)\\dotnet\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C;E:\\Matlab\\bin;D:\\texlive\\2023\\bin\\windows;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2024.3.1\\;C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\;C:\\opencv\\build\\x64\\vc16\\bin;C:\\Users\\Wihan\\AppData\\Local\\JSONBuddy;C:\\Users\\Wihan\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Wihan\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Program Files\\Oracle\\VirtualBox;C:\\Users\\RajaRama\\Anaconda3\\Scripts;C:\\Users\\RajaRama\\Anaconda3;C:\\Users\\RajaRama\\Anaconda3\\Library\\bin;C:\\Users\\Wihan\\AppData\\Local\\gitkraken\\bin;C:\\Users\\Wihan\\AppData\\Local\\GitHubDesktop\\bin;C:\\Program Files\\JetBrains\\CLion 2024.2.0.1\\bin;;D:\\texlive\\2023\\bin\\windows
+      #$ __VSCMD_PREINIT_VCToolsVersion=14.41.34120
+      #$ __VSCMD_PREINIT_VS170COMNTOOLS=E:\\VisualStudio\\Common7\\Tools\\
+      #$ PATH=E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\HostX64\\x64;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\HostX64\\x64;E:\\VisualStudio\\Common7\\IDE\\VC\\VCPackages;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer;E:\\VisualStudio\\MSBuild\\Current\\bin\\Roslyn;E:\\VisualStudio\\Team Tools\\DiagnosticsHub\\Collector;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64;E:\\VisualStudio\\\\MSBuild\\Current\\Bin\\amd64;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319;E:\\VisualStudio\\Common7\\IDE\\;E:\\VisualStudio\\Common7\\Tools\\;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\HostX64\\x64;E:\\VisualStudio\\Common7\\IDE\\VC\\VCPackages;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer;E:\\VisualStudio\\MSBuild\\Current\\bin\\Roslyn;E:\\VisualStudio\\Team Tools\\DiagnosticsHub\\Collector;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64;E:\\VisualStudio\\\\MSBuild\\Current\\Bin\\amd64;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319;E:\\VisualStudio\\Common7\\IDE\\;E:\\VisualStudio\\Common7\\Tools\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\bin;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\libnvvp;C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.2.8-hotspot\\bin;C:\\Program Files\\Common Files\\Oracle\\Java\\javapath;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\MinGW\\bin;C:\\ProgramData\\chocolatey\\bin;C:\\tools\\BCURRAN3;C:\\Program Files\\dotnet\\;C:\\Program Files (x86)\\dotnet\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C;E:\\Matlab\\bin;D:\\texlive\\2023\\bin\\windows;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2024.3.1\\;C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\;C:\\opencv\\build\\x64\\vc16\\bin;C:\\Users\\Wihan\\AppData\\Local\\JSONBuddy;C:\\Users\\Wihan\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Wihan\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Program Files\\Oracle\\VirtualBox;C:\\Users\\RajaRama\\Anaconda3\\Scripts;C:\\Users\\RajaRama\\Anaconda3;C:\\Users\\RajaRama\\Anaconda3\\Library\\bin;C:\\Users\\Wihan\\AppData\\Local\\gitkraken\\bin;C:\\Users\\Wihan\\AppData\\Local\\GitHubDesktop\\bin;C:\\Program Files\\JetBrains\\CLion 2024.2.0.1\\bin;;D:\\texlive\\2023\\bin\\windows;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja;E:\\VisualStudio\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe;E:\\VisualStudio\\VC\\vcpkg;E:\\CLion\\CLion 2024.2.1\\bin\\ninja\\win\\x64;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja;E:\\VisualStudio\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe;E:\\VisualStudio\\VC\\vcpkg
+      #$ _NVVM_BRANCH_=nvvm
+      #$ _SPACE_= 
+      #$ _CUDART_=cudart
+      #$ _HERE_=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin
+      #$ _THERE_=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin
+      #$ _TARGET_SIZE_=
+      #$ _TARGET_DIR_=
+      #$ _TARGET_SIZE_=64
+      #$ _WIN_PLATFORM_=x64
+      #$ TOP=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/..
+      #$ CICC_PATH=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../nvvm/bin
+      #$ NVVMIR_LIBRARY_DIR=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../nvvm/libdevice
+      #$ PATH=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../nvvm/bin;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\HostX64\\x64;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\HostX64\\x64;E:\\VisualStudio\\Common7\\IDE\\VC\\VCPackages;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer;E:\\VisualStudio\\MSBuild\\Current\\bin\\Roslyn;E:\\VisualStudio\\Team Tools\\DiagnosticsHub\\Collector;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64;E:\\VisualStudio\\\\MSBuild\\Current\\Bin\\amd64;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319;E:\\VisualStudio\\Common7\\IDE\\;E:\\VisualStudio\\Common7\\Tools\\;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\HostX64\\x64;E:\\VisualStudio\\Common7\\IDE\\VC\\VCPackages;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer;E:\\VisualStudio\\MSBuild\\Current\\bin\\Roslyn;E:\\VisualStudio\\Team Tools\\DiagnosticsHub\\Collector;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64;E:\\VisualStudio\\\\MSBuild\\Current\\Bin\\amd64;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319;E:\\VisualStudio\\Common7\\IDE\\;E:\\VisualStudio\\Common7\\Tools\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\bin;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\libnvvp;C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.2.8-hotspot\\bin;C:\\Program Files\\Common Files\\Oracle\\Java\\javapath;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\MinGW\\bin;C:\\ProgramData\\chocolatey\\bin;C:\\tools\\BCURRAN3;C:\\Program Files\\dotnet\\;C:\\Program Files (x86)\\dotnet\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C;E:\\Matlab\\bin;D:\\texlive\\2023\\bin\\windows;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2024.3.1\\;C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\;C:\\opencv\\build\\x64\\vc16\\bin;C:\\Users\\Wihan\\AppData\\Local\\JSONBuddy;C:\\Users\\Wihan\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Wihan\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Program Files\\Oracle\\VirtualBox;C:\\Users\\RajaRama\\Anaconda3\\Scripts;C:\\Users\\RajaRama\\Anaconda3;C:\\Users\\RajaRama\\Anaconda3\\Library\\bin;C:\\Users\\Wihan\\AppData\\Local\\gitkraken\\bin;C:\\Users\\Wihan\\AppData\\Local\\GitHubDesktop\\bin;C:\\Program Files\\JetBrains\\CLion 2024.2.0.1\\bin;;D:\\texlive\\2023\\bin\\windows;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja;E:\\VisualStudio\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe;E:\\VisualStudio\\VC\\vcpkg;E:\\CLion\\CLion 2024.2.1\\bin\\ninja\\win\\x64;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja;E:\\VisualStudio\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe;E:\\VisualStudio\\VC\\vcpkg
+      #$ INCLUDES="-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"  
+      #$ LIBRARIES=  "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64"
+      #$ CUDAFE_FLAGS=
+      #$ PTXAS_FLAGS=
+      #$ erase tmp/a_dlink.reg.c
+      CMakeCUDACompilerId.cu
+      #$ resource file tmp/CMakeCUDACompilerId.cpp4.ii.res: [-D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo -E -TP -EHsc -D__CUDACC__ -D__NVCC__  "-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"    -D__CUDACC_VER_MAJOR__=12 -D__CUDACC_VER_MINOR__=6 -D__CUDACC_VER_BUILD__=68 -D__CUDA_API_VER_MAJOR__=12 -D__CUDA_API_VER_MINOR__=6 -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 -FI "cuda_runtime.h" "CMakeCUDACompilerId.cu" ]
+      #$ cl.exe @"tmp/CMakeCUDACompilerId.cpp4.ii.res" > "tmp/CMakeCUDACompilerId.cpp4.ii" 
+      CMakeCUDACompilerId.cu
+      #$ cudafe++ --ms_c++14 --microsoft_version=1941 --msvc_target_version=1941 --compiler_bindir "E:/VisualStudio/VC/Tools/MSVC/14.41.34120/bin/HostX64/x64/../../../../../../.." --sdk_dir "C:/Program Files (x86)/Windows Kits/10/" --display_error_number --orig_src_file_name "CMakeCUDACompilerId.cu" --orig_src_path_name "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\CMakeCUDACompilerId.cu" --allow_managed --m64 --parse_templates --gen_c_file_name "tmp/CMakeCUDACompilerId.cudafe1.cpp" --stub_file_name "CMakeCUDACompilerId.cudafe1.stub.c" --gen_module_id_file --module_id_file_name "tmp/CMakeCUDACompilerId.module_id" "tmp/CMakeCUDACompilerId.cpp4.ii" 
+      #$ resource file tmp/CMakeCUDACompilerId.cpp1.ii.res: [-D__CUDA_ARCH__=520 -D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo -E -TP  -DCUDA_DOUBLE_MATH_FUNCTIONS -EHsc -D__CUDACC__ -D__NVCC__  "-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"    -D__CUDACC_VER_MAJOR__=12 -D__CUDACC_VER_MINOR__=6 -D__CUDACC_VER_BUILD__=68 -D__CUDA_API_VER_MAJOR__=12 -D__CUDA_API_VER_MINOR__=6 -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 -FI "cuda_runtime.h" "CMakeCUDACompilerId.cu" ]
+      #$ cl.exe @"tmp/CMakeCUDACompilerId.cpp1.ii.res" > "tmp/CMakeCUDACompilerId.cpp1.ii" 
+      CMakeCUDACompilerId.cu
+      #$ ""%CICC_PATH%\\cicc" --ms_c++14 --microsoft_version=1941 --msvc_target_version=1941 --compiler_bindir "E:/VisualStudio/VC/Tools/MSVC/14.41.34120/bin/HostX64/x64/../../../../../../.." --sdk_dir "C:/Program Files (x86)/Windows Kits/10/" --display_error_number --orig_src_file_name "CMakeCUDACompilerId.cu" --orig_src_path_name "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\CMakeCUDACompilerId.cu" --allow_managed  -arch compute_52 -m64 --no-version-ident -ftz=0 -prec_div=1 -prec_sqrt=1 -fmad=1 --include_file_name "CMakeCUDACompilerId.fatbin.c" -tused --module_id_file_name "tmp/CMakeCUDACompilerId.module_id" --gen_c_file_name "tmp/CMakeCUDACompilerId.cudafe1.c" --stub_file_name "tmp/CMakeCUDACompilerId.cudafe1.stub.c" --gen_device_file_name "tmp/CMakeCUDACompilerId.cudafe1.gpu"  "tmp/CMakeCUDACompilerId.cpp1.ii" -o "tmp/CMakeCUDACompilerId.ptx""
+      #$ ptxas -arch=sm_52 -m64 "tmp/CMakeCUDACompilerId.ptx"  -o "tmp/CMakeCUDACompilerId.sm_52.cubin" 
+      #$ fatbinary --create="tmp/CMakeCUDACompilerId.fatbin" -64 --cicc-cmdline="-ftz=0 -prec_div=1 -prec_sqrt=1 -fmad=1 " "--image3=kind=elf,sm=52,file=tmp/CMakeCUDACompilerId.sm_52.cubin" "--image3=kind=ptx,sm=52,file=tmp/CMakeCUDACompilerId.ptx" --embedded-fatbin="tmp/CMakeCUDACompilerId.fatbin.c" 
+      #$ resource file tmp/CMakeCUDACompilerId.obj.res: [-D__CUDA_ARCH__=520 -D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo -c -TP  -DCUDA_DOUBLE_MATH_FUNCTIONS -EHsc "-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"   "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\CMakeCUDACompilerId.cudafe1.cpp" ]
+      #$ cl.exe @"tmp/CMakeCUDACompilerId.obj.res" -Fo"tmp/CMakeCUDACompilerId.obj" 
+      CMakeCUDACompilerId.cudafe1.cpp
+      #$ resource file tmp/a_dlink.sm_52.cubin.optf: [-m64 --arch=sm_52 --register-link-binaries="tmp/a_dlink.reg.c"    "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64" -cpu-arch=X86_64 "tmp/CMakeCUDACompilerId.obj"  cudadevrt.lib  -o "tmp/a_dlink.sm_52.cubin"]
+      #$ nvlink -optf "tmp/a_dlink.sm_52.cubin.optf"
+      #$ fatbinary --create="tmp/a_dlink.fatbin" -64 --cicc-cmdline="-ftz=0 -prec_div=1 -prec_sqrt=1 -fmad=1 " -link "--image3=kind=elf,sm=52,file=tmp/a_dlink.sm_52.cubin" --embedded-fatbin="tmp/a_dlink.fatbin.c" 
+      #$ resource file tmp/a_dlink.obj.res: [-D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo -c -TP -EHsc -DFATBINFILE="\\"tmp/a_dlink.fatbin.c\\"" -DREGISTERLINKBINARYFILE="\\"tmp/a_dlink.reg.c\\"" -I. -D__NV_EXTRA_INITIALIZATION= -D__NV_EXTRA_FINALIZATION= -D__CUDA_INCLUDE_COMPILER_INTERNAL_HEADERS__  "-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"    -D__CUDACC_VER_MAJOR__=12 -D__CUDACC_VER_MINOR__=6 -D__CUDACC_VER_BUILD__=68 -D__CUDA_API_VER_MAJOR__=12 -D__CUDA_API_VER_MINOR__=6 -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\bin\\crt\\link.stub" ]
+      #$ cl.exe @"tmp/a_dlink.obj.res" -Fo"tmp/a_dlink.obj" 
+      link.stub
+      #$ resource file tmp/a.exe.res: [-D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\a_dlink.obj" "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\CMakeCUDACompilerId.obj" -link -INCREMENTAL:NO   "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64"  cudadevrt.lib  cudart_static.lib]
+      #$ cl.exe @"tmp/a.exe.res" -Fe"a.exe" 
+         Creating library a.lib and object a.exp
+      
+      
+      Compilation of the CUDA compiler identification source "CMakeCUDACompilerId.cu" produced "a.exe"
+      
+      Compilation of the CUDA compiler identification source "CMakeCUDACompilerId.cu" produced "a.exp"
+      
+      Compilation of the CUDA compiler identification source "CMakeCUDACompilerId.cu" produced "a.lib"
+      
+      The CUDA compiler identification is NVIDIA, found in:
+        D:/Documents/Uni Repos/PoopRobotJetson/YOLO_CUDA/cmake-build-debug/CMakeFiles/3.29.6/CompilerIdCUDA/a.exe
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCompilerId.cmake:1216 (message)"
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCompilerId.cmake:250 (CMAKE_DETERMINE_MSVC_SHOWINCLUDES_PREFIX)"
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCUDACompiler.cmake:131 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:24 (project)"
+    message: |
+      Detecting CUDA compiler /showIncludes prefix:
+        nvcc fatal   : Don't know what to do with 'D:/c'
+        
+  -
+    kind: "message-v1"
+    backtrace:
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCompilerId.cmake:1216 (message)"
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCompilerId.cmake:250 (CMAKE_DETERMINE_MSVC_SHOWINCLUDES_PREFIX)"
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCUDACompiler.cmake:131 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:24 (project)"
+    message: |
+      Detecting CUDA compiler /showIncludes prefix:
+        nvcc fatal   : Don't know what to do with 'D:/c'
+        
+  -
+    kind: "message-v1"
+    backtrace:
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/Internal/CMakeNVCCParseImplicitInfo.cmake:128 (message)"
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCUDACompiler.cmake:242 (cmake_nvcc_parse_implicit_info)"
+      - "CMakeLists.txt:24 (project)"
+    message: |
+      Parsed CUDA nvcc implicit link information:
+        found 'PATH=' string: [E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\HostX64\\x64;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\HostX64\\x64;E:\\VisualStudio\\Common7\\IDE\\VC\\VCPackages;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer;E:\\VisualStudio\\MSBuild\\Current\\bin\\Roslyn;E:\\VisualStudio\\Team Tools\\DiagnosticsHub\\Collector;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64;E:\\VisualStudio\\\\MSBuild\\Current\\Bin\\amd64;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319;E:\\VisualStudio\\Common7\\IDE\\;E:\\VisualStudio\\Common7\\Tools\\;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\HostX64\\x64;E:\\VisualStudio\\Common7\\IDE\\VC\\VCPackages;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer;E:\\VisualStudio\\MSBuild\\Current\\bin\\Roslyn;E:\\VisualStudio\\Team Tools\\DiagnosticsHub\\Collector;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64;E:\\VisualStudio\\\\MSBuild\\Current\\Bin\\amd64;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319;E:\\VisualStudio\\Common7\\IDE\\;E:\\VisualStudio\\Common7\\Tools\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\bin;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\libnvvp;C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.2.8-hotspot\\bin;C:\\Program Files\\Common Files\\Oracle\\Java\\javapath;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\MinGW\\bin;C:\\ProgramData\\chocolatey\\bin;C:\\tools\\BCURRAN3;C:\\Program Files\\dotnet\\;C:\\Program Files (x86)\\dotnet\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C;E:\\Matlab\\bin;D:\\texlive\\2023\\bin\\windows;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2024.3.1\\;C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\;C:\\opencv\\build\\x64\\vc16\\bin;C:\\Users\\Wihan\\AppData\\Local\\JSONBuddy;C:\\Users\\Wihan\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Wihan\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Program Files\\Oracle\\VirtualBox;C:\\Users\\RajaRama\\Anaconda3\\Scripts;C:\\Users\\RajaRama\\Anaconda3;C:\\Users\\RajaRama\\Anaconda3\\Library\\bin;C:\\Users\\Wihan\\AppData\\Local\\gitkraken\\bin;C:\\Users\\Wihan\\AppData\\Local\\GitHubDesktop\\bin;C:\\Program Files\\JetBrains\\CLion 2024.2.0.1\\bin;;D:\\texlive\\2023\\bin\\windows;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja;E:\\VisualStudio\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe;E:\\VisualStudio\\VC\\vcpkg;E:\\CLion\\CLion 2024.2.1\\bin\\ninja\\win\\x64;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja;E:\\VisualStudio\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe;E:\\VisualStudio\\VC\\vcpkg]
+        found 'LIBRARIES=' string: ["/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64"]
+        found 'INCLUDES=' string: ["-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"  ]
+        considering line: []
+        considering line: [D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA>call "E:/VisualStudio/VC/Tools/MSVC/14.41.34120/bin/HostX64/x64/../../../../../../../VC/Auxiliary/Build/vcvars64.bat" ]
+        considering line: [**********************************************************************]
+        considering line: [** Visual Studio 2022 Developer Command Prompt v17.11.2]
+        considering line: [** Copyright (c) 2022 Microsoft Corporation]
+        considering line: [**********************************************************************]
+        considering line: [[vcvarsall.bat] Environment initialized for: 'x64']
+        considering line: [E:/VisualStudio/VC/Tools/MSVC/14.41.34120/bin/HostX64/x64/../../../../../../../VC/Auxiliary/Build/vcvars64.bat]
+        considering line: [erase tmp/a_dlink.reg.c]
+        considering line: [CMakeCUDACompilerId.cu]
+        considering line: [resource file tmp/CMakeCUDACompilerId.cpp4.ii.res: [-D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo -E -TP -EHsc -D__CUDACC__ -D__NVCC__  "-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"    -D__CUDACC_VER_MAJOR__=12 -D__CUDACC_VER_MINOR__=6 -D__CUDACC_VER_BUILD__=68 -D__CUDA_API_VER_MAJOR__=12 -D__CUDA_API_VER_MINOR__=6 -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 -FI "cuda_runtime.h" "CMakeCUDACompilerId.cu" ]]
+        considering line: [cl.exe @"tmp/CMakeCUDACompilerId.cpp4.ii.res" > "tmp/CMakeCUDACompilerId.cpp4.ii" ]
+        considering line: [CMakeCUDACompilerId.cu]
+        considering line: [cudafe++ --ms_c++14 --microsoft_version=1941 --msvc_target_version=1941 --compiler_bindir "E:/VisualStudio/VC/Tools/MSVC/14.41.34120/bin/HostX64/x64/../../../../../../.." --sdk_dir "C:/Program Files (x86)/Windows Kits/10/" --display_error_number --orig_src_file_name "CMakeCUDACompilerId.cu" --orig_src_path_name "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\CMakeCUDACompilerId.cu" --allow_managed --m64 --parse_templates --gen_c_file_name "tmp/CMakeCUDACompilerId.cudafe1.cpp" --stub_file_name "CMakeCUDACompilerId.cudafe1.stub.c" --gen_module_id_file --module_id_file_name "tmp/CMakeCUDACompilerId.module_id" "tmp/CMakeCUDACompilerId.cpp4.ii" ]
+        considering line: [resource file tmp/CMakeCUDACompilerId.cpp1.ii.res: [-D__CUDA_ARCH__=520 -D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo -E -TP  -DCUDA_DOUBLE_MATH_FUNCTIONS -EHsc -D__CUDACC__ -D__NVCC__  "-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"    -D__CUDACC_VER_MAJOR__=12 -D__CUDACC_VER_MINOR__=6 -D__CUDACC_VER_BUILD__=68 -D__CUDA_API_VER_MAJOR__=12 -D__CUDA_API_VER_MINOR__=6 -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 -FI "cuda_runtime.h" "CMakeCUDACompilerId.cu" ]]
+        considering line: [cl.exe @"tmp/CMakeCUDACompilerId.cpp1.ii.res" > "tmp/CMakeCUDACompilerId.cpp1.ii" ]
+        considering line: [CMakeCUDACompilerId.cu]
+        considering line: [""%CICC_PATH%\\cicc" --ms_c++14 --microsoft_version=1941 --msvc_target_version=1941 --compiler_bindir "E:/VisualStudio/VC/Tools/MSVC/14.41.34120/bin/HostX64/x64/../../../../../../.." --sdk_dir "C:/Program Files (x86)/Windows Kits/10/" --display_error_number --orig_src_file_name "CMakeCUDACompilerId.cu" --orig_src_path_name "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\CMakeCUDACompilerId.cu" --allow_managed  -arch compute_52 -m64 --no-version-ident -ftz=0 -prec_div=1 -prec_sqrt=1 -fmad=1 --include_file_name "CMakeCUDACompilerId.fatbin.c" -tused --module_id_file_name "tmp/CMakeCUDACompilerId.module_id" --gen_c_file_name "tmp/CMakeCUDACompilerId.cudafe1.c" --stub_file_name "tmp/CMakeCUDACompilerId.cudafe1.stub.c" --gen_device_file_name "tmp/CMakeCUDACompilerId.cudafe1.gpu"  "tmp/CMakeCUDACompilerId.cpp1.ii" -o "tmp/CMakeCUDACompilerId.ptx""]
+        considering line: [ptxas -arch=sm_52 -m64 "tmp/CMakeCUDACompilerId.ptx"  -o "tmp/CMakeCUDACompilerId.sm_52.cubin" ]
+        considering line: [fatbinary --create="tmp/CMakeCUDACompilerId.fatbin" -64 --cicc-cmdline="-ftz=0 -prec_div=1 -prec_sqrt=1 -fmad=1 " "--image3=kind=elf,sm=52,file=tmp/CMakeCUDACompilerId.sm_52.cubin" "--image3=kind=ptx,sm=52,file=tmp/CMakeCUDACompilerId.ptx" --embedded-fatbin="tmp/CMakeCUDACompilerId.fatbin.c" ]
+        considering line: [resource file tmp/CMakeCUDACompilerId.obj.res: [-D__CUDA_ARCH__=520 -D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo -c -TP  -DCUDA_DOUBLE_MATH_FUNCTIONS -EHsc "-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"   "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\CMakeCUDACompilerId.cudafe1.cpp" ]]
+        considering line: [cl.exe @"tmp/CMakeCUDACompilerId.obj.res" -Fo"tmp/CMakeCUDACompilerId.obj" ]
+        considering line: [CMakeCUDACompilerId.cudafe1.cpp]
+        considering line: [resource file tmp/a_dlink.sm_52.cubin.optf: [-m64 --arch=sm_52 --register-link-binaries="tmp/a_dlink.reg.c"    "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64" -cpu-arch=X86_64 "tmp/CMakeCUDACompilerId.obj"  cudadevrt.lib  -o "tmp/a_dlink.sm_52.cubin"]]
+          extracted link line: [resource file tmp/a_dlink.sm_52.cubin.optf: [-m64 --arch=sm_52 --register-link-binaries="tmp/a_dlink.reg.c"    "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64" -cpu-arch=X86_64 "tmp/CMakeCUDACompilerId.obj"  cudadevrt.lib  -o "tmp/a_dlink.sm_52.cubin"]]
+        considering line: [nvlink -optf "tmp/a_dlink.sm_52.cubin.optf"]
+          ignoring nvlink line
+        considering line: [fatbinary --create="tmp/a_dlink.fatbin" -64 --cicc-cmdline="-ftz=0 -prec_div=1 -prec_sqrt=1 -fmad=1 " -link "--image3=kind=elf,sm=52,file=tmp/a_dlink.sm_52.cubin" --embedded-fatbin="tmp/a_dlink.fatbin.c" ]
+        considering line: [resource file tmp/a_dlink.obj.res: [-D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo -c -TP -EHsc -DFATBINFILE="\\"tmp/a_dlink.fatbin.c\\"" -DREGISTERLINKBINARYFILE="\\"tmp/a_dlink.reg.c\\"" -I. -D__NV_EXTRA_INITIALIZATION= -D__NV_EXTRA_FINALIZATION= -D__CUDA_INCLUDE_COMPILER_INTERNAL_HEADERS__  "-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"    -D__CUDACC_VER_MAJOR__=12 -D__CUDACC_VER_MINOR__=6 -D__CUDACC_VER_BUILD__=68 -D__CUDA_API_VER_MAJOR__=12 -D__CUDA_API_VER_MINOR__=6 -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\bin\\crt\\link.stub" ]]
+        considering line: [cl.exe @"tmp/a_dlink.obj.res" -Fo"tmp/a_dlink.obj" ]
+        considering line: [link.stub]
+        considering line: [resource file tmp/a.exe.res: [-D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\a_dlink.obj" "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\CMakeCUDACompilerId.obj" -link -INCREMENTAL:NO   "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64"  cudadevrt.lib  cudart_static.lib]]
+          extracted link line: [resource file tmp/a.exe.res: [-D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\a_dlink.obj" "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\CMakeCUDACompilerId.obj" -link -INCREMENTAL:NO   "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64"  cudadevrt.lib  cudart_static.lib]]
+        considering line: [cl.exe @"tmp/a.exe.res" -Fe"a.exe" ]
+          extracted link line: [cl.exe -D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\a_dlink.obj" "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\CMakeCUDACompilerId.obj" -link -INCREMENTAL:NO   "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64"  cudadevrt.lib  cudart_static.lib -Fe"a.exe" ]
+        considering line: [   Creating library a.lib and object a.exp]
+        considering line: []
+      
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        link line: [cuda-fake-ld cl.exe -D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\a_dlink.obj" "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\CMakeCUDACompilerId.obj" -link -INCREMENTAL:NO   "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64"  cudadevrt.lib  cudart_static.lib -Fe"a.exe" ]
+          arg [cuda-fake-ld] ==> ignore
+          arg [cl.exe] ==> recognize MSVC cl
+          arg [-D__CUDA_ARCH_LIST__=520] ==> ignore
+          arg [-D__NV_LEGACY_LAUNCH] ==> ignore
+          arg [-nologo] ==> ignore
+          arg [D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\a_dlink.obj] ==> ignore
+          arg [D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\CMakeCUDACompilerId.obj] ==> ignore
+          arg [-link] ==> ignore MSVC cl option
+          arg [-INCREMENTAL:NO] ==> ignore
+          arg [/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64] ==> dir [C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64]
+          arg [cudadevrt.lib] ==> lib [cudadevrt.lib]
+          arg [cudart_static.lib] ==> lib [cudart_static.lib]
+          arg [-Fea.exe] ==> ignore
+        collapse library dir [C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64] ==> [C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/lib/x64]
+        implicit libs: [cudadevrt.lib;cudart_static.lib]
+        implicit objs: []
+        implicit dirs: [C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/lib/x64]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/Internal/CMakeNVCCParseImplicitInfo.cmake:146 (message)"
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCUDACompiler.cmake:242 (cmake_nvcc_parse_implicit_info)"
+      - "CMakeLists.txt:24 (project)"
+    message: |
+      Parsed CUDA nvcc include information:
+        found 'PATH=' string: [E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\HostX64\\x64;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\HostX64\\x64;E:\\VisualStudio\\Common7\\IDE\\VC\\VCPackages;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer;E:\\VisualStudio\\MSBuild\\Current\\bin\\Roslyn;E:\\VisualStudio\\Team Tools\\DiagnosticsHub\\Collector;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64;E:\\VisualStudio\\\\MSBuild\\Current\\Bin\\amd64;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319;E:\\VisualStudio\\Common7\\IDE\\;E:\\VisualStudio\\Common7\\Tools\\;E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\HostX64\\x64;E:\\VisualStudio\\Common7\\IDE\\VC\\VCPackages;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer;E:\\VisualStudio\\MSBuild\\Current\\bin\\Roslyn;E:\\VisualStudio\\Team Tools\\DiagnosticsHub\\Collector;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.22621.0\\\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64;E:\\VisualStudio\\\\MSBuild\\Current\\Bin\\amd64;C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319;E:\\VisualStudio\\Common7\\IDE\\;E:\\VisualStudio\\Common7\\Tools\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\bin;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\libnvvp;C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.2.8-hotspot\\bin;C:\\Program Files\\Common Files\\Oracle\\Java\\javapath;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\MinGW\\bin;C:\\ProgramData\\chocolatey\\bin;C:\\tools\\BCURRAN3;C:\\Program Files\\dotnet\\;C:\\Program Files (x86)\\dotnet\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C;E:\\Matlab\\bin;D:\\texlive\\2023\\bin\\windows;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2024.3.1\\;C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\;C:\\opencv\\build\\x64\\vc16\\bin;C:\\Users\\Wihan\\AppData\\Local\\JSONBuddy;C:\\Users\\Wihan\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Wihan\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Program Files\\Oracle\\VirtualBox;C:\\Users\\RajaRama\\Anaconda3\\Scripts;C:\\Users\\RajaRama\\Anaconda3;C:\\Users\\RajaRama\\Anaconda3\\Library\\bin;C:\\Users\\Wihan\\AppData\\Local\\gitkraken\\bin;C:\\Users\\Wihan\\AppData\\Local\\GitHubDesktop\\bin;C:\\Program Files\\JetBrains\\CLion 2024.2.0.1\\bin;;D:\\texlive\\2023\\bin\\windows;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja;E:\\VisualStudio\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe;E:\\VisualStudio\\VC\\vcpkg;E:\\CLion\\CLion 2024.2.1\\bin\\ninja\\win\\x64;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin;E:\\VisualStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja;E:\\VisualStudio\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe;E:\\VisualStudio\\VC\\vcpkg]
+        found 'LIBRARIES=' string: ["/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64"]
+        found 'INCLUDES=' string: ["-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"  ]
+        considering line: []
+        considering line: [D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA>call "E:/VisualStudio/VC/Tools/MSVC/14.41.34120/bin/HostX64/x64/../../../../../../../VC/Auxiliary/Build/vcvars64.bat" ]
+        considering line: [**********************************************************************]
+        considering line: [** Visual Studio 2022 Developer Command Prompt v17.11.2]
+        considering line: [** Copyright (c) 2022 Microsoft Corporation]
+        considering line: [**********************************************************************]
+        considering line: [[vcvarsall.bat] Environment initialized for: 'x64']
+        considering line: [E:/VisualStudio/VC/Tools/MSVC/14.41.34120/bin/HostX64/x64/../../../../../../../VC/Auxiliary/Build/vcvars64.bat]
+        considering line: [erase tmp/a_dlink.reg.c]
+        considering line: [CMakeCUDACompilerId.cu]
+        considering line: [resource file tmp/CMakeCUDACompilerId.cpp4.ii.res: [-D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo -E -TP -EHsc -D__CUDACC__ -D__NVCC__  "-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"    -D__CUDACC_VER_MAJOR__=12 -D__CUDACC_VER_MINOR__=6 -D__CUDACC_VER_BUILD__=68 -D__CUDA_API_VER_MAJOR__=12 -D__CUDA_API_VER_MINOR__=6 -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 -FI "cuda_runtime.h" "CMakeCUDACompilerId.cu" ]]
+        considering line: [cl.exe @"tmp/CMakeCUDACompilerId.cpp4.ii.res" > "tmp/CMakeCUDACompilerId.cpp4.ii" ]
+        considering line: [CMakeCUDACompilerId.cu]
+        considering line: [cudafe++ --ms_c++14 --microsoft_version=1941 --msvc_target_version=1941 --compiler_bindir "E:/VisualStudio/VC/Tools/MSVC/14.41.34120/bin/HostX64/x64/../../../../../../.." --sdk_dir "C:/Program Files (x86)/Windows Kits/10/" --display_error_number --orig_src_file_name "CMakeCUDACompilerId.cu" --orig_src_path_name "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\CMakeCUDACompilerId.cu" --allow_managed --m64 --parse_templates --gen_c_file_name "tmp/CMakeCUDACompilerId.cudafe1.cpp" --stub_file_name "CMakeCUDACompilerId.cudafe1.stub.c" --gen_module_id_file --module_id_file_name "tmp/CMakeCUDACompilerId.module_id" "tmp/CMakeCUDACompilerId.cpp4.ii" ]
+        considering line: [resource file tmp/CMakeCUDACompilerId.cpp1.ii.res: [-D__CUDA_ARCH__=520 -D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo -E -TP  -DCUDA_DOUBLE_MATH_FUNCTIONS -EHsc -D__CUDACC__ -D__NVCC__  "-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"    -D__CUDACC_VER_MAJOR__=12 -D__CUDACC_VER_MINOR__=6 -D__CUDACC_VER_BUILD__=68 -D__CUDA_API_VER_MAJOR__=12 -D__CUDA_API_VER_MINOR__=6 -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 -FI "cuda_runtime.h" "CMakeCUDACompilerId.cu" ]]
+        considering line: [cl.exe @"tmp/CMakeCUDACompilerId.cpp1.ii.res" > "tmp/CMakeCUDACompilerId.cpp1.ii" ]
+        considering line: [CMakeCUDACompilerId.cu]
+        considering line: [""%CICC_PATH%\\cicc" --ms_c++14 --microsoft_version=1941 --msvc_target_version=1941 --compiler_bindir "E:/VisualStudio/VC/Tools/MSVC/14.41.34120/bin/HostX64/x64/../../../../../../.." --sdk_dir "C:/Program Files (x86)/Windows Kits/10/" --display_error_number --orig_src_file_name "CMakeCUDACompilerId.cu" --orig_src_path_name "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\CMakeCUDACompilerId.cu" --allow_managed  -arch compute_52 -m64 --no-version-ident -ftz=0 -prec_div=1 -prec_sqrt=1 -fmad=1 --include_file_name "CMakeCUDACompilerId.fatbin.c" -tused --module_id_file_name "tmp/CMakeCUDACompilerId.module_id" --gen_c_file_name "tmp/CMakeCUDACompilerId.cudafe1.c" --stub_file_name "tmp/CMakeCUDACompilerId.cudafe1.stub.c" --gen_device_file_name "tmp/CMakeCUDACompilerId.cudafe1.gpu"  "tmp/CMakeCUDACompilerId.cpp1.ii" -o "tmp/CMakeCUDACompilerId.ptx""]
+        considering line: [ptxas -arch=sm_52 -m64 "tmp/CMakeCUDACompilerId.ptx"  -o "tmp/CMakeCUDACompilerId.sm_52.cubin" ]
+        considering line: [fatbinary --create="tmp/CMakeCUDACompilerId.fatbin" -64 --cicc-cmdline="-ftz=0 -prec_div=1 -prec_sqrt=1 -fmad=1 " "--image3=kind=elf,sm=52,file=tmp/CMakeCUDACompilerId.sm_52.cubin" "--image3=kind=ptx,sm=52,file=tmp/CMakeCUDACompilerId.ptx" --embedded-fatbin="tmp/CMakeCUDACompilerId.fatbin.c" ]
+        considering line: [resource file tmp/CMakeCUDACompilerId.obj.res: [-D__CUDA_ARCH__=520 -D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo -c -TP  -DCUDA_DOUBLE_MATH_FUNCTIONS -EHsc "-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"   "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\CMakeCUDACompilerId.cudafe1.cpp" ]]
+        considering line: [cl.exe @"tmp/CMakeCUDACompilerId.obj.res" -Fo"tmp/CMakeCUDACompilerId.obj" ]
+        considering line: [CMakeCUDACompilerId.cudafe1.cpp]
+        considering line: [resource file tmp/a_dlink.sm_52.cubin.optf: [-m64 --arch=sm_52 --register-link-binaries="tmp/a_dlink.reg.c"    "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64" -cpu-arch=X86_64 "tmp/CMakeCUDACompilerId.obj"  cudadevrt.lib  -o "tmp/a_dlink.sm_52.cubin"]]
+          extracted link line: [resource file tmp/a_dlink.sm_52.cubin.optf: [-m64 --arch=sm_52 --register-link-binaries="tmp/a_dlink.reg.c"    "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64" -cpu-arch=X86_64 "tmp/CMakeCUDACompilerId.obj"  cudadevrt.lib  -o "tmp/a_dlink.sm_52.cubin"]]
+        considering line: [nvlink -optf "tmp/a_dlink.sm_52.cubin.optf"]
+          ignoring nvlink line
+        considering line: [fatbinary --create="tmp/a_dlink.fatbin" -64 --cicc-cmdline="-ftz=0 -prec_div=1 -prec_sqrt=1 -fmad=1 " -link "--image3=kind=elf,sm=52,file=tmp/a_dlink.sm_52.cubin" --embedded-fatbin="tmp/a_dlink.fatbin.c" ]
+        considering line: [resource file tmp/a_dlink.obj.res: [-D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo -c -TP -EHsc -DFATBINFILE="\\"tmp/a_dlink.fatbin.c\\"" -DREGISTERLINKBINARYFILE="\\"tmp/a_dlink.reg.c\\"" -I. -D__NV_EXTRA_INITIALIZATION= -D__NV_EXTRA_FINALIZATION= -D__CUDA_INCLUDE_COMPILER_INTERNAL_HEADERS__  "-IC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../include"    -D__CUDACC_VER_MAJOR__=12 -D__CUDACC_VER_MINOR__=6 -D__CUDACC_VER_BUILD__=68 -D__CUDA_API_VER_MAJOR__=12 -D__CUDA_API_VER_MINOR__=6 -D__NVCC_DIAG_PRAGMA_SUPPORT__=1 "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\bin\\crt\\link.stub" ]]
+        considering line: [cl.exe @"tmp/a_dlink.obj.res" -Fo"tmp/a_dlink.obj" ]
+        considering line: [link.stub]
+        considering line: [resource file tmp/a.exe.res: [-D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\a_dlink.obj" "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\CMakeCUDACompilerId.obj" -link -INCREMENTAL:NO   "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64"  cudadevrt.lib  cudart_static.lib]]
+          extracted link line: [resource file tmp/a.exe.res: [-D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\a_dlink.obj" "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\CMakeCUDACompilerId.obj" -link -INCREMENTAL:NO   "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64"  cudadevrt.lib  cudart_static.lib]]
+        considering line: [cl.exe @"tmp/a.exe.res" -Fe"a.exe" ]
+          extracted link line: [cl.exe -D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\a_dlink.obj" "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\CMakeCUDACompilerId.obj" -link -INCREMENTAL:NO   "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64"  cudadevrt.lib  cudart_static.lib -Fe"a.exe" ]
+        considering line: [   Creating library a.lib and object a.exp]
+        considering line: []
+      
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        link line: [cuda-fake-ld cl.exe -D__CUDA_ARCH_LIST__=520 -D__NV_LEGACY_LAUNCH -nologo "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\a_dlink.obj" "D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\CMakeCUDACompilerId.obj" -link -INCREMENTAL:NO   "/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64"  cudadevrt.lib  cudart_static.lib -Fe"a.exe" ]
+          arg [cuda-fake-ld] ==> ignore
+          arg [cl.exe] ==> recognize MSVC cl
+          arg [-D__CUDA_ARCH_LIST__=520] ==> ignore
+          arg [-D__NV_LEGACY_LAUNCH] ==> ignore
+          arg [-nologo] ==> ignore
+          arg [D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\a_dlink.obj] ==> ignore
+          arg [D:\\Documents\\Uni Repos\\PoopRobotJetson\\YOLO_CUDA\\cmake-build-debug\\CMakeFiles\\3.29.6\\CompilerIdCUDA\\tmp\\CMakeCUDACompilerId.obj] ==> ignore
+          arg [-link] ==> ignore MSVC cl option
+          arg [-INCREMENTAL:NO] ==> ignore
+          arg [/LIBPATH:C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64] ==> dir [C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64]
+          arg [cudadevrt.lib] ==> lib [cudadevrt.lib]
+          arg [cudart_static.lib] ==> lib [cudart_static.lib]
+          arg [-Fea.exe] ==> ignore
+        collapse library dir [C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/../lib/x64] ==> [C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/lib/x64]
+        implicit libs: [cudadevrt.lib;cudart_static.lib]
+        implicit objs: []
+        implicit dirs: [C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/lib/x64]
+        implicit fwks: []
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCompilerABI.cmake:67 (try_compile)"
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeTestCUDACompiler.cmake:19 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:24 (project)"
+    checks:
+      - "Detecting CUDA compiler ABI info"
+    directories:
+      source: "D:/Documents/Uni Repos/PoopRobotJetson/YOLO_CUDA/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-vllcph"
+      binary: "D:/Documents/Uni Repos/PoopRobotJetson/YOLO_CUDA/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-vllcph"
+    cmakeVariables:
+      CMAKE_CUDA_ARCHITECTURES: "52"
+      CMAKE_CUDA_FLAGS: "-D_WINDOWS -Xcompiler=\" /EHsc\""
+      CMAKE_CUDA_FLAGS_DEBUG: "-Xcompiler=\" -Ob0 -Od /RTC1\""
+      CMAKE_CUDA_RUNTIME_LIBRARY: "Static"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_CUDA_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'D:/Documents/Uni Repos/PoopRobotJetson/YOLO_CUDA/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-vllcph'
+        
+        Run Build Command(s): "E:/CLion/CLion 2024.2.1/bin/ninja/win/x64/ninja.exe" -v cmTC_47386
+        [1/2] C:\\PROGRA~1\\NVIDIA~2\\CUDA\\v12.6\\bin\\nvcc.exe -forward-unknown-to-host-compiler   -D_WINDOWS -Xcompiler=" /EHsc"  -Xcompiler=" -Ob0 -Od /RTC1" "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -Xcompiler=-MDd -Xcompiler=-Zi   -Xcompiler=-v -MD -MT CMakeFiles\\cmTC_47386.dir\\CMakeCUDACompilerABI.cu.obj -MF CMakeFiles\\cmTC_47386.dir\\CMakeCUDACompilerABI.cu.obj.d -x cu -c "E:\\CLion\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\share\\cmake-3.29\\Modules\\CMakeCUDACompilerABI.cu" -o CMakeFiles\\cmTC_47386.dir\\CMakeCUDACompilerABI.cu.obj -Xcompiler=-FdCMakeFiles\\cmTC_47386.dir\\,-FS
+        cl : Command line warning D9002 : ignoring unknown option '-v'\x0d
+        CMakeCUDACompilerABI.cu\x0d
+        cl : Command line warning D9002 : ignoring unknown option '-v'\x0d
+        CMakeCUDACompilerABI.cu\x0d
+        CMakeCUDACompilerABI.cu\x0d
+        cl : Command line warning D9002 : ignoring unknown option '-v'\x0d
+        tmpxft_00002a58_00000000-10_CMakeCUDACompilerABI.cudafe1.cpp\x0d
+        E:\\CLion\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\share\\cmake-3.29\\Modules\\CMakeCompilerCUDAArch.h(10): warning C4305: 'return': truncation from 'int' to 'bool'\x0d
+        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && "E:\\CLion\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\bin\\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\\cmTC_47386.dir --rc=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\rc.exe --mt=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\mt.exe --manifests  -- E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\link.exe /nologo CMakeFiles\\cmTC_47386.dir\\CMakeCUDACompilerABI.cu.obj  /out:cmTC_47386.exe /implib:cmTC_47386.lib /pdb:cmTC_47386.pdb /version:0.0 -v /debug /INCREMENTAL  cudadevrt.lib  cudart_static.lib -LIBPATH:"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/lib/x64" && cd ."
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCompilerABI.cmake:137 (message)"
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeTestCUDACompiler.cmake:19 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:24 (project)"
+    message: |
+      Parsed CUDA implicit include dir info: rv=start
+        warn: unable to parse implicit include dirs!
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCompilerABI.cmake:173 (message)"
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeTestCUDACompiler.cmake:19 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:24 (project)"
+    message: |
+      Parsed CUDA implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?|link\\.exe|lld-link(\\.exe)?))("|,| |$)]
+        ignore line: [Change Dir: 'D:/Documents/Uni Repos/PoopRobotJetson/YOLO_CUDA/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-vllcph']
+        ignore line: []
+        ignore line: [Run Build Command(s): "E:/CLion/CLion 2024.2.1/bin/ninja/win/x64/ninja.exe" -v cmTC_47386]
+        ignore line: [[1/2] C:\\PROGRA~1\\NVIDIA~2\\CUDA\\v12.6\\bin\\nvcc.exe -forward-unknown-to-host-compiler   -D_WINDOWS -Xcompiler=" /EHsc"  -Xcompiler=" -Ob0 -Od /RTC1" "--generate-code=arch=compute_52 code=[compute_52 sm_52]" -Xcompiler=-MDd -Xcompiler=-Zi   -Xcompiler=-v -MD -MT CMakeFiles\\cmTC_47386.dir\\CMakeCUDACompilerABI.cu.obj -MF CMakeFiles\\cmTC_47386.dir\\CMakeCUDACompilerABI.cu.obj.d -x cu -c "E:\\CLion\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\share\\cmake-3.29\\Modules\\CMakeCUDACompilerABI.cu" -o CMakeFiles\\cmTC_47386.dir\\CMakeCUDACompilerABI.cu.obj -Xcompiler=-FdCMakeFiles\\cmTC_47386.dir\\ -FS]
+        ignore line: [cl : Command line warning D9002 : ignoring unknown option '-v'\x0d]
+        ignore line: [CMakeCUDACompilerABI.cu\x0d]
+        ignore line: [cl : Command line warning D9002 : ignoring unknown option '-v'\x0d]
+        ignore line: [CMakeCUDACompilerABI.cu\x0d]
+        ignore line: [CMakeCUDACompilerABI.cu\x0d]
+        ignore line: [cl : Command line warning D9002 : ignoring unknown option '-v'\x0d]
+        ignore line: [tmpxft_00002a58_00000000-10_CMakeCUDACompilerABI.cudafe1.cpp\x0d]
+        ignore line: [E:\\CLion\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\share\\cmake-3.29\\Modules\\CMakeCompilerCUDAArch.h(10): warning C4305: 'return': truncation from 'int' to 'bool'\x0d]
+        ignore line: [[2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && "E:\\CLion\\CLion 2024.2.1\\bin\\cmake\\win\\x64\\bin\\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\\cmTC_47386.dir --rc=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\rc.exe --mt=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\mt.exe --manifests  -- E:\\VisualStudio\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\link.exe /nologo CMakeFiles\\cmTC_47386.dir\\CMakeCUDACompilerABI.cu.obj  /out:cmTC_47386.exe /implib:cmTC_47386.lib /pdb:cmTC_47386.pdb /version:0.0 -v /debug /INCREMENTAL  cudadevrt.lib  cudart_static.lib -LIBPATH:"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/lib/x64" && cd ."]
+        ignore line: []
+        ignore line: []
+        linker tool for 'CUDA': E:/VisualStudio/VC/Tools/MSVC/14.41.34120/bin/Hostx64/x64/link.exe
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: []
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeDetermineCompilerABI.cmake:210 (cmake_determine_linker_id)"
+      - "E:/CLion/CLion 2024.2.1/bin/cmake/win/x64/share/cmake-3.29/Modules/CMakeTestCUDACompiler.cmake:19 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:24 (project)"
+    message: |
+      Running the CUDA compiler's linker: "E:/VisualStudio/VC/Tools/MSVC/14.41.34120/bin/Hostx64/x64/link.exe" "-v"
+      Microsoft (R) Incremental Linker Version 14.41.34120.0
+      Copyright (C) Microsoft Corporation.  All rights reserved.
+...
