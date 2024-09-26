@@ -19,7 +19,7 @@ class yolo {
     std::vector<std::vector<float>> getBoxPredictions(float* inputImage);
 
    private:
-    ModelLoadingHelper mlh;
+    ModelLoadingHelper MLH;
     std::vector<Layer*> model;
 
     float* hostOutput;
