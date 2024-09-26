@@ -86,6 +86,21 @@ void drawBoundingBoxes(cv::Mat &image, const float *output, const int grid_size,
 
 int main()
 {
+
+    serialHelper serial("/dev/ttyUSB0", 9600);
+
+    // Create a position controller
+    positionController controller(0.5, 10, 0.1, 0.05);
+
+    // Set the goal position
+    controller.setGoal(0, 0, 0);
+
+    // reset the position of the robot
+    serial.resetPosition();
+
+    // request poop pickup
+    serial.requestAndWaitForPoopPickup();
+
     const auto MLH = ModelLoadingHelper("/home/wihan/model/");
     std::vector<Layer *> model;
 
