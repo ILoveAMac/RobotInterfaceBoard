@@ -47,8 +47,8 @@ yolo::~yolo() {
 std::vector<std::vector<float>> yolo::getBoxPredictions(float* inputImage) {
     float* output = nullptr;
     for (const auto& layer : this->model) {
-        output = layer->forward(input);
-        input = output;
+        output = layer->forward(inputImage);
+        inputImage = output;
         cudaDeviceSynchronize();
     }
 
