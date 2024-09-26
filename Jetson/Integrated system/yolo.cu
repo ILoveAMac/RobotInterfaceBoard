@@ -1,8 +1,6 @@
 #include "yolo.cuh"
 
-yolo::yolo(const std::string& modelPath) {
-    this->mlh = ModelLoadingHelper(modelPath);
-
+yolo::yolo(const std::string& modelPath) : mlh(ModelLoadingHelper(modelPath)) {
     // Build the model
     this->model.push_back(new Conv2D(5, 32, 2, 2, "0", MLH, 224, 224, 32, 448, 448, 3));
     this->model.push_back(new MaxPool2D(224, 224, 32, 112, 112, 32));

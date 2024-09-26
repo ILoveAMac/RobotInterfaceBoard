@@ -16,7 +16,7 @@ class yolo {
     ~yolo();
 
     // Function to return final output bounding boxes
-    static std::vector<std::vector<float>> getBoxPredictions(float* inputImage);
+    std::vector<std::vector<float>> getBoxPredictions(float* inputImage);
 
    private:
     ModelLoadingHelper mlh;
