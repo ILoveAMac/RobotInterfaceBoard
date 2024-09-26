@@ -198,13 +198,6 @@ int main() {
 
     // Free allocated memory
     cudaFree(input_image);
-    free(host_image);
-    free(host_output);
-
-    // Clean up layers
-    for (auto layer : model) {
-        delete layer;
-    }
 
     return 0;
 }
