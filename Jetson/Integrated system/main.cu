@@ -1,22 +1,25 @@
+// Standard Library Headers
 #include <iostream>
-#include <chrono> // For timing
 #include <string>
+#include <vector>
+#include <thread>
+#include <chrono>  // For timing
+#include <cstring> // For memcpy
+#include <cstdio>  // For printf
+#include <cmath>   // For math functions
 
+// OpenCV Headers
+#include <opencv2/opencv.hpp>
+
+// Boost Headers
+#include <boost/asio.hpp>
+
+// Project-Specific Headers
 #include "ModelLoadingHelper.h"
 #include "Conv2D.cuh"
 #include "Layer.cuh"
 #include "MaxPool2D.cuh"
 #include "FullyConnected.cuh"
-#include <opencv2/opencv.hpp>
-
-#include <boost/asio.hpp>
-#include <iostream>
-#include <vector>
-#include <cstring> // For memcpy
-#include <cstdio>  // For printf
-#include <thread>
-#include <math.h>
-
 #include "serialHelper.h"
 #include "positionController.h"
 
