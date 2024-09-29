@@ -99,7 +99,7 @@ void FullyConnected::loadData()
 
 __half *FullyConnected::forward(const __half *input)
 {
-    int threadsPerBlock = 32;
+    int threadsPerBlock = 8;
     int blocksPerGrid = (outputSize + threadsPerBlock - 1) / threadsPerBlock;
 
     fullyConnectedKernel<<<blocksPerGrid, threadsPerBlock>>>(input, d_weights, d_biases, d_intermediate, inputSize, outputSize, applyActivation);
