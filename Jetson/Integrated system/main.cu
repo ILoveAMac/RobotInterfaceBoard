@@ -1,8 +1,8 @@
 // Standard Library Headers
-#include <chrono>   // For timing
-#include <cmath>    // For math functions
-#include <cstdio>   // For printf
-#include <cstring>  // For memcpy
+#include <chrono>  // For timing
+#include <cmath>   // For math functions
+#include <cstdio>  // For printf
+#include <cstring> // For memcpy
 #include <iostream>
 #include <string>
 #include <thread>
@@ -25,12 +25,19 @@
 #include "serialHelper.h"
 #include "yolo.cuh"
 
-int main() {
+using std::chrono::duration;
+using std::chrono::duration_cast;
+using std::chrono::high_resolution_clock;
+using std::chrono::milliseconds;
+
+int main()
+{
     // Initialize VideoCapture with default camera (index 0)
     cv::VideoCapture cap(0);
 
     // Check if the webcam opened successfully
-    if (!cap.isOpened()) {
+    if (!cap.isOpened())
+    {
         std::cerr << "Error: Could not open the webcam" << std::endl;
         return -1;
     }
@@ -57,12 +64,14 @@ int main() {
     yolo yolo("/home/wihan/model/");
 
     // Main loop
-    while (true) {
+    while (true)
+    {
         // Capture a frame from the webcam
         cap >> frame;
 
         // Check if the frame is empty
-        if (frame.empty()) {
+        if (frame.empty())
+        {
             std::cerr << "Error: Captured empty frame" << std::endl;
             break;
         }
@@ -80,16 +89,25 @@ int main() {
         cv::split(resized_frame, channels);
 
         // Copy the data from the OpenCV Mat to the host memory (channels first format)
-        for (int c = 0; c < 3; ++c) {
-            for (int h = 0; h < 448; ++h) {
-                for (int w = 0; w < 448; ++w) {
+        for (int c = 0; c < 3; ++c)
+        {
+            for (int h = 0; h < 448; ++h)
+            {
+                for (int w = 0; w < 448; ++w)
+                {
                     host_image[c * 448 * 448 + h * 448 + w] = channels[c].at<float>(h, w);
                 }
             }
         }
 
         // Transfer the data from host memory to the GPU memory (device)
+        auto t1 = high_resolution_clock::now();
         cudaMemcpy(input_image, host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
+        auto t2 = high_resolution_clock::now();
+
+        duration<double, std::milli> ms_double = t2 - t1;
+        std::cout << ms_double.count() << "ms\n";
+
         // Get the bounding boxes
         std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
 
@@ -101,13 +119,17 @@ int main() {
         cv::imshow("Detection", resized_frame);
 
         // Exit if 'q' is pressed
-        if (cv::waitKey(1) == 'c') {
+        if (cv::waitKey(1) == 'c')
+        {
             // Save the current image
             std::string filename = "img/captured_image_" + std::to_string(image_counter) + ".png";
-            if (cv::imwrite(filename, 255 * resized_frame)) {
+            if (cv::imwrite(filename, 255 * resized_frame))
+            {
                 std::cout << "Image saved: " << filename << std::endl;
                 image_counter++;
-            } else {
+            }
+            else
+            {
                 std::cerr << "Error: Could not save image" << std::endl;
             }
         }
