@@ -76,6 +76,86 @@ __global__ void conv2dForwardKernel(const float *input, float *output, const flo
     }
 }
 
+// CUDA kernel for Conv2D forward pass with batch normalization and Leaky ReLU using shared memory
+__global__ void conv2dForwardKernelShared(const float *input, float *output, const float *weights, const float *gamma,
+                                          const float *beta, const float *runningMean, const float *runningVar,
+                                          const int inputHeight, const int inputWidth, const int inputChannels,
+                                          const int kernelSize,
+                                          const int stride, const int padding, const int outputHeight,
+                                          const int outputWidth)
+{
+    // Calculate output coordinates
+    const int filter = blockIdx.z;                       // Output channel (filter) index
+    const int h_out = blockIdx.y * blockDim.y + threadIdx.y; // Output height index
+    const int w_out = blockIdx.x * blockDim.x + threadIdx.x; // Output width index
+
+    // Check if within output bounds
+    if (h_out >= outputHeight || w_out >= outputWidth)
+        return;
+
+    // Calculate the corresponding input coordinates
+    const int h_in = h_out * stride - padding;
+    const int w_in = w_out * stride - padding;
+
+    // Shared memory for input tile
+    extern __shared__ float sharedInput[];
+    // Size of shared memory per input channel
+    const int sharedMemPerChannel = (blockDim.y + kernelSize - 1) * (blockDim.x + kernelSize - 1);
+
+    // Load input tile into shared memory for each input channel
+    for (int c = 0; c < inputChannels; ++c)
+    {
+        for (int i = threadIdx.y; i < blockDim.y + kernelSize - 1; i += blockDim.y)
+        {
+            for (int j = threadIdx.x; j < blockDim.x + kernelSize - 1; j += blockDim.x)
+            {
+                int h = h_in + i;
+                int w = w_in + j;
+                float value = 0.0f;
+                if (h >= 0 && h < inputHeight && w >= 0 && w < inputWidth)
+                {
+                    int inputIdx = (c * inputHeight + h) * inputWidth + w;
+                    value = input[inputIdx];
+                }
+                int sharedIdx = c * sharedMemPerChannel + i * (blockDim.x + kernelSize - 1) + j;
+                sharedInput[sharedIdx] = value;
+            }
+        }
+    }
+
+    // Synchronize to ensure all data is loaded into shared memory
+    __syncthreads();
+
+    // Perform convolution
+    float sum = 0.0f;
+    for (int c = 0; c < inputChannels; ++c)
+    {
+        for (int kh = 0; kh < kernelSize; ++kh)
+        {
+            for (int kw = 0; kw < kernelSize; ++kw)
+            {
+                int sharedIdx = c * sharedMemPerChannel + (threadIdx.y + kh) * (blockDim.x + kernelSize - 1) + (threadIdx.x + kw);
+                int weightIdx = ((filter * inputChannels + c) * kernelSize * kernelSize) + (kh * kernelSize + kw);
+                sum += sharedInput[sharedIdx] * weights[weightIdx];
+            }
+        }
+    }
+
+    // Apply batch normalization
+    const float mean = runningMean[filter];
+    const float var = runningVar[filter];
+    const float gammaVal = gamma[filter];
+    const float betaVal = beta[filter];
+    sum = gammaVal * (sum - mean) / sqrtf(var + 1e-8f) + betaVal;
+
+    // Apply Leaky ReLU
+    sum = (sum > 0.0f) ? sum : 0.1f * sum;
+
+    // Write the result to the output tensor
+    int outputIdx = (filter * outputHeight + h_out) * outputWidth + w_out;
+    output[outputIdx] = sum;
+}
+
 
 Conv2D::Conv2D(const int kernelSize, const int numFilters, const int stride, const int padding,
                const std::string &layerName, const ModelLoadingHelper &ml, const int outHeight, const int outWidth,
@@ -192,9 +272,20 @@ float *Conv2D::forward(const float *input)
     dim3 gridDim((outputWidth + blockDim.x - 1) / blockDim.x, (outputHeight + blockDim.y - 1) / blockDim.y, numFilters);
 
     // Launch the CUDA Kernel
-    conv2dForwardKernel<<<gridDim, blockDim>>>(input, d_intermediate, d_weights, d_gamma, d_beta, d_runningMean, d_runningVar,
-                                               inputHeight, inputWidth, inputChannels, kernelSize, stride, padding,
-                                               outputHeight, outputWidth);
+    // conv2dForwardKernel<<<gridDim, blockDim>>>(input, d_intermediate, d_weights, d_gamma, d_beta, d_runningMean, d_runningVar,
+    //                                           inputHeight, inputWidth, inputChannels, kernelSize, stride, padding,
+    //                                           outputHeight, outputWidth);
+
+	// Calculate shared memory size
+    int sharedInputSizePerChannel = (blockDim.y + kernelSize - 1) * (blockDim.x + kernelSize - 1);
+    size_t sharedMemorySize = inputChannels * sharedInputSizePerChannel * sizeof(float);
+
+    // Launch the kernel
+    conv2dForwardKernelShared<<<gridDim, blockDim, sharedMemorySize>>>(
+        input, d_intermediate, d_weights, d_gamma, d_beta, d_runningMean, d_runningVar,
+        inputHeight, inputWidth, inputChannels, kernelSize, stride, padding,
+        outputHeight, outputWidth);
+
 
     return d_intermediate;
 }

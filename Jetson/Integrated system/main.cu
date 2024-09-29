@@ -90,12 +90,11 @@ int main() {
 
         // Transfer the data from host memory to the GPU memory (device)
         cudaMemcpy(input_image, host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
-
-        cv::cvtColor(resized_frame, resized_frame, cv::COLOR_RGB2BGR);
-
         // Get the bounding boxes
         std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
+
         // Draw the bounding boxes
+        cv::cvtColor(resized_frame, resized_frame, cv::COLOR_RGB2BGR);
         resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
 
         // Display the image
