@@ -76,7 +76,7 @@ __global__ void conv2dForwardKernel(
         __half var_plus_eps = __hadd(var, __float2half(1e-8f));
 
         // Perform sqrt(var + 1e-8)
-        __half sqrt_var_plus_eps = __hsqrt(var_plus_eps);
+        __half sqrt_var_plus_eps = 0.0;
 
         // Perform (sum - mean) / sqrt(var + 1e-8)
         __half normalized = __hdiv(sum_minus_mean, sqrt_var_plus_eps);
