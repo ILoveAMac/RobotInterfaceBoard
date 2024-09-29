@@ -49,7 +49,7 @@ yolo::~yolo()
     }
 }
 
-std::vector<std::vector<float>> yolo::getBoxPredictions(__half *inputImage)
+std::vector<std::vector<__half>> yolo::getBoxPredictions(__half *inputImage)
 {
     __half *output = nullptr;
     for (const auto &layer : this->model)
