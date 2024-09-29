@@ -51,7 +51,7 @@ yolo::~yolo()
 
 std::vector<std::vector<float>> yolo::getBoxPredictions(__half *inputImage)
 {
-    float *output = nullptr;
+    __half *output = nullptr;
     for (const auto &layer : this->model)
     {
         output = layer->forward(inputImage);
