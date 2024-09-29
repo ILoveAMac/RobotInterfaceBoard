@@ -138,8 +138,8 @@ int main()
                 std::cerr << "Error: Could not save image" << std::endl;
             }
         }
-        duration<double, std::milli> ms_double = t2 - t1;
-        std::cout << ms_double.count() << "ms\n";
+        // duration<double, std::milli> ms_double = t2 - t1;
+        // std::cout << ms_double.count() << "ms\n";
     }
 
     // Release resources
