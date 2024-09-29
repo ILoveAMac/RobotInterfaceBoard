@@ -266,7 +266,7 @@ void Conv2D::loadData()
 float *Conv2D::forward(const float *input)
 {
     // Block and grid sizes to launch the CUDA Kernel
-    dim3 blockDim(8, 8); // 16x16 threads per block (256 which is dividable by 32 as warps run in groups of 32)
+    dim3 blockDim(4, 4); // 16x16 threads per block (256 which is dividable by 32 as warps run in groups of 32)
     // Calculation of the grid dimensions below ensures that we always have enough blocks to cover the whole image
     dim3 gridDim((outputWidth + blockDim.x - 1) / blockDim.x, (outputHeight + blockDim.y - 1) / blockDim.y, numFilters);
 
