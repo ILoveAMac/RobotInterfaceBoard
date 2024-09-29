@@ -24,7 +24,7 @@ __global__ void maxPool2DForwardKernel(const __half *input, __half *output,
     if (h < outputHeight && w < outputWidth)
     {
         // We initialize the max value to a very low number
-        __half maxVal = -10000.0f; // -10000 should be low enough
+        __half maxVal = __float2half(-10000.0f); // -10000 should be low enough
 
         // Two for loops to move the max pooling window across the input
         for (int kh = 0; kh < kernelSize; kh++)
@@ -40,7 +40,8 @@ __global__ void maxPool2DForwardKernel(const __half *input, __half *output,
                 {
                     // Calculate the index in the input tensor
                     const int inputIndex = (c * inputHeight + inputH) * inputWidth + inputW;
-                    maxVal = fmax(maxVal, input[inputIndex]); // Store larges value
+                    // maxVal = fmax(maxVal, input[inputIndex]); // Store larges value
+                    maxVal = (maxVal > input[inputIndex]) ? maxVal : input[inputIndex];
                 }
             }
         }
