@@ -85,7 +85,7 @@ __global__ void conv2dForwardKernelShared(const float *input, float *output, con
                                           const int outputWidth)
 {
     // Calculate output coordinates
-    const int filter = blockIdx.z;                       // Output channel (filter) index
+    const int filter = blockIdx.z;                           // Output channel (filter) index
     const int h_out = blockIdx.y * blockDim.y + threadIdx.y; // Output height index
     const int w_out = blockIdx.x * blockDim.x + threadIdx.x; // Output width index
 
@@ -155,7 +155,6 @@ __global__ void conv2dForwardKernelShared(const float *input, float *output, con
     int outputIdx = (filter * outputHeight + h_out) * outputWidth + w_out;
     output[outputIdx] = sum;
 }
-
 
 Conv2D::Conv2D(const int kernelSize, const int numFilters, const int stride, const int padding,
                const std::string &layerName, const ModelLoadingHelper &ml, const int outHeight, const int outWidth,
@@ -272,20 +271,19 @@ float *Conv2D::forward(const float *input)
     dim3 gridDim((outputWidth + blockDim.x - 1) / blockDim.x, (outputHeight + blockDim.y - 1) / blockDim.y, numFilters);
 
     // Launch the CUDA Kernel
-    // conv2dForwardKernel<<<gridDim, blockDim>>>(input, d_intermediate, d_weights, d_gamma, d_beta, d_runningMean, d_runningVar,
-    //                                           inputHeight, inputWidth, inputChannels, kernelSize, stride, padding,
-    //                                           outputHeight, outputWidth);
+    conv2dForwardKernel<<<gridDim, blockDim>>>(input, d_intermediate, d_weights, d_gamma, d_beta, d_runningMean, d_runningVar,
+                                               inputHeight, inputWidth, inputChannels, kernelSize, stride, padding,
+                                               outputHeight, outputWidth);
 
-	// Calculate shared memory size
-    int sharedInputSizePerChannel = (blockDim.y + kernelSize - 1) * (blockDim.x + kernelSize - 1);
-    size_t sharedMemorySize = inputChannels * sharedInputSizePerChannel * sizeof(float);
+    // Calculate shared memory size
+    // int sharedInputSizePerChannel = (blockDim.y + kernelSize - 1) * (blockDim.x + kernelSize - 1);
+    // size_t sharedMemorySize = inputChannels * sharedInputSizePerChannel * sizeof(float);
 
     // Launch the kernel
-    conv2dForwardKernelShared<<<gridDim, blockDim, sharedMemorySize>>>(
-        input, d_intermediate, d_weights, d_gamma, d_beta, d_runningMean, d_runningVar,
-        inputHeight, inputWidth, inputChannels, kernelSize, stride, padding,
-        outputHeight, outputWidth);
-
+    // conv2dForwardKernelShared<<<gridDim, blockDim, sharedMemorySize>>>(
+    //     input, d_intermediate, d_weights, d_gamma, d_beta, d_runningMean, d_runningVar,
+    //     inputHeight, inputWidth, inputChannels, kernelSize, stride, padding,
+    //     outputHeight, outputWidth);
 
     return d_intermediate;
 }
@@ -337,7 +335,7 @@ void Conv2D::allocateAndCopyUnifiedMemory(const std::vector<float> &flattenedDat
     const size_t dataSize = flattenedData.size() * sizeof(float);
 
     // Step 1: Allocate GPU memory
-    const cudaError_t err = cudaMalloc(&d_ptr, dataSize);  // Allocate memory on the GPU (device)
+    const cudaError_t err = cudaMalloc(&d_ptr, dataSize); // Allocate memory on the GPU (device)
     if (!checkCudaError(err, "Failed to allocate GPU memory"))
     {
         return; // Handle error: early exit if allocation failed
@@ -347,8 +345,8 @@ void Conv2D::allocateAndCopyUnifiedMemory(const std::vector<float> &flattenedDat
     const cudaError_t memcpyErr = cudaMemcpy(d_ptr, flattenedData.data(), dataSize, cudaMemcpyHostToDevice);
     if (!checkCudaError(memcpyErr, "Failed to copy data to GPU memory"))
     {
-        cudaFree(d_ptr);  // Free GPU memory if copying fails
-        return; // Handle error: early exit if memcpy failed
+        cudaFree(d_ptr); // Free GPU memory if copying fails
+        return;          // Handle error: early exit if memcpy failed
     }
     // d_ptr now points to the GPU memory containing the flattened data
 }
