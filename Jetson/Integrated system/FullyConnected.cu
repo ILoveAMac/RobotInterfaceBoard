@@ -19,7 +19,7 @@ __global__ void fullyConnectedKernel(const __half *input, const __half *weights,
     if (neuronIndex < outputSize)
     {
         // Accumulator for result
-        __half sum = 0.0f;
+        __half sum = __float2half(0.0f);
 
         // Perform the dot product between the input vector and the row of the weights matrix
         for (int i = 0; i < inputSize; i++)
@@ -33,7 +33,19 @@ __global__ void fullyConnectedKernel(const __half *input, const __half *weights,
         // Only apply the activation if this is an inner layer
         if (applyActivation)
         {
-            sum = (sum > 0.0f) ? sum : 0.1f * sum; // Leaky ReLu
+            __half zero = __float2half(0.0f);
+            __half one_tenth = __float2half(0.1f);
+
+            // Use the __hgt intrinsic to compare if sum > 0.0f
+            if (__hgt(sum, zero)) // __hgt(a, b) returns true if a > b
+            {
+                // sum remains unchanged
+            }
+            else
+            {
+                // Perform sum = 0.1f * sum using the __hmul intrinsic
+                sum = __hmul(one_tenth, sum);
+            }
         }
 
         // Write the result to the output
