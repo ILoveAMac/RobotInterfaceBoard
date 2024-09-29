@@ -8,6 +8,8 @@
 #include <thread>
 #include <vector>
 
+#include <cuda_fp16.h>
+
 // OpenCV Headers
 #include <opencv2/opencv.hpp>
 
@@ -100,7 +102,7 @@ int main()
                 }
             }
         }
-        half test = 1.0;
+        __half test = 1.0;
 
         // Transfer the data from host memory to the GPU memory (device)
         cudaMemcpy(input_image, host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
