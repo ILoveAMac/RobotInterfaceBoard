@@ -1,37 +1,16 @@
 #include "yolo.cuh"
 
-// Function to convert 2D vector of __half to 2D vector of float
-std::vector<std::vector<float>> convertHalfToFloat(const std::vector<std::vector<__half>> &halfVec)
+void convertHalfToFloat(const __half *halfArray, float *floatArray, size_t length)
 {
-    // Determine the size of the outer vector
-    size_t numRows = halfVec.size();
-
-    // Initialize the output 2D vector with the same number of rows
-    std::vector<std::vector<float>> floatVec;
-    floatVec.reserve(numRows); // Reserve space to avoid multiple reallocations
-
-    // Iterate over each row in the input 2D vector
-    for (const auto &row : halfVec)
+    if (halfArray == nullptr || floatArray == nullptr)
     {
-        // Determine the size of the current row
-        size_t numCols = row.size();
-
-        // Initialize the inner vector for floats with the same number of columns
-        std::vector<float> floatRow;
-        floatRow.reserve(numCols); // Reserve space for efficiency
-
-        // Iterate over each __half element in the current row
-        for (const auto &h : row)
-        {
-            // Convert __half to float and add to the floatRow
-            floatRow.emplace_back(__half2float(h));
-        }
-
-        // Add the converted row to the floatVec
-        floatVec.emplace_back(std::move(floatRow));
+        throw std::invalid_argument("Input or output array pointer is null.");
     }
 
-    return floatVec;
+    for (size_t i = 0; i < length; ++i)
+    {
+        floatArray[i] = __half2float(halfArray[i]);
+    }
 }
 
 yolo::yolo(const std::string &modelPath) : MLH(ModelLoadingHelper(modelPath))
@@ -96,8 +75,9 @@ std::vector<std::vector<float>> yolo::getBoxPredictions(__half *inputImage)
     // Copy the data from GPU to CPU
     cudaMemcpy(this->hostOutput, output, 7 * 7 * 10 * sizeof(__half), cudaMemcpyDeviceToHost);
 
-    // Convert half to float
-    std::vector<std::vector<float>> floatOutput = convertHalfToFloat(aiHelperUtils::reshapeOutput(this->hostOutput, 7 * 7 * 10));
+    // Convert the output to float
+    float floatOutput[7 * 7 * 10];
+    convertHalfToFloat(this->hostOutput, floatOutput, 7 * 7 * 10);
 
     // Get the final bounding boxes
     return aiHelperUtils::getFinalBoundingBoxes(floatOutput);
