@@ -195,12 +195,6 @@ float *Conv2D::forward(const float *input)
                                                inputHeight, inputWidth, inputChannels, kernelSize, stride, padding,
                                                outputHeight, outputWidth);
 
-    // Launch the kernel
-    conv2dForwardKernelShared<<<gridDim, blockDim, sharedMemorySize>>>(
-        input, d_intermediate, d_weights, d_gamma, d_beta, d_runningMean, d_runningVar,
-        inputHeight, inputWidth, inputChannels, kernelSize, stride, padding,
-        outputHeight, outputWidth);
-
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {
