@@ -279,6 +279,16 @@ float *Conv2D::forward(const float *input)
     int sharedInputSizePerChannel = (blockDim.y + kernelSize - 1) * (blockDim.x + kernelSize - 1);
     size_t sharedMemorySize = inputChannels * sharedInputSizePerChannel * sizeof(float);
 
+    // Check if shared memory size exceeds the hardware limit
+    size_t maxSharedMemPerBlock;
+    cudaDeviceGetAttribute(&maxSharedMemPerBlock, cudaDevAttrMaxSharedMemoryPerBlock, 0);
+    if (sharedMemorySize > maxSharedMemPerBlock)
+    {
+        std::cerr << "Shared memory size per block (" << sharedMemorySize
+                  << " bytes) exceeds the hardware limit (" << maxSharedMemPerBlock << " bytes)." << std::endl;
+        // return nullptr; // Early exit or handle the error appropriately
+    }
+
     // Launch the kernel
     conv2dForwardKernelShared<<<gridDim, blockDim, sharedMemorySize>>>(
         input, d_intermediate, d_weights, d_gamma, d_beta, d_runningMean, d_runningVar,
