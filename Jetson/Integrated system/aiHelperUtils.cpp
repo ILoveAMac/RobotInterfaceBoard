@@ -56,25 +56,25 @@ cv::Mat aiHelperUtils::drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<
         int x2 = static_cast<int>(x_center + w / 2.0);
         int y2 = static_cast<int>(y_center + h / 2.0);
 
-        // Draw the bounding box on the image
-        cv::rectangle(frame, cv::Point(x1, y1), cv::Point(x2, y2), cv::Scalar(0, 255, 0), 2);
+        // // Draw the bounding box on the image
+        // cv::rectangle(frame, cv::Point(x1, y1), cv::Point(x2, y2), cv::Scalar(0, 255, 0), 2);
 
-        // Convert confidence to string and format it
-        std::string label = cv::format("%.2f", c);
+        // // Convert confidence to string and format it
+        // std::string label = cv::format("%.2f", c);
 
-        // Set the position for the confidence label (above the top-left corner of the bounding box)
-        int baseline = 0;
-        cv::Size label_size = cv::getTextSize(label, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseline);
-        int label_x = std::max(x1, 0);                     // Ensure the label is inside the image boundaries
-        int label_y = std::max(y1 - label_size.height, 0); // Display above the box
+        // // Set the position for the confidence label (above the top-left corner of the bounding box)
+        // int baseline = 0;
+        // cv::Size label_size = cv::getTextSize(label, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseline);
+        // int label_x = std::max(x1, 0);                     // Ensure the label is inside the image boundaries
+        // int label_y = std::max(y1 - label_size.height, 0); // Display above the box
 
-        // Draw the label background rectangle
-        cv::rectangle(frame, cv::Point(label_x, label_y), cv::Point(label_x + label_size.width, label_y + label_size.height + baseline),
-                      cv::Scalar(0, 255, 0), cv::FILLED);
+        // // Draw the label background rectangle
+        // cv::rectangle(frame, cv::Point(label_x, label_y), cv::Point(label_x + label_size.width, label_y + label_size.height + baseline),
+        //               cv::Scalar(0, 255, 0), cv::FILLED);
 
-        // Put the confidence text on the image
-        cv::putText(frame, label, cv::Point(label_x, label_y + label_size.height),
-                    cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0), 1);
+        // // Put the confidence text on the image
+        // cv::putText(frame, label, cv::Point(label_x, label_y + label_size.height),
+        //             cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0), 1);
     }
 
     return frame;
