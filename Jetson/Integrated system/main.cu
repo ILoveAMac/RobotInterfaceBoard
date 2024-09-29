@@ -108,15 +108,15 @@ int main()
         std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
         auto t2 = high_resolution_clock::now();
 
-        duration<double, std::milli> ms_double = t2 - t1;
-        std::cout << ms_double.count() << "ms\n";
-
         // Draw the bounding boxes
         cv::cvtColor(resized_frame, resized_frame, cv::COLOR_RGB2BGR);
         resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
 
         // Display the image
         cv::imshow("Detection", resized_frame);
+
+        duration<double, std::milli> ms_double = t2 - t1;
+        std::cout << ms_double.count() << "ms\n";
 
         // Exit if 'q' is pressed
         if (cv::waitKey(1) == 'c')
