@@ -280,7 +280,7 @@ float *Conv2D::forward(const float *input)
     size_t sharedMemorySize = inputChannels * sharedInputSizePerChannel * sizeof(float);
 
     // Check if shared memory size exceeds the hardware limit
-    size_t maxSharedMemPerBlock;
+    int maxSharedMemPerBlock;
     cudaDeviceGetAttribute(&maxSharedMemPerBlock, cudaDevAttrMaxSharedMemoryPerBlock, 0);
     if (sharedMemorySize > maxSharedMemPerBlock)
     {
