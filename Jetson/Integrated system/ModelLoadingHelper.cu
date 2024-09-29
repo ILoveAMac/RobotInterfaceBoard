@@ -12,7 +12,7 @@ ModelLoadingHelper::ModelLoadingHelper(const std::string &filePath)
 ModelLoadingHelper::~ModelLoadingHelper() {}
 
 // Method to load 4D convolution weights and convert to __half
-std::vector<std::vector<std::vector<std::vector<__half>>>> loadConv4D(const std::string &key) const
+std::vector<std::vector<std::vector<std::vector<__half>>>> ModelLoadingHelper::loadConv4D(const std::string &key) const
 {
     // Create file path by appending key to this->filepath
     const std::string fullPath = this->filePath + key;
@@ -69,7 +69,7 @@ std::vector<std::vector<std::vector<std::vector<__half>>>> loadConv4D(const std:
 }
 
 // Method to load 2D fully connected layer data and convert to __half
-std::vector<std::vector<__half>> loadFCL(const std::string &key) const
+std::vector<std::vector<__half>> ModelLoadingHelper::loadFCL(const std::string &key) const
 {
     // Create file path by appending key to this->filepath
     const std::string fullPath = this->filePath + key;
@@ -110,7 +110,7 @@ std::vector<std::vector<__half>> loadFCL(const std::string &key) const
 }
 
 // Method to load 1D data and convert to __half
-std::vector<__half> load1D(const std::string &key) const
+std::vector<__half> ModelLoadingHelper::load1D(const std::string &key) const
 {
     // Create file path by appending key to this->filepath
     const std::string fullPath = this->filePath + key;
