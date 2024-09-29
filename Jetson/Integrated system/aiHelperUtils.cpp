@@ -4,24 +4,28 @@ aiHelperUtils::aiHelperUtils() {}
 
 aiHelperUtils::~aiHelperUtils() {}
 
-std::vector<std::vector<float>> aiHelperUtils::getFinalBoundingBoxes(const float* detections) {
+std::vector<std::vector<float>> aiHelperUtils::getFinalBoundingBoxes(const float *detections)
+{
     // Vecttor to store the bounding boxes
     std::vector<std::vector<float>> boxes;
-    for (int i = 0; i < GRID_SIZE; i++) {
-        for (int j = 0; j < GRID_SIZE; j++) {
-            for (int b = 0; b < NUM_BOXES; b++) {  // Loop over each bounding box in the cell
+    for (int i = 0; i < GRID_SIZE; i++)
+    {
+        for (int j = 0; j < GRID_SIZE; j++)
+        {
+            for (int b = 0; b < NUM_BOXES; b++)
+            { // Loop over each bounding box in the cell
                 // Calculate the starting index for the current bounding box (5 values per bounding box)
                 const int index = (i * GRID_SIZE + j) * (5 * NUM_BOXES) + b * 5;
 
                 // Extract all of the bounding boxes and store them in the boxes vector
-                float x_offset = detections[index];            // x relative to the grid cell
-                float y_offset = detections[index + 1];        // y relative to the grid cell
-                float w = detections[index + 2] * IMG_HEIGHT;  // Width relative to image size
-                float h = detections[index + 3] * IMG_WIDTH;   // Height relative to image size
-                float c = detections[index + 4];               // Confidence for the bounding box
+                float x_offset = detections[index];           // x relative to the grid cell
+                float y_offset = detections[index + 1];       // y relative to the grid cell
+                float w = detections[index + 2] * IMG_HEIGHT; // Width relative to image size
+                float h = detections[index + 3] * IMG_WIDTH;  // Height relative to image size
+                float c = detections[index + 4];              // Confidence for the bounding box
 
-                float x_center = (j + x_offset) * (IMG_HEIGHT / GRID_SIZE);  // Absolute x-center
-                float y_center = (i + y_offset) * (IMG_WIDTH / GRID_SIZE);   // Absolute y-center
+                float x_center = (j + x_offset) * (IMG_HEIGHT / GRID_SIZE); // Absolute x-center
+                float y_center = (i + y_offset) * (IMG_WIDTH / GRID_SIZE);  // Absolute y-center
 
                 std::vector<float> box = {x_center, y_center, w, h, c};
 
@@ -35,8 +39,10 @@ std::vector<std::vector<float>> aiHelperUtils::getFinalBoundingBoxes(const float
     return aiHelperUtils::nonMaxSuppression(boxes);
 }
 
-cv::Mat aiHelperUtils::drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<float>> boxes) {
-    for (std::vector<float> box : boxes) {
+cv::Mat aiHelperUtils::drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<float>> boxes)
+{
+    for (std::vector<float> box : boxes)
+    {
         // Extract the bounding box data
         float x_center = box[0];
         float y_center = box[1];
@@ -59,8 +65,8 @@ cv::Mat aiHelperUtils::drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<
         // Set the position for the confidence label (above the top-left corner of the bounding box)
         int baseline = 0;
         cv::Size label_size = cv::getTextSize(label, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseline);
-        int label_x = std::max(x1, 0);                      // Ensure the label is inside the image boundaries
-        int label_y = std::max(y1 - label_size.height, 0);  // Display above the box
+        int label_x = std::max(x1, 0);                     // Ensure the label is inside the image boundaries
+        int label_y = std::max(y1 - label_size.height, 0); // Display above the box
 
         // Draw the label background rectangle
         cv::rectangle(frame, cv::Point(label_x, label_y), cv::Point(label_x + label_size.width, label_y + label_size.height + baseline),
@@ -74,24 +80,27 @@ cv::Mat aiHelperUtils::drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<
     return frame;
 }
 
-std::vector<std::vector<float>> aiHelperUtils::nonMaxSuppression(std::vector<std::vector<float>> boxes) {
+std::vector<std::vector<float>> aiHelperUtils::nonMaxSuppression(std::vector<std::vector<float>> boxes)
+{
     // Remove any predictions from the list that have a confidence score less than the threshold
     // confidences are stored in the last element of the vector
     std::vector<std::vector<float>> filtered_boxes;
-    for (int i = 0; i < boxes.size(); i++) {
-        if (boxes[i][4] > CONF_THRESH) {
+    for (int i = 0; i < boxes.size(); i++)
+    {
+        if (boxes[i][4] > CONF_THRESH)
+        {
             filtered_boxes.push_back(boxes[i]);
         }
     }
 
     // Sort the boxes based on their confidence scores, highest first
-    std::sort(filtered_boxes.begin(), filtered_boxes.end(), [](const std::vector<float>& a, const std::vector<float>& b) {
-        return a[4] > b[4];
-    });
+    std::sort(filtered_boxes.begin(), filtered_boxes.end(), [](const std::vector<float> &a, const std::vector<float> &b)
+              { return a[4] > b[4]; });
 
     // Perform non-maximum suppression
     std::vector<std::vector<float>> final_boxes;
-    while (filtered_boxes.size() > 0) {
+    while (filtered_boxes.size() > 0)
+    {
         std::vector<float> chosenBox = filtered_boxes[0];
         // Add the chosen box to the final list
         final_boxes.push_back(chosenBox);
@@ -100,7 +109,8 @@ std::vector<std::vector<float>> aiHelperUtils::nonMaxSuppression(std::vector<std
 
         // Remove any boxes that have a high IoU with the chosen box
         filtered_boxes.erase(std::remove_if(filtered_boxes.begin(), filtered_boxes.end(),
-                                            [chosenBox](const std::vector<float>& box) {
+                                            [chosenBox](const std::vector<float> &box)
+                                            {
                                                 return aiHelperUtils::iou(chosenBox, box) > IOU_NMS_THRESH;
                                             }),
                              filtered_boxes.end());
@@ -109,7 +119,8 @@ std::vector<std::vector<float>> aiHelperUtils::nonMaxSuppression(std::vector<std
     return final_boxes;
 }
 
-float aiHelperUtils::iou(std::vector<float> box1, std::vector<float> box2) {
+float aiHelperUtils::iou(std::vector<float> box1, std::vector<float> box2)
+{
     // Calculate the intersection area of the two boxes
     float box1_x1 = box1[0] - box1[2] / 2;
     float box1_x2 = box1[0] + box1[2] / 2;
