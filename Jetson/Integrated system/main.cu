@@ -124,23 +124,23 @@ int main()
         // Display the image
         cv::imshow("Detection", resized_frame);
 
-        auto t2 = high_resolution_clock::now();
-        duration<double, std::milli> ms_double = t2 - t1;
-        if (ms_double.count() > 5000) // Take an image every 5 seconds
-        {
-            t1 = t2;
-            // Save the current image
-            std::string filename = "img/captured_image_" + std::to_string(image_counter) + ".png";
-            if (cv::imwrite(filename, 255 * resized_frame))
-            {
-                std::cout << "Image saved: " << filename << std::endl;
-                image_counter++;
-            }
-            else
-            {
-                std::cerr << "Error: Could not save image" << std::endl;
-            }
-        }
+        // auto t2 = high_resolution_clock::now();
+        // duration<double, std::milli> ms_double = t2 - t1;
+        // if (ms_double.count() > 5000) // Take an image every 5 seconds
+        // {
+        //     t1 = t2;
+        //     // Save the current image
+        //     std::string filename = "img/captured_image_" + std::to_string(image_counter) + ".png";
+        //     if (cv::imwrite(filename, 255 * resized_frame))
+        //     {
+        //         std::cout << "Image saved: " << filename << std::endl;
+        //         image_counter++;
+        //     }
+        //     else
+        //     {
+        //         std::cerr << "Error: Could not save image" << std::endl;
+        //     }
+        // }
         // duration<double, std::milli> ms_double = t2 - t1;
         // std::cout << ms_double.count() << "ms\n";
     }
