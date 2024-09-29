@@ -186,7 +186,7 @@ void Conv2D::loadData()
 float *Conv2D::forward(const float *input)
 {
     // Block and grid sizes to launch the CUDA Kernel
-    dim3 blockDim(4, 4); // 16x16 threads per block (256 which is dividable by 32 as warps run in groups of 32)
+    dim3 blockDim(8, 32); // 16x16 threads per block (256 which is dividable by 32 as warps run in groups of 32)
     // Calculation of the grid dimensions below ensures that we always have enough blocks to cover the whole image
     dim3 gridDim((outputWidth + blockDim.x - 1) / blockDim.x, (outputHeight + blockDim.y - 1) / blockDim.y, numFilters);
 
@@ -194,12 +194,6 @@ float *Conv2D::forward(const float *input)
     conv2dForwardKernel<<<gridDim, blockDim>>>(input, d_intermediate, d_weights, d_gamma, d_beta, d_runningMean, d_runningVar,
                                                inputHeight, inputWidth, inputChannels, kernelSize, stride, padding,
                                                outputHeight, outputWidth);
-
-    cudaError_t err = cudaGetLastError();
-    if (err != cudaSuccess)
-    {
-        std::cerr << "CUDA error: " << cudaGetErrorString(err) << std::endl;
-    }
 
     return d_intermediate;
 }
