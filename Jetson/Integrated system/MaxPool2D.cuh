@@ -16,7 +16,7 @@ public:
     ~MaxPool2D() override;
 
     // Function to perform max pooling
-    float *forward(const float *input) override;
+    __half *forward(const __half *input) override;
 
     // Pooling layer doesn't require loading data, so it's left empty
     void loadData() override {}
@@ -27,7 +27,7 @@ public:
     int getOutputChannels() const override;
 
     // scratch space for storing intermediate results
-    float *d_intermediate;
+    __half *d_intermediate;
 
 private:
     // Input shape

@@ -4,7 +4,7 @@
 
 #include "MaxPool2D.cuh"
 
-__global__ void maxPool2DForwardKernel(const float *input, float *output,
+__global__ void maxPool2DForwardKernel(const __half *input, __half *output,
                                        const int inputHeight, const int inputWidth, int inputChannels,
                                        const int outputHeight, const int outputWidth, const int kernelSize,
                                        const int stride)
@@ -24,7 +24,7 @@ __global__ void maxPool2DForwardKernel(const float *input, float *output,
     if (h < outputHeight && w < outputWidth)
     {
         // We initialize the max value to a very low number
-        float maxVal = -10000.0f; // -10000 should be low enough
+        __half maxVal = -10000.0f; // -10000 should be low enough
 
         // Two for loops to move the max pooling window across the input
         for (int kh = 0; kh < kernelSize; kh++)
@@ -64,8 +64,8 @@ MaxPool2D::MaxPool2D(const int inputHeight, const int inputWidth, const int inpu
     this->outputChannels = outputChannels;
 
     // allcoate memory for the intermediate results
-    // cudaMallocManaged(&d_intermediate, outputHeight * outputWidth * inputChannels * sizeof(float));
-    cudaMalloc(&d_intermediate, outputHeight * outputWidth * inputChannels * sizeof(float));
+    // cudaMallocManaged(&d_intermediate, outputHeight * outputWidth * inputChannels * sizeof(__half));
+    cudaMalloc(&d_intermediate, outputHeight * outputWidth * inputChannels * sizeof(__half));
 }
 
 MaxPool2D::~MaxPool2D()
@@ -73,7 +73,7 @@ MaxPool2D::~MaxPool2D()
     // There is no memory to free for the max pooling layer
 }
 
-float *MaxPool2D::forward(const float *input)
+__half *MaxPool2D::forward(const __half *input)
 {
     // Define block and grid sizes for the CUDA Kernel
     dim3 blockDim(8, 32); // 16x16 threads per block

@@ -8,6 +8,8 @@
 #include <cstring>
 #include <cuda_runtime.h>
 
+#include <cuda_fp16.h>
+
 #include "ModelLoadingHelper.h"
 #include "Layer.cuh"
 
@@ -27,7 +29,7 @@ public:
 
     // Forward function to perform convolution, batch normalization, and activation
     // It takes an input tensor (flattened) and returns the output tensor (flattened)
-    float *forward(const float *input) override;
+    __half *forward(const __half *input) override;
 
     int getOutputHeight() const override;
 
@@ -51,25 +53,25 @@ private:
     int outputHeight, outputWidth, outputChannels;
 
     // Pointers to hold weights and biases on the GPU
-    float *d_weights; // Pointer to device memory for kernel weights
+    __half *d_weights; // Pointer to device memory for kernel weights
 
     // Batch normalization parameters
-    float *d_gamma;       // Pointer to device memory for batch norm scale (gamma)
-    float *d_beta;        // Pointer to device memory for batch norm shift (beta)
-    float *d_runningMean; // Pointer to device memory for running mean
-    float *d_runningVar;  // Pointer to device memory for running variance
+    __half *d_gamma;       // Pointer to device memory for batch norm scale (gamma)
+    __half *d_beta;        // Pointer to device memory for batch norm shift (beta)
+    __half *d_runningMean; // Pointer to device memory for running mean
+    __half *d_runningVar;  // Pointer to device memory for running variance
 
     // Model Loading helper to load the data for the model during init
     ModelLoadingHelper ml;
 
     // Scratch space for storing intermediate results
-    float *d_intermediate; // Pointer to device memory for intermediate results
+    __half *d_intermediate; // Pointer to device memory for intermediate results
 
-    static std::vector<float> flatten2D(const std::vector<std::vector<float>> &input);
+    static std::vector<__half> flatten2D(const std::vector<std::vector<__half>> &input);
 
-    static std::vector<float> flatten4D(const std::vector<std::vector<std::vector<std::vector<float>>>> &input);
+    static std::vector<__half> flatten4D(const std::vector<std::vector<std::vector<std::vector<__half>>>> &input);
 
-    static void allocateAndCopyUnifiedMemory(const std::vector<float> &flattenedData, float *&d_ptr);
+    static void allocateAndCopyUnifiedMemory(const std::vector<__half> &flattenedData, __half *&d_ptr);
 
     static bool checkCudaError(cudaError_t err, const char *msg);
 };

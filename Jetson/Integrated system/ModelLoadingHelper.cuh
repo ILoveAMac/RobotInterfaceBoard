@@ -12,10 +12,13 @@
 #include <sstream>
 #include <stdexcept>
 
+#include <cuda_fp16.h>
+
 #include "cereal/types/vector.hpp"
 #include "cereal/archives/binary.hpp"
 
-class ModelLoadingHelper {
+class ModelLoadingHelper
+{
 public:
     // Constructor takes a file path to the directory containing model parameters
     explicit ModelLoadingHelper(const std::string &filePath);
@@ -24,18 +27,16 @@ public:
     ~ModelLoadingHelper();
 
     // Function to load 4D vector of floats, so a conv2d layer
-    std::vector<std::vector<std::vector<std::vector<float>>>> loadConv4D(const std::string &key) const;
+    std::vector<std::vector<std::vector<std::vector<__half>>>> loadConv4D(const std::string &key) const;
 
     // Function to load 2D vector of floats, used for fully connected layers
-    std::vector<std::vector<float>> loadFCL(const std::string &key) const;
+    std::vector<std::vector<__half>> loadFCL(const std::string &key) const;
 
     // Function to load 1D vector, used for batch norm and bias for fully connected layer
-    std::vector<float> load1D(const std::string &key) const;
+    std::vector<__half> load1D(const std::string &key) const;
 
 private:
     std::string filePath;
 };
 
-
-
-#endif //MODELLOADINGHELPER_H
+#endif // MODELLOADINGHELPER_H

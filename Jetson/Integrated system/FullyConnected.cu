@@ -7,7 +7,7 @@
 // CUDA Kernel for output layer
 // Each thread in the CUDA grid will compute one output neuron (one element of the output vector).
 // The computation for each output neuron is independent of the others.
-__global__ void fullyConnectedKernel(const float *input, const float *weights, const float *biases, float *output,
+__global__ void fullyConnectedKernel(const __half *input, const __half *weights, const __half *biases, __half *output,
                                      const int inputSize, const int outputSize, const bool applyActivation)
 {
 
@@ -19,7 +19,7 @@ __global__ void fullyConnectedKernel(const float *input, const float *weights, c
     if (neuronIndex < outputSize)
     {
         // Accumulator for result
-        float sum = 0.0f;
+        __half sum = 0.0f;
 
         // Perform the dot product between the input vector and the row of the weights matrix
         for (int i = 0; i < inputSize; i++)
@@ -52,8 +52,8 @@ FullyConnected::FullyConnected(const int inputSize, const int outputSize, const 
     this->applyActivation = applyActivation;
 
     // allocate memory for the intermediate results
-    // cudaMallocManaged(&d_intermediate, outputSize * sizeof(float));
-    cudaMalloc(&d_intermediate, outputSize * sizeof(float));
+    // cudaMallocManaged(&d_intermediate, outputSize * sizeof(__half));
+    cudaMalloc(&d_intermediate, outputSize * sizeof(__half));
 }
 
 FullyConnected::~FullyConnected()
@@ -85,7 +85,7 @@ void FullyConnected::loadData()
     allocateAndCopyUnifiedMemory(biases, d_biases);
 }
 
-float *FullyConnected::forward(const float *input)
+__half *FullyConnected::forward(const __half *input)
 {
     int threadsPerBlock = 8;
     int blocksPerGrid = (outputSize + threadsPerBlock - 1) / threadsPerBlock;
@@ -95,9 +95,9 @@ float *FullyConnected::forward(const float *input)
     return d_intermediate;
 }
 
-std::vector<float> FullyConnected::flatten2D(const std::vector<std::vector<float>> &input)
+std::vector<__half> FullyConnected::flatten2D(const std::vector<std::vector<__half>> &input)
 {
-    std::vector<float> flattened;
+    std::vector<__half> flattened;
     for (const auto &row : input)
     {
         flattened.insert(flattened.end(), row.begin(), row.end());
@@ -105,10 +105,10 @@ std::vector<float> FullyConnected::flatten2D(const std::vector<std::vector<float
     return flattened;
 }
 
-void FullyConnected::allocateAndCopyUnifiedMemory(const std::vector<float> &flattenedData, float *&d_ptr)
+void FullyConnected::allocateAndCopyUnifiedMemory(const std::vector<__half> &flattenedData, __half *&d_ptr)
 {
     // Calculate the size of the flattened data in bytes
-    const size_t dataSize = flattenedData.size() * sizeof(float);
+    const size_t dataSize = flattenedData.size() * sizeof(__half);
 
     // Step 1: Allocate GPU memory
     const cudaError_t err = cudaMalloc(&d_ptr, dataSize); // Allocate memory on the GPU (device)

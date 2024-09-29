@@ -50,11 +50,12 @@ int main()
     std::vector<cv::Mat> channels(3);
 
     // Allocate device memory for the input image (3 channels, 448x448)
-    float *input_image;
-    cudaMalloc(&input_image, 3 * 448 * 448 * sizeof(float));
+    __half *input_image;
+    cudaMalloc(&input_image, 3 * 448 * 448 * sizeof(__half));
 
     // Allocate host memory for the input image (use standard malloc or new)
-    auto host_image = static_cast<float *>(malloc(3 * 448 * 448 * sizeof(float)));
+    // auto host_image = static_cast<float *>(malloc(3 * 448 * 448 * sizeof(float)));
+    __half *host_image_half = new __half[3 * 448 * 448];
 
     // Create a window to display the results
     cv::namedWindow("Detection", cv::WINDOW_AUTOSIZE);
@@ -98,14 +99,13 @@ int main()
             {
                 for (int w = 0; w < 448; ++w)
                 {
-                    host_image[c * 448 * 448 + h * 448 + w] = channels[c].at<float>(h, w);
+                    host_image[c * 448 * 448 + h * 448 + w] = __float2half(channels[c].at<float>(h, w));
                 }
             }
         }
-        __half test = 1.0;
 
         // Transfer the data from host memory to the GPU memory (device)
-        cudaMemcpy(input_image, host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
+        cudaMemcpy(input_image, host_image, 3 * 448 * 448 * sizeof(__half), cudaMemcpyHostToDevice);
 
         // Get the bounding boxes
         std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);

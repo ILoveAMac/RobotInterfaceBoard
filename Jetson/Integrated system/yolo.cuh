@@ -3,26 +3,29 @@
 
 #include <vector>
 
+#include <cuda_fp16.h>
+
 #include "Conv2D.cuh"
 #include "FullyConnected.cuh"
 #include "Layer.cuh"
 #include "MaxPool2D.cuh"
-#include "ModelLoadingHelper.h"
+#include "ModelLoadingHelper.cuh"
 #include "aiHelperUtils.h"
 
-class yolo {
-   public:
-    yolo(const std::string& modelPath);
+class yolo
+{
+public:
+    yolo(const std::string &modelPath);
     ~yolo();
 
     // Function to return final output bounding boxes
-    std::vector<std::vector<float>> getBoxPredictions(float* inputImage);
+    std::vector<std::vector<float>> getBoxPredictions(__half *inputImage);
 
-   private:
+private:
     ModelLoadingHelper MLH;
-    std::vector<Layer*> model;
+    std::vector<Layer *> model;
 
-    float* hostOutput;
+    __half *hostOutput;
 };
 
-#endif  // YOLO_H
+#endif // YOLO_H
