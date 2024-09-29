@@ -271,19 +271,25 @@ float *Conv2D::forward(const float *input)
     dim3 gridDim((outputWidth + blockDim.x - 1) / blockDim.x, (outputHeight + blockDim.y - 1) / blockDim.y, numFilters);
 
     // Launch the CUDA Kernel
-    conv2dForwardKernel<<<gridDim, blockDim>>>(input, d_intermediate, d_weights, d_gamma, d_beta, d_runningMean, d_runningVar,
-                                               inputHeight, inputWidth, inputChannels, kernelSize, stride, padding,
-                                               outputHeight, outputWidth);
+    // conv2dForwardKernel<<<gridDim, blockDim>>>(input, d_intermediate, d_weights, d_gamma, d_beta, d_runningMean, d_runningVar,
+    //                                           inputHeight, inputWidth, inputChannels, kernelSize, stride, padding,
+    //                                           outputHeight, outputWidth);
 
     // Calculate shared memory size
-    // int sharedInputSizePerChannel = (blockDim.y + kernelSize - 1) * (blockDim.x + kernelSize - 1);
-    // size_t sharedMemorySize = inputChannels * sharedInputSizePerChannel * sizeof(float);
+    int sharedInputSizePerChannel = (blockDim.y + kernelSize - 1) * (blockDim.x + kernelSize - 1);
+    size_t sharedMemorySize = inputChannels * sharedInputSizePerChannel * sizeof(float);
 
     // Launch the kernel
-    // conv2dForwardKernelShared<<<gridDim, blockDim, sharedMemorySize>>>(
-    //     input, d_intermediate, d_weights, d_gamma, d_beta, d_runningMean, d_runningVar,
-    //     inputHeight, inputWidth, inputChannels, kernelSize, stride, padding,
-    //     outputHeight, outputWidth);
+    conv2dForwardKernelShared<<<gridDim, blockDim, sharedMemorySize>>>(
+        input, d_intermediate, d_weights, d_gamma, d_beta, d_runningMean, d_runningVar,
+        inputHeight, inputWidth, inputChannels, kernelSize, stride, padding,
+        outputHeight, outputWidth);
+
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess)
+    {
+        std::cerr << "CUDA error: " << cudaGetErrorString(err) << std::endl;
+    }
 
     return d_intermediate;
 }
