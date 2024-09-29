@@ -66,6 +66,7 @@ int main()
     // Main loop
     while (true)
     {
+        auto t1 = high_resolution_clock::now();
         // Capture a frame from the webcam
         cap >> frame;
 
@@ -101,7 +102,6 @@ int main()
         }
 
         // Transfer the data from host memory to the GPU memory (device)
-        auto t1 = high_resolution_clock::now();
         cudaMemcpy(input_image, host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
         auto t2 = high_resolution_clock::now();
 
