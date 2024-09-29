@@ -64,7 +64,7 @@ int main()
     // Create a window to display the results
     cv::namedWindow("Detection", cv::WINDOW_AUTOSIZE);
 
-    int image_counter = 0;
+    int image_counter = 132;
 
     aiHelperUtils aiHelper;
 
