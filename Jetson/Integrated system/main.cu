@@ -125,7 +125,8 @@ int main()
         cv::imshow("Detection", resized_frame);
 
         auto t2 = high_resolution_clock::now();
-        if (t2 - t1 > 5000) // Take an image every 5 seconds
+        duration<double, std::milli> ms_double = t2 - t1;
+        if (ms_double > 5000) // Take an image every 5 seconds
         {
             t1 = t2;
             // Save the current image
