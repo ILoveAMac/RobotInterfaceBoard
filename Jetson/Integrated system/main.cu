@@ -32,6 +32,44 @@ using std::chrono::duration_cast;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 
+#include <vector>
+#include <cuda_fp16.h>
+#include <stdexcept>
+
+// Function to convert 2D vector of __half to 2D vector of float
+std::vector<std::vector<float>> convertHalfToFloat(const std::vector<std::vector<__half>> &halfVec)
+{
+    // Determine the size of the outer vector
+    size_t numRows = halfVec.size();
+
+    // Initialize the output 2D vector with the same number of rows
+    std::vector<std::vector<float>> floatVec;
+    floatVec.reserve(numRows); // Reserve space to avoid multiple reallocations
+
+    // Iterate over each row in the input 2D vector
+    for (const auto &row : halfVec)
+    {
+        // Determine the size of the current row
+        size_t numCols = row.size();
+
+        // Initialize the inner vector for floats with the same number of columns
+        std::vector<float> floatRow;
+        floatRow.reserve(numCols); // Reserve space for efficiency
+
+        // Iterate over each __half element in the current row
+        for (const auto &h : row)
+        {
+            // Convert __half to float and add to the floatRow
+            floatRow.emplace_back(__half2float(h));
+        }
+
+        // Add the converted row to the floatVec
+        floatVec.emplace_back(std::move(floatRow));
+    }
+
+    return floatVec;
+}
+
 int main()
 {
     // Initialize VideoCapture with default camera (index 0)
@@ -109,12 +147,14 @@ int main()
         cudaMemcpy(input_image, host_image, 3 * 448 * 448 * sizeof(__half), cudaMemcpyHostToDevice);
 
         // Get the bounding boxes
-        std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
+        std::vector<std::vector<__half>> bboxes = yolo.getBoxPredictions(input_image);
         auto t2 = high_resolution_clock::now();
+
+        std::vector<std::vector<float>> bboxes_f = convertHalfToFloat(bboxes);
 
         // Draw the bounding boxes
         cv::cvtColor(resized_frame, resized_frame, cv::COLOR_RGB2BGR);
-        resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
+        resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes_f);
 
         // Display the image
         cv::imshow("Detection", resized_frame);
