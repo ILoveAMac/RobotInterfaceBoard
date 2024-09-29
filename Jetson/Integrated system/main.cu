@@ -69,6 +69,7 @@ int main()
     // Main loop
     while (true)
     {
+        //
         auto t1 = high_resolution_clock::now();
         // Capture a frame from the webcam
         cap >> frame;
