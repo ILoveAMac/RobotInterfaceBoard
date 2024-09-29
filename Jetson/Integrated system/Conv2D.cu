@@ -5,6 +5,7 @@
 #include "Conv2D.cuh"
 #include <cuda_runtime.h>
 #include <cmath>
+#include <cuda_fp16.h>
 
 __global__ void conv2dForwardKernel(
     const __half *input, __half *output,
