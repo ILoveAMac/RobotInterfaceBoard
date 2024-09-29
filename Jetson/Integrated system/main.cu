@@ -69,12 +69,10 @@ int main()
     aiHelperUtils aiHelper;
 
     yolo yolo("/home/wihan/model/");
-
+    auto t1 = high_resolution_clock::now();
     // Main loop
     while (true)
     {
-        //
-        auto t1 = high_resolution_clock::now();
         // Capture a frame from the webcam
         cap >> frame;
 
@@ -114,7 +112,6 @@ int main()
 
         // Get the bounding boxes
         std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
-        auto t2 = high_resolution_clock::now();
 
         // Draw the bounding boxes
         cv::cvtColor(resized_frame, resized_frame, cv::COLOR_RGB2BGR);
@@ -124,8 +121,12 @@ int main()
         cv::imshow("Detection", resized_frame);
 
         // Exit if 'q' is pressed
-        if (cv::waitKey(1) == 'c')
+        auto t2 = high_resolution_clock::now();
+        duration<double, std::milli> ms_double = t2 - t1;
+        if (cv::waitKey(1) == 'c' || ms_double.count() > 5000)
         {
+            t1 = high_resolution_clock::now();
+
             // Save the current image
             std::string filename = "img/captured_image_" + std::to_string(image_counter) + ".png";
             if (cv::imwrite(filename, 255 * resized_frame))
@@ -138,8 +139,8 @@ int main()
                 std::cerr << "Error: Could not save image" << std::endl;
             }
         }
-        duration<double, std::milli> ms_double = t2 - t1;
-        std::cout << ms_double.count() << "ms\n";
+        // duration<double, std::milli> ms_double = t2 - t1;
+        // std::cout << ms_double.count() << "ms\n";
     }
 
     // Release resources
