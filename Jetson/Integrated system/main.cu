@@ -115,9 +115,6 @@ int main()
         // Display the image
         cv::imshow("Detection", resized_frame);
 
-        duration<double, std::milli> ms_double = t2 - t1;
-        std::cout << ms_double.count() << "ms\n";
-
         // Exit if 'q' is pressed
         if (cv::waitKey(1) == 'c')
         {
@@ -133,6 +130,8 @@ int main()
                 std::cerr << "Error: Could not save image" << std::endl;
             }
         }
+        duration<double, std::milli> ms_double = t2 - t1;
+        std::cout << ms_double.count() << "ms\n";
     }
 
     // Release resources
