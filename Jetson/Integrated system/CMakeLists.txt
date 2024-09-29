@@ -5,6 +5,10 @@ project(YOLO_CUDA CUDA CXX)
 set(CMAKE_CUDA_STANDARD 20)
 set(CMAKE_CXX_STANDARD 11)
 
+# Specify the CUDA architecture
+# For Jetson Nano (Maxwell), use sm_53
+set(CMAKE_CUDA_ARCHITECTURES 53)
+
 # Header files (if any)
 # set(Headers ModelLoadingHelper.h)
 
