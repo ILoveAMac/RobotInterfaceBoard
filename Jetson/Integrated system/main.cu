@@ -55,7 +55,7 @@ int main()
 
     // Allocate host memory for the input image (use standard malloc or new)
     // auto host_image = static_cast<float *>(malloc(3 * 448 * 448 * sizeof(float)));
-    __half *host_image_half = new __half[3 * 448 * 448];
+    __half *host_image = new __half[3 * 448 * 448];
 
     // Create a window to display the results
     cv::namedWindow("Detection", cv::WINDOW_AUTOSIZE);
