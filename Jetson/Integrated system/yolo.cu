@@ -62,10 +62,6 @@ yolo::~yolo()
     }
 }
 
-using std::chrono::duration;
-using std::chrono::duration_cast;
-using std::chrono::high_resolution_clock;
-using std::chrono::milliseconds;
 std::vector<std::vector<float>> yolo::getBoxPredictions(__half *inputImage)
 {
     __half *output = nullptr;
@@ -75,17 +71,13 @@ std::vector<std::vector<float>> yolo::getBoxPredictions(__half *inputImage)
         inputImage = output;
         cudaDeviceSynchronize();
     }
-    auto t1 = high_resolution_clock::now();
+
     // Copy the data from GPU to CPU
     cudaMemcpy(this->hostOutput, output, 7 * 7 * 10 * sizeof(__half), cudaMemcpyDeviceToHost);
 
     // Convert the output to float
     float floatOutput[7 * 7 * 10];
     convertHalfToFloat(this->hostOutput, floatOutput, 7 * 7 * 10);
-    auto t2 = high_resolution_clock::now();
-
-    duration<double, std::milli> ms_double = t2 - t1;
-    std::cout << ms_double.count() << "ms\n";
 
     // Get the final bounding boxes
     return aiHelperUtils::getFinalBoundingBoxes(floatOutput);
