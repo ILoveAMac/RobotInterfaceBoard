@@ -100,6 +100,7 @@ int main()
                 }
             }
         }
+        half test = 1.0;
 
         // Transfer the data from host memory to the GPU memory (device)
         cudaMemcpy(input_image, host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
