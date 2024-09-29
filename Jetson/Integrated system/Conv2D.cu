@@ -6,36 +6,28 @@
 #include <cuda_runtime.h>
 #include <cmath>
 
-// CUDA kernel for Conv2D forward pass with batch normalization and ReLU
-__global__ void conv2dForwardKernel(const __half *input, __half *output, const __half *weights, const __half *gamma,
-                                    const __half *beta, const __half *runningMean, const __half *runningVar,
-                                    const int inputHeight, const int inputWidth, const int inputChannels,
-                                    const int kernelSize,
-                                    const int stride, const int padding, const int outputHeight,
-                                    const int outputWidth)
+__global__ void conv2dForwardKernel(
+    const __half *input, __half *output,
+    const __half *weights, const __half *gamma,
+    const __half *beta, const __half *runningMean,
+    const __half *runningVar,
+    const int inputHeight, const int inputWidth,
+    const int inputChannels,
+    const int kernelSize,
+    const int stride, const int padding,
+    const int outputHeight,
+    const int outputWidth)
 {
     // Get the index of the thread in the output tensor
     const int filter = blockIdx.z;                       // Channel index
     const int h = blockIdx.y * blockDim.y + threadIdx.y; // Output height index
     const int w = blockIdx.x * blockDim.x + threadIdx.x; // Output width index
 
-    // Where are we now:
-    // We are a specific filter given by the filter index
-    // On the input image we are at position (h, w).
-    // (h, w) is the top left corner of the area where we will preform convolution
-    // Now, we must preform the convolution operation at position (h, w) using the specific filter
-    // The size of the filter is given by kernelSize, and we use it to ensure we preform the convolution within
-    // the bounds of the kernel
-
-    // Additional things to take not of:
-    // We are using padding. The padding will be used to keep the input the same size as the output.
-    // We are using a stride. The stride will affect the output size
-
     // Check that we are within bounds of the output tensor
     if (h < outputHeight && w < outputWidth)
     {
         // Accumulator for result
-        __half sum = 0.0f;
+        __half sum = __float2half(0.0f);
 
         // For every input channel
         for (int inputChannel = 0; inputChannel < inputChannels; inputChannel++)
@@ -54,7 +46,13 @@ __global__ void conv2dForwardKernel(const __half *input, __half *output, const _
                     {
                         // Calculate the index in the flattened weights array
                         const int weightIndex = ((filter * inputChannels + inputChannel) * kernelSize * kernelSize) + (kh * kernelSize + kw);
-                        sum += input[(inputChannel * inputHeight + inputH) * inputWidth + inputW] * weights[weightIndex];
+
+                        // Retrieve input and weight values
+                        __half input_val = input[(inputChannel * inputHeight + inputH) * inputWidth + inputW];
+                        __half weight_val = weights[weightIndex];
+
+                        // Perform FP16 multiplication and accumulation
+                        sum = __hadd(sum, __hmul(input_val, weight_val));
                     }
                     // else the bounds are invalid,
                     // thus we treat this as padding with zeros and do not add anything to the sum
@@ -67,12 +65,44 @@ __global__ void conv2dForwardKernel(const __half *input, __half *output, const _
         const __half var = runningVar[filter];
         const __half gammaVal = gamma[filter];
         const __half betaVal = beta[filter];
-        sum = gammaVal * (sum - mean) / sqrtf(var + 1e-8) + betaVal;
 
-        // Apply LeRelu
-        sum = (sum > 0.0f) ? sum : 0.1f * sum;
+        // sum = gammaVal * (sum - mean) / sqrtf(var + 1e-8) + betaVal;
 
-        output[(filter * outputHeight + h) * outputWidth + w] = sum;
+        // Perform (sum - mean)
+        __half sum_minus_mean = __hsub(sum, mean);
+
+        // Perform (var + 1e-8)
+        __half var_plus_eps = __hadd(var, __float2half(1e-8f));
+
+        // Perform sqrt(var + 1e-8)
+        __half sqrt_var_plus_eps = __hsqrt(var_plus_eps);
+
+        // Perform (sum - mean) / sqrt(var + 1e-8)
+        __half normalized = __hdiv(sum_minus_mean, sqrt_var_plus_eps);
+
+        // Perform gamma * normalized
+        __half scaled = __hmul(gammaVal, normalized);
+
+        // Perform gamma * normalized + beta
+        __half bn_sum = __hadd(scaled, betaVal);
+
+        // Apply Leaky ReLU: sum = (sum > 0.0f) ? sum : 0.1f * sum;
+        __half zero = __float2half(0.0f);
+        __half one_tenth = __float2half(0.1f);
+        __half relu_sum;
+
+        // Use conditional statements instead of ternary operator for __half
+        if (__hgt(bn_sum, zero)) // __hgt returns true if bn_sum > zero
+        {
+            relu_sum = bn_sum;
+        }
+        else
+        {
+            relu_sum = __hmul(one_tenth, bn_sum);
+        }
+
+        // Write the result to the output tensor
+        output[(filter * outputHeight + h) * outputWidth + w] = relu_sum;
     }
 }
 
