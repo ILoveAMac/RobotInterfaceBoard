@@ -10,7 +10,7 @@
 
 #include <cuda_fp16.h>
 
-#include "ModelLoadingHelper.h"
+#include "ModelLoadingHelper.cuh"
 #include "Layer.cuh"
 
 class Conv2D : public Layer

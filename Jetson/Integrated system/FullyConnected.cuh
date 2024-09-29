@@ -6,7 +6,7 @@
 #define FULLYCONNECTED_CUH
 
 #include <Layer.cuh>
-#include "ModelLoadingHelper.h"
+#include "ModelLoadingHelper.cuh"
 #include <vector>
 #include <cstring>
 #include <cuda_runtime.h>
