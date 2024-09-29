@@ -126,7 +126,7 @@ int main()
 
         auto t2 = high_resolution_clock::now();
         duration<double, std::milli> ms_double = t2 - t1;
-        if (ms_doublems_double.count() > 5000) // Take an image every 5 seconds
+        if (ms_double.count() > 5000) // Take an image every 5 seconds
         {
             t1 = t2;
             // Save the current image
