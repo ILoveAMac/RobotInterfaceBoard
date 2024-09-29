@@ -76,7 +76,7 @@ MaxPool2D::~MaxPool2D()
 __half *MaxPool2D::forward(const __half *input)
 {
     // Define block and grid sizes for the CUDA Kernel
-    dim3 blockDim(8, 32); // 16x16 threads per block
+    dim3 blockDim(32, 32); // 16x16 threads per block
     dim3 gridDim((outputWidth + blockDim.x - 1) / blockDim.x, (outputHeight + blockDim.y - 1) / blockDim.y, inputChannels);
 
     // Launch the Max Pooling kernel
