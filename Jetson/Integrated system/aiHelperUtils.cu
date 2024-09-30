@@ -112,7 +112,7 @@ std::vector<std::vector<__half>> aiHelperUtils::nonMaxSuppression(std::vector<st
         filtered_boxes.erase(std::remove_if(filtered_boxes.begin(), filtered_boxes.end(),
                                             [chosenBox](const std::vector<__half> &box)
                                             {
-                                                return aiHelperUtils::iou(chosenBox, box) > IOU_NMS_THRESH;
+                                                return __float2half(aiHelperUtils::iou(chosenBox, box)) > IOU_NMS_THRESH;
                                             }),
                              filtered_boxes.end());
     }
@@ -140,7 +140,7 @@ __half aiHelperUtils::iou(std::vector<__half> box1, std::vector<__half> box2)
     __half y2 = hmin(box1_y2, box2_y2);
 
     __half zero = __float2half(0.0f);
-    __half intersection = __hmul(__hmax(zero, __hsub(x2, x1)), __hmax(zero, __hsub(y2, y1)));
+    __half intersection = __hmul(__hmax(zero, __hsub(x2, x1)), hmax(zero, __hsub(y2, y1)));
 
     __half box1_area = __hmul(fabs(box1[2]), fabs(box1[3]));
     __half box2_area = __hmul(fabs(box2[2]), fabs(box2[3]));
