@@ -30,16 +30,17 @@ using std::chrono::duration_cast;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 
-serialHelper serial("/dev/ttyUSB0", 9600);
-// Create a position controller
-positionController controller(0.5, 10, 0.1, 0.05);
-// Set the goal position
-controller.setGoal(1, 0, 0);
-// reset the position of the robot
-serial.resetPosition();
-
 int main()
 {
+
+    serialHelper serial("/dev/ttyUSB0", 9600);
+    // Create a position controller
+    positionController controller(0.5, 10, 0.1, 0.05);
+    // Set the goal position
+    controller.setGoal(1, 0, 0);
+    // reset the position of the robot
+    serial.resetPosition();
+
     // Initialize VideoCapture with default camera (index 0)
     cv::VideoCapture cap(0);
 
