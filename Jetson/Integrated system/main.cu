@@ -37,7 +37,7 @@ int main()
     // Create a position controller
     positionController controller(0.5, 0.5, 0.1, 0.05);
     // Set the goal position
-    controller.setGoal(0, 0, 0);
+    controller.setGoal(0, 0.5, 0);
     // reset the position of the robot
     serial.resetPosition();
 
