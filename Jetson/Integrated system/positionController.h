@@ -36,6 +36,9 @@ public:
     // Calculate the velocities to reach the goal position
     std::vector<float> updateVelocities(float x, float y, float theta);
 
+    // Function to get the current state
+    State getState();
+
     // Set the goal position
     void setGoal(float x, float y, float theta);
 
@@ -64,9 +67,6 @@ private:
     std::vector<float> rotateToGoal(float x, float y, float theta);
     std::vector<float> moveToGoal(float x, float y, float theta);
     std::vector<float> rotateToGoalOrientation(float theta);
-
-    // Function to get the current state
-    State getState();
 
     float goalTolerance;
     float thetaTolerance;
