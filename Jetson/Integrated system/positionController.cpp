@@ -50,7 +50,7 @@ std::vector<float> positionController::rotateToGoal(float x, float y, float thet
     if (fabs(alpha) < thetaTolerance)
     {
         state = State::MOVE_TO_GOAL; // Transition to moving to the goal
-        print("Transition to moving to the goal");
+        printf("Transition to moving to the goal");
         return {0, 0}; // Stop rotating
     }
 
@@ -66,7 +66,7 @@ std::vector<float> positionController::moveToGoal(float x, float y, float theta)
     if (distance < goalTolerance)
     {
         state = State::ROTATE_TO_GOAL_ORIENTATION; // Transition to rotating to goal orientation
-        print("Transition to rotating to goal orientation");
+        printf("Transition to rotating to goal orientation");
         return {0, 0};
     }
 
