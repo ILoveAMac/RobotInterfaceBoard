@@ -81,7 +81,6 @@ int main()
         auto t1 = high_resolution_clock::now();
         // Capture a frame from the webcam
         cap >> frame;
-        auto t2 = high_resolution_clock::now();
 
         // Check if the frame is empty
         if (frame.empty())
@@ -118,11 +117,11 @@ int main()
         cudaMemcpy(input_image, host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
 
         // Get the bounding boxes
-        // std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
+        std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
 
         // Draw the bounding boxes
         cv::cvtColor(resized_frame, resized_frame, cv::COLOR_RGB2BGR);
-        // resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
+        resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
 
         // Display the image
         cv::imshow("Detection", resized_frame);
@@ -142,6 +141,7 @@ int main()
                 std::cerr << "Error: Could not save image" << std::endl;
             }
         }
+        auto t2 = high_resolution_clock::now();
         duration<double, std::milli> ms_double = t2 - t1;
         std::cout << ms_double.count() << "ms\n";
 
