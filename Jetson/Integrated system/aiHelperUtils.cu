@@ -144,8 +144,15 @@ __half aiHelperUtils::iou(std::vector<__half> box1, std::vector<__half> box2)
     __half intersection = __hmul((__hgt(__hsub(x2, x1), zero) ? __hsub(x2, x1) : zero),
                                  (__hgt(__hsub(y2, y1), zero) ? __hsub(y2, y1) : zero));
 
-    __half box1_area = __hmul(fabs(box1[2]), fabs(box1[3]));
-    __half box2_area = __hmul(fabs(box2[2]), fabs(box2[3]));
+    // Calculate absolute values for box dimensions manually
+    __half box1_w_abs = (__hlt(box1[2], __float2half(0.0f))) ? __hneg(box1[2]) : box1[2];
+    __half box1_h_abs = (__hlt(box1[3], __float2half(0.0f))) ? __hneg(box1[3]) : box1[3];
+    __half box2_w_abs = (__hlt(box2[2], __float2half(0.0f))) ? __hneg(box2[2]) : box2[2];
+    __half box2_h_abs = (__hlt(box2[3], __float2half(0.0f))) ? __hneg(box2[3]) : box2[3];
+
+    // Compute the area using the absolute values
+    __half box1_area = __hmul(box1_w_abs, box1_h_abs);
+    __half box2_area = __hmul(box2_w_abs, box2_h_abs);
 
     return __hdiv(intersection, __hsub(__hadd(box1_area, box2_area), __hadd(intersection, __float2half(1E-6))));
 }
