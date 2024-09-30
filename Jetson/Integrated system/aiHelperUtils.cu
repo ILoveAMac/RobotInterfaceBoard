@@ -112,7 +112,7 @@ std::vector<std::vector<__half>> aiHelperUtils::nonMaxSuppression(std::vector<st
         filtered_boxes.erase(std::remove_if(filtered_boxes.begin(), filtered_boxes.end(),
                                             [chosenBox](const std::vector<__half> &box)
                                             {
-                                                return __float2half(aiHelperUtils::iou(chosenBox, box)) > IOU_NMS_THRESH;
+                                                return (aiHelperUtils::iou(chosenBox, box)) > __float2half(IOU_NMS_THRESH);
                                             }),
                              filtered_boxes.end());
     }
