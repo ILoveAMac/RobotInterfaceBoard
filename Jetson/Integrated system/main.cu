@@ -76,6 +76,7 @@ int main()
     while (true)
     {
         auto t1 = high_resolution_clock::now();
+        auto t2 = high_resolution_clock::now();
         // Capture a frame from the webcam
         cap >> frame;
 
@@ -85,8 +86,6 @@ int main()
             std::cerr << "Error: Captured empty frame" << std::endl;
             break;
         }
-
-        auto t2 = high_resolution_clock::now();
 
         // Resize the image to 448x448 (input size for YOLOv1)
         cv::resize(frame, resized_frame, cv::Size(448, 448));
