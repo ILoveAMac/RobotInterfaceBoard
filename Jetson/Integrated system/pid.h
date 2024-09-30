@@ -23,7 +23,7 @@ public:
 
     float compute(float error, float input);
 
-    float reset();
+    void reset();
 
 private:
     float kp, ki, kd;

@@ -125,9 +125,6 @@ void positionController::setGains(float Kp, float Ka)
 // Private functions
 float positionController::calculateAlpha(float x, float y, float theta)
 {
-    // calculate the distance to the goal
-    float distance = sqrt(pow(this->goalX - x, 2) + pow(this->goalY - y, 2));
-
     // calculate the angle to the goal x,y position
     float beta = atan2(this->goalY - y, this->goalX - x);
 

@@ -105,7 +105,7 @@ float PID::compute(float error, float input)
     return output;
 }
 
-float PID::reset()
+void PID::reset()
 {
     // reset the parameters for the PID controller
     integral = 0.0f;
