@@ -35,6 +35,9 @@ std::vector<std::vector<float>> aiHelperUtils::getFinalBoundingBoxes(const float
         }
     }
 
+    // print number of boxes
+    std::cout << "Number of boxes: " << boxes.size() << std::endl;
+
     // Perform non-maximum suppression to remove overlapping bounding boxes
     return aiHelperUtils::nonMaxSuppression(boxes);
 }
