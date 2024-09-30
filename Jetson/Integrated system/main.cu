@@ -64,7 +64,7 @@ int main()
     // Create a window to display the results
     cv::namedWindow("Detection", cv::WINDOW_AUTOSIZE);
 
-    int image_counter = 132;
+    int image_counter = 0;
 
     aiHelperUtils aiHelper;
 
@@ -73,6 +73,7 @@ int main()
     // Main loop
     while (true)
     {
+        t1 = high_resolution_clock::now();
         // Capture a frame from the webcam
         cap >> frame;
 
@@ -121,12 +122,8 @@ int main()
         cv::imshow("Detection", resized_frame);
 
         // Exit if 'q' is pressed
-        auto t2 = high_resolution_clock::now();
-        duration<double, std::milli> ms_double = t2 - t1;
-        if (cv::waitKey(1) == 'c' || ms_double.count() > 5000)
+        if (cv::waitKey(1) == 'c')
         {
-            t1 = high_resolution_clock::now();
-
             // Save the current image
             std::string filename = "img/captured_image_" + std::to_string(image_counter) + ".png";
             if (cv::imwrite(filename, 255 * resized_frame))
@@ -139,8 +136,9 @@ int main()
                 std::cerr << "Error: Could not save image" << std::endl;
             }
         }
-        // duration<double, std::milli> ms_double = t2 - t1;
-        // std::cout << ms_double.count() << "ms\n";
+        auto t2 = high_resolution_clock::now();
+        duration<double, std::milli> ms_double = t2 - t1;
+        std::cout << ms_double.count() << "ms\n";
     }
 
     // Release resources
