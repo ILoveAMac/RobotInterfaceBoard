@@ -87,15 +87,17 @@ std::vector<std::vector<float>> aiHelperUtils::nonMaxSuppression(std::vector<std
     std::vector<std::vector<float>> filtered_boxes;
     for (int i = 0; i < boxes.size(); i++)
     {
-        if (boxes[i][4] > -100)
-        {
-            filtered_boxes.push_back(boxes[i]);
-        }
+        // if (boxes[i][4] > -100)
+        // {
+        filtered_boxes.push_back(boxes[i]);
+        // }
     }
 
     // print the number of boxes before and after filtering
     std::cout << "Number of boxes before NMS: " << boxes.size() << std::endl;
     std::cout << "Number of boxes after NMS: " << filtered_boxes.size() << std::endl;
+
+    std::cout << "Number of boxes before NMS: " << boxes[0] << std::endl;
 
     // Sort the boxes based on their confidence scores, highest first
     std::sort(filtered_boxes.begin(), filtered_boxes.end(), [](const std::vector<float> &a, const std::vector<float> &b)
