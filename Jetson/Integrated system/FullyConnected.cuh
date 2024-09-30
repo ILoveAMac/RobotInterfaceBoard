@@ -6,10 +6,12 @@
 #define FULLYCONNECTED_CUH
 
 #include <Layer.cuh>
-#include "ModelLoadingHelper.h"
+#include "ModelLoadingHelper.cuh"
 #include <vector>
 #include <cstring>
 #include <cuda_runtime.h>
+
+#include <cuda_fp16.h>
 
 class FullyConnected : public Layer
 {
@@ -24,7 +26,7 @@ public:
     void loadData() override;
 
     // Forward function to perform the fully connected operation
-    float *forward(const float *input) override;
+    __half *forward(const __half *input) override;
 
     // Fully connected layers do not modify output dimensions (just the output size)
     int getOutputHeight() const override { return 1; }
@@ -36,8 +38,8 @@ private:
     int outputSize; // The size of the output vector
 
     // Weights and biases on the GPU
-    float *d_weights; // Pointer to device memory for weights
-    float *d_biases;  // Pointer to device memory for biases
+    __half *d_weights; // Pointer to device memory for weights
+    __half *d_biases;  // Pointer to device memory for biases
 
     // Model loading helper for loading weights and biases
     ModelLoadingHelper ml;
@@ -47,12 +49,12 @@ private:
     bool applyActivation;
 
     // Scratch space for storing intermediate results
-    float *d_intermediate;
+    __half *d_intermediate;
 
-    static std::vector<float> flatten2D(const std::vector<std::vector<float>> &input);
+    static std::vector<__half> flatten2D(const std::vector<std::vector<__half>> &input);
 
     // Utility functions for GPU memory management
-    static void allocateAndCopyUnifiedMemory(const std::vector<float> &flattenedData, float *&d_ptr);
+    static void allocateAndCopyUnifiedMemory(const std::vector<__half> &flattenedData, __half *&d_ptr);
 
     static bool checkCudaError(cudaError_t err, const char *msg);
 };

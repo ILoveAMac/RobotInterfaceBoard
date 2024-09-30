@@ -1,6 +1,7 @@
 #include "yolo.cuh"
 
-yolo::yolo(const std::string& modelPath) : MLH(ModelLoadingHelper(modelPath)) {
+yolo::yolo(const std::string &modelPath) : MLH(ModelLoadingHelper(modelPath))
+{
     // Build the model
     this->model.push_back(new Conv2D(5, 32, 2, 2, "0", MLH, 224, 224, 32, 448, 448, 3));
     this->model.push_back(new MaxPool2D(224, 224, 32, 112, 112, 32));
@@ -25,35 +26,41 @@ yolo::yolo(const std::string& modelPath) : MLH(ModelLoadingHelper(modelPath)) {
     this->model.push_back(new FullyConnected(512, 7 * 7 * 2 * 5, MLH, "4", false));
 
     // Load the weights
-    for (const auto layer : model) {
+    for (const auto layer : model)
+    {
         layer->loadData();
     }
 
     // Allocate memory for the output
-    this->hostOutput = static_cast<float*>(malloc(7 * 7 * 10 * sizeof(float)));
+    this->hostOutput = static_cast<__half *>(malloc(7 * 7 * 10 * sizeof(__half)));
 }
 
-yolo::~yolo() {
+yolo::~yolo()
+{
     // Clean up layers
-    for (auto layer : this->model) {
+    for (auto layer : this->model)
+    {
         delete layer;
     }
 
-    if (this->hostOutput) {
+    if (this->hostOutput)
+    {
         free(this->hostOutput);
     }
 }
 
-std::vector<std::vector<float>> yolo::getBoxPredictions(float* inputImage) {
-    float* output = nullptr;
-    for (const auto& layer : this->model) {
+std::vector<std::vector<__half>> yolo::getBoxPredictions(__half *inputImage)
+{
+    __half *output = nullptr;
+    for (const auto &layer : this->model)
+    {
         output = layer->forward(inputImage);
         inputImage = output;
         cudaDeviceSynchronize();
     }
 
     // Copy the data from GPU to CPU
-    cudaMemcpy(this->hostOutput, output, 7 * 7 * 10 * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(this->hostOutput, output, 7 * 7 * 10 * sizeof(__half), cudaMemcpyDeviceToHost);
 
     // Get the final bounding boxes
     return aiHelperUtils::getFinalBoundingBoxes(this->hostOutput);
