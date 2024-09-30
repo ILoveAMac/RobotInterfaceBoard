@@ -21,7 +21,7 @@
 #include "FullyConnected.cuh"
 #include "Layer.cuh"
 #include "MaxPool2D.cuh"
-#include "ModelLoadingHelper.h"
+#include "ModelLoadingHelper.cuh"
 #include "aiHelperUtils.h"
 #include "positionController.h"
 #include "serialHelper.h"
