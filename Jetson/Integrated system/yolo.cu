@@ -76,7 +76,7 @@ std::vector<std::vector<float>> yolo::getBoxPredictions(__half *inputImage)
     cudaMemcpy(this->hostOutput, output, 7 * 7 * 10 * sizeof(__half), cudaMemcpyDeviceToHost);
 
     // print the first element of the output
-    std::cout << "First element of the output: " << __half2float(output[0]) << std::endl;
+    std::cout << "First element of the output: " << __half2float(hostOutput[0]) << std::endl;
 
     // Convert the output to float
     float floatOutput[7 * 7 * 10];
