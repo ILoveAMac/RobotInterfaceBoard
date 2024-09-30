@@ -101,6 +101,13 @@ std::vector<std::vector<__half>> ModelLoadingHelper::loadFCL(const std::string &
         for (const auto &value : fc_row)
         {
             fc_row_half.emplace_back(__float2half(value));
+
+            // check for nan or inf values
+            if (__float2half(value) == 0x7c00)
+            {
+                std::cerr << "Error: NaN or Inf value detected in fully connected layer" << std::endl;
+                // throw std::runtime_error("Error: NaN or Inf value detected in fully connected layer");
+            }
         }
 
         fcData_half.emplace_back(std::move(fc_row_half));
