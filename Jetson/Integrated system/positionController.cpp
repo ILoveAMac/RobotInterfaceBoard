@@ -50,7 +50,9 @@ std::vector<float> positionController::rotateToGoal(float x, float y, float thet
     if (fabs(alpha) < thetaTolerance)
     {
         state = State::MOVE_TO_GOAL; // Transition to moving to the goal
-        return {0, 0};               // Stop rotating
+        // notify the caller that the robot should move to the goal
+        std::cout << "Moving to goal" << std::endl;
+        return {0, 0}; // Stop rotating
     }
 
     // PID control on the rotation
