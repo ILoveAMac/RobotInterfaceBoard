@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.29)
 project(YOLO_CUDA CUDA CXX)
 
+set(CMAKE_CUDA_ARCHITECTURES 53)
+
 # Set CUDA and C++ standards
 set(CMAKE_CUDA_STANDARD 20)
 set(CMAKE_CXX_STANDARD 11)
