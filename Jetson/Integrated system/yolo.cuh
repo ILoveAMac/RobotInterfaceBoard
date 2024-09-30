@@ -8,7 +8,7 @@
 #include "Layer.cuh"
 #include "MaxPool2D.cuh"
 #include "ModelLoadingHelper.cuh"
-#include "aiHelperUtils.h"
+#include "aiHelperUtils.cuh"
 
 #include <cuda_fp16.h>
 
