@@ -82,6 +82,8 @@ std::vector<float> positionController::rotateToGoalOrientation(float theta)
     if (fabs(angleError) < thetaTolerance)
     {
         state = State::IDLE; // Goal reached, stop
+        // Notify the caller that the goal has been reached
+        std::cout << "Goal reached" << std::endl;
         return {0, 0};
     }
 
