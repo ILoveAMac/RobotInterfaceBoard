@@ -20,6 +20,7 @@ add_executable(YOLO_CUDA
     positionController.cpp
     aiHelperUtils.cpp
     navigationHelper.cpp
+    pid.cpp
 )
 
 # Enable separable compilation for CUDA
