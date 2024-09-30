@@ -134,13 +134,15 @@ __half aiHelperUtils::iou(std::vector<__half> box1, std::vector<__half> box2)
     __half box2_y1 = __hsub(box2[1], __hdiv(box2[3], half_two));
     __half box2_y2 = __hadd(box2[1], __hdiv(box2[3], half_two));
 
-    __half x1 = hmax(box1_x1, box2_x1);
-    __half y1 = hmax(box1_y1, box2_y1);
-    __half x2 = hmin(box1_x2, box2_x2);
-    __half y2 = hmin(box1_y2, box2_y2);
+    // Replace __hmax and __hmin with explicit comparisons
+    __half x1 = (__hgt(box1_x1, box2_x1)) ? box1_x1 : box2_x1; // Equivalent to max(box1_x1, box2_x1)
+    __half y1 = (__hgt(box1_y1, box2_y1)) ? box1_y1 : box2_y1; // Equivalent to max(box1_y1, box2_y1)
+    __half x2 = (__hlt(box1_x2, box2_x2)) ? box1_x2 : box2_x2; // Equivalent to min(box1_x2, box2_x2)
+    __half y2 = (__hlt(box1_y2, box2_y2)) ? box1_y2 : box2_y2; // Equivalent to min(box1_y2, box2_y2)
 
     __half zero = __float2half(0.0f);
-    __half intersection = __hmul(__hmax(zero, __hsub(x2, x1)), hmax(zero, __hsub(y2, y1)));
+    __half intersection = __hmul((__hgt(__hsub(x2, x1), zero) ? __hsub(x2, x1) : zero),
+                                 (__hgt(__hsub(y2, y1), zero) ? __hsub(y2, y1) : zero));
 
     __half box1_area = __hmul(fabs(box1[2]), fabs(box1[3]));
     __half box2_area = __hmul(fabs(box2[2]), fabs(box2[3]));
