@@ -3,14 +3,29 @@
 
 #include <vector>
 #include <math.h>
-
 #include <iostream>
 
+#include "PID.h"
+
 #define AXLE_LENGTH 0.307f
-#define MAX_LINEAR_VELOCITY 0.5f
+#define MAX_LINEAR_VELOCITY 0.3f
 #define MAX_ANGULAR_VELOCITY 1.0f
 
-#define ALPHA 0.9 // Smoothing factor
+// Angular Velocity PID controller parameters
+#define A_KP 0.5f
+#define A_KI 0.0f
+#define A_KD 0.0f
+
+#define ALPHA 0.8 // Smoothing factor
+
+// State machine states
+enum class State
+{
+    IDLE,
+    ROTATE_TO_GOAL,
+    MOVE_TO_GOAL,
+    ROTATE_TO_GOAL_ORIENTATION
+};
 
 class positionController
 {
@@ -33,12 +48,6 @@ public:
     // Set the control gains
     void setGains(float Kp, float Ka);
 
-    // Check if the robot is at the goal
-    bool atGoalPosition() { return atGoal; }
-
-    // Check if the robot is at the goal orientation
-    bool atGoalOrientation() { return atGoalTheta; }
-
 private:
     // Internal functions
     float calculateAlpha(float x, float y, float theta);
@@ -51,6 +60,11 @@ private:
 
     float normalizeAngle(float angle);
 
+    // Functions for the state machine
+    std::vector<float> rotateToGoal(float x, float y, float theta);
+    std::vector<float> moveToGoal(float x, float y, float theta);
+    std::vector<float> rotateToGoalOrientation(float theta);
+
     float goalTolerance;
     float thetaTolerance;
     float Kp;
@@ -61,12 +75,15 @@ private:
     float goalY;
     float goalTheta;
 
-    bool atGoal;
-    bool atGoalTheta;
-
     // Variables to smooth the velocities
     float V_prev;
     float W_prev;
+
+    // Current state
+    State state;
+
+    // PID controller for the angular velocity
+    PID pidTheta;
 };
 
 #endif // positionController_H

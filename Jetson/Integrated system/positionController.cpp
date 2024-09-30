@@ -1,13 +1,11 @@
 #include "positionController.h"
 
-positionController::positionController(float Kp, float Ka, float goalTolerance, float thetaTolerance)
+positionController::positionController(float Kp, float Ka, float goalTolerance, float thetaTolerance) : pidTheta(A_KP, A_KI, A_KD, -MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY, true)
 {
     this->Kp = Kp;
     this->Ka = Ka;
     this->goalTolerance = goalTolerance;
     this->thetaTolerance = thetaTolerance;
-    this->atGoal = false;
-    this->atGoalTheta = false;
 
     this->goalX = 0;
     this->goalY = 0;
@@ -15,6 +13,9 @@ positionController::positionController(float Kp, float Ka, float goalTolerance, 
 
     this->V_prev = 0;
     this->W_prev = 0;
+
+    // Current state
+    this->state = State::IDLE;
 }
 
 positionController::~positionController() {}
@@ -22,20 +23,71 @@ positionController::~positionController() {}
 // update velocities from the current position
 std::vector<float> positionController::updateVelocities(float x, float y, float theta)
 {
-    // Calculate the angle to the goal position
+    switch (state)
+    {
+    case State::IDLE:
+        return {0, 0}; // Return zero velocities
+
+    case State::ROTATE_TO_GOAL:
+        return rotateToGoal(x, y, theta);
+
+    case State::MOVE_TO_GOAL:
+        return moveToGoal(x, y, theta);
+
+    case State::ROTATE_TO_GOAL_ORIENTATION:
+        return rotateToGoalOrientation(theta);
+
+    default:
+        // Handle unexpected states gracefully
+        return {0, 0};
+    }
+}
+
+std::vector<float> positionController::rotateToGoal(float x, float y, float theta)
+{
     float alpha = calculateAlpha(x, y, theta);
 
-    // Calculate the distance to the goal position
-    float p = calculateP(x, y);
+    if (fabs(alpha) < thetaTolerance)
+    {
+        state = State::MOVE_TO_GOAL; // Transition to moving to the goal
+        return {0, 0};               // Stop rotating
+    }
 
-    // Calculate the linear velocity
-    float V = calculateV(alpha, p);
+    // PID control on the rotation
+    float W = pidTheta.compute(alpha, theta);
+    return calculateVelocities(0, W); // Only rotate
+}
 
-    // Calculate the angular velocity
+std::vector<float> positionController::moveToGoal(float x, float y, float theta)
+{
+    float distance = calculateP(x, y);
+
+    if (distance < goalTolerance)
+    {
+        state = State::ROTATE_TO_GOAL_ORIENTATION; // Transition to rotating to goal orientation
+        return {0, 0};
+    }
+
+    float alpha = calculateAlpha(x, y, theta);
+    float V = calculateV(alpha, distance);
     float W = calculateW(alpha);
 
-    // Calculate the left and right wheel velocities
     return calculateVelocities(V, W);
+}
+
+std::vector<float> positionController::rotateToGoalOrientation(float theta)
+{
+    float angleError = normalizeAngle(goalTheta - theta);
+
+    if (fabs(angleError) < thetaTolerance)
+    {
+        state = State::IDLE; // Goal reached, stop
+        return {0, 0};
+    }
+
+    // PID control for rotation to goal orientation
+    float W = pidTheta.compute(angleError, theta);
+    return calculateVelocities(0, W); // Only rotate
 }
 
 // Set the goal position
@@ -44,8 +96,11 @@ void positionController::setGoal(float x, float y, float theta)
     this->goalX = x;
     this->goalY = y;
     this->goalTheta = theta;
-    this->atGoal = false;
-    this->atGoalTheta = false;
+
+    // Reset the PID controllers to avoid jumps in the control signal
+    pidTheta.reset();
+
+    this->state = State::ROTATE_TO_GOAL;
 }
 
 // Set the goal tolerance
@@ -72,28 +127,6 @@ float positionController::calculateAlpha(float x, float y, float theta)
 {
     // calculate the distance to the goal
     float distance = sqrt(pow(this->goalX - x, 2) + pow(this->goalY - y, 2));
-
-    // Check if the robot is at the goal
-    if (distance < this->goalTolerance)
-    {
-        // set the robot at the goal
-        this->atGoal = true;
-    }
-
-    if (this->atGoal)
-    {
-        if (fabs(this->goalTheta - theta) < this->thetaTolerance)
-        {
-            // the robot is at the goal
-            this->atGoalTheta = true;
-            return 0;
-        }
-
-        // the robot is at the goal, so only rotate in place
-        printf("Goal theta: %f, theta: %f\n", this->goalTheta, theta);
-        printf("diff: %f\n", this->goalTheta - theta);
-        return this->goalTheta - theta;
-    }
 
     // calculate the angle to the goal x,y position
     float beta = atan2(this->goalY - y, this->goalX - x);
@@ -130,15 +163,7 @@ float positionController::calculateV(float alpha, float p)
 float positionController::calculateW(float alpha)
 {
     // calculate the angular velocity
-    float W = 0;
-    if (this->atGoal)
-    {
-        W = this->Ka * alpha;
-    }
-    else
-    {
-        W = this->Kp * sin(alpha) * cos(alpha) + this->Ka * alpha;
-    }
+    float W = this->Kp * sin(alpha) * cos(alpha) + this->Ka * alpha;
 
     // check if the angular velocity is greater than the maximum
     if (W > MAX_ANGULAR_VELOCITY)
@@ -166,25 +191,6 @@ std::vector<float> positionController::calculateVelocities(float V, float W)
     V_prev = V;
     W_prev = W;
 
-    // Check if the robot is at the goal, if it is then only rotate in place
-    if (this->atGoal)
-    {
-        float left = -1 * W * AXLE_LENGTH / 2;
-        float right = W * AXLE_LENGTH / 2;
-
-        if (fabs(left) < 0.05)
-        {
-            left = 0;
-        }
-
-        if (fabs(right) < 0.05)
-        {
-            right = 0;
-        }
-
-        return {left, right};
-    }
-
     // The robot is not at the goal, so calculate the velocities to reach the goal
 
     float left = V - W * AXLE_LENGTH / 2;
@@ -205,14 +211,13 @@ std::vector<float> positionController::calculateVelocities(float V, float W)
 
 float positionController::normalizeAngle(float angle)
 {
-    // Normalize the angle to be between -pi and pi
-    while (angle > M_PI)
-        angle -= 2.0 * M_PI;
-    while (angle < -M_PI)
-        angle += 2.0 * M_PI;
+    angle = fmod(angle + M_PI, 2.0f * M_PI);
+    if (angle < 0)
+        angle += 2.0f * M_PI;
+    angle -= M_PI;
 
-    // Treat angles close to pi and -pi as the same to avoid oscillation
-    if (fabs(angle - M_PI) < 1e-3)
+    // Handle edge case near pi
+    if (fabs(angle - M_PI) < 1e-3f)
         angle = -M_PI;
 
     return angle;

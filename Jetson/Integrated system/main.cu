@@ -8,8 +8,6 @@
 #include <thread>
 #include <vector>
 
-#include <cuda_fp16.h>
-
 // OpenCV Headers
 #include <opencv2/opencv.hpp>
 
@@ -31,6 +29,14 @@ using std::chrono::duration;
 using std::chrono::duration_cast;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
+
+serialHelper serial("/dev/ttyUSB0", 9600);
+// Create a position controller
+positionController controller(0.5, 10, 0.1, 0.05);
+// Set the goal position
+controller.setGoal(1, 0, 0);
+// reset the position of the robot
+serial.resetPosition();
 
 int main()
 {
@@ -133,7 +139,18 @@ int main()
             }
         }
         duration<double, std::milli> ms_double = t2 - t1;
-        std::cout << ms_double.count() << "ms\n";
+        // std::cout << ms_double.count() << "ms\n";
+
+        std::vector<float> position = serial.receivePosition();
+        std::vector<float> velocities = controller.updateVelocities(position[0], position[1], position[2]);
+        serial.sendSpeeds(velocities[1], velocities[1], velocities[0], velocities[0]);
+
+        float distance = serial.receiveDistanceSensorMeasurement(SENSE_1);
+        std::cout << "Distance sensor: " << distance << std::endl;
+        if (distance < 0.2 && distance != -1)
+        {
+            break;
+        }
     }
 
     // Release resources

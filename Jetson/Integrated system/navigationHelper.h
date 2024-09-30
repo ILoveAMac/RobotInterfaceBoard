@@ -7,6 +7,7 @@
 
 #include "serialHelper.h"
 #include "positionController.h"
+#include "pid.h"
 
 class navigationHelper
 {
