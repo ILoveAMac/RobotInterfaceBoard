@@ -97,6 +97,7 @@ int main()
 
         // Split channels
         cv::split(resized_frame, channels);
+        auto t2 = high_resolution_clock::now();
 
         // Copy the data from the OpenCV Mat to the host memory (channels first format)
         for (int c = 0; c < 3; ++c)
@@ -109,7 +110,6 @@ int main()
                 }
             }
         }
-        auto t2 = high_resolution_clock::now();
 
         // Transfer the data from host memory to the GPU memory (device)
         cudaMemcpy(input_image, host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
