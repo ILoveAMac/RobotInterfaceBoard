@@ -75,13 +75,6 @@ std::vector<std::vector<float>> yolo::getBoxPredictions(__half *inputImage)
     // Copy the data from GPU to CPU
     cudaMemcpy(this->hostOutput, output, 7 * 7 * 10 * sizeof(__half), cudaMemcpyDeviceToHost);
 
-    // get the last cuda error
-    cudaError_t cudaError = cudaGetLastError();
-    if (cudaError != cudaSuccess)
-    {
-        std::cerr << "CUDA error: " << cudaGetErrorString(cudaError) << std::endl;
-    }
-
     // Convert the output to float
     float floatOutput[7 * 7 * 10];
     convertHalfToFloat(this->hostOutput, floatOutput, 7 * 7 * 10);
