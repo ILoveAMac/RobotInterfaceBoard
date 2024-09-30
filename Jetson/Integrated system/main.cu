@@ -117,7 +117,7 @@ int main()
         cudaMemcpy(input_image, host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
 
         // If the current state is not a rotation, use the YOLO model to detect objects
-        if (controller.getState() != State::ROTATE_TO_GOAL && controller.getState() != State::ROTATE_TO_POSITION)
+        if (controller.getState() != State::ROTATE_TO_GOAL && controller.getState() != State::ROTATE_TO_GOAL_ORIENTATION)
         {
             // Get the bounding boxes
             std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
