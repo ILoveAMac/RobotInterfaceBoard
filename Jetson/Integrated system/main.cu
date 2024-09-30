@@ -86,6 +86,8 @@ int main()
             break;
         }
 
+        auto t2 = high_resolution_clock::now();
+
         // Resize the image to 448x448 (input size for YOLOv1)
         cv::resize(frame, resized_frame, cv::Size(448, 448));
 
@@ -97,7 +99,6 @@ int main()
 
         // Split channels
         cv::split(resized_frame, channels);
-        auto t2 = high_resolution_clock::now();
 
         // Copy the data from the OpenCV Mat to the host memory (channels first format)
         for (int c = 0; c < 3; ++c)
