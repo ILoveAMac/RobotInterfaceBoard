@@ -21,7 +21,7 @@
 #include "FullyConnected.cuh"
 #include "Layer.cuh"
 #include "MaxPool2D.cuh"
-#include "ModelLoadingHelper.cuh"
+#include "ModelLoadingHelper.h"
 #include "aiHelperUtils.h"
 #include "positionController.h"
 #include "serialHelper.h"
@@ -31,10 +31,6 @@ using std::chrono::duration;
 using std::chrono::duration_cast;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
-
-#include <vector>
-#include <cuda_fp16.h>
-#include <stdexcept>
 
 int main()
 {
@@ -58,8 +54,7 @@ int main()
     cudaMalloc(&input_image, 3 * 448 * 448 * sizeof(__half));
 
     // Allocate host memory for the input image (use standard malloc or new)
-    // auto host_image = static_cast<float *>(malloc(3 * 448 * 448 * sizeof(float)));
-    __half *host_image = new __half[3 * 448 * 448];
+    auto host_image = static_cast<__half *>(malloc(3 * 448 * 448 * sizeof(__half)));
 
     // Create a window to display the results
     cv::namedWindow("Detection", cv::WINDOW_AUTOSIZE);
@@ -69,11 +64,11 @@ int main()
     aiHelperUtils aiHelper;
 
     yolo yolo("/home/wihan/model/");
-    auto t1 = high_resolution_clock::now();
+
     // Main loop
     while (true)
     {
-        t1 = high_resolution_clock::now();
+        auto t1 = high_resolution_clock::now();
         // Capture a frame from the webcam
         cap >> frame;
 
@@ -113,6 +108,7 @@ int main()
 
         // Get the bounding boxes
         std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
+        auto t2 = high_resolution_clock::now();
 
         // Draw the bounding boxes
         cv::cvtColor(resized_frame, resized_frame, cv::COLOR_RGB2BGR);
@@ -136,7 +132,6 @@ int main()
                 std::cerr << "Error: Could not save image" << std::endl;
             }
         }
-        auto t2 = high_resolution_clock::now();
         duration<double, std::milli> ms_double = t2 - t1;
         std::cout << ms_double.count() << "ms\n";
     }
