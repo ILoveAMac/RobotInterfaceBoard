@@ -3,6 +3,7 @@
 //
 
 #include "MaxPool2D.cuh"
+#include <cuda_fp16.h>
 
 __global__ void maxPool2DForwardKernel(const __half *input, __half *output,
                                        const int inputHeight, const int inputWidth, int inputChannels,
@@ -40,7 +41,7 @@ __global__ void maxPool2DForwardKernel(const __half *input, __half *output,
                 {
                     // Calculate the index in the input tensor
                     const int inputIndex = (c * inputHeight + inputH) * inputWidth + inputW;
-                    maxVal = fmax(maxVal, input[inputIndex]); // Store larges value
+                    maxVal = (maxVal > input[inputIndex]) ? maxVal : input[inputIndex];
                 }
             }
         }
