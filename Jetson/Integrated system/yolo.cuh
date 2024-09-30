@@ -19,7 +19,7 @@ public:
     ~yolo();
 
     // Function to return final output bounding boxes
-    std::vector<std::vector<__half>> getBoxPredictions(__half *inputImage);
+    std::vector<std::vector<float>> getBoxPredictions(__half *inputImage);
 
 private:
     ModelLoadingHelper MLH;

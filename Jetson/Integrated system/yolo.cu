@@ -49,7 +49,7 @@ yolo::~yolo()
     }
 }
 
-std::vector<std::vector<__half>> yolo::getBoxPredictions(__half *inputImage)
+std::vector<std::vector<float>> yolo::getBoxPredictions(__half *inputImage)
 {
     __half *output = nullptr;
     for (const auto &layer : this->model)
@@ -62,6 +62,20 @@ std::vector<std::vector<__half>> yolo::getBoxPredictions(__half *inputImage)
     // Copy the data from GPU to CPU
     cudaMemcpy(this->hostOutput, output, 7 * 7 * 10 * sizeof(__half), cudaMemcpyDeviceToHost);
 
-    // Get the final bounding boxes
-    return aiHelperUtils::getFinalBoundingBoxes(this->hostOutput);
+    // Allocate memory for floatOutput
+    float *floatOutput = new float[7 * 7 * 10];
+
+    // Convert __half values to float
+    for (int i = 0; i < 7 * 7 * 10; ++i)
+    {
+        floatOutput[i] = __half2float(this->hostOutput[i]);
+    }
+
+    // Get the final bounding boxes using the float pointer
+    auto result = aiHelperUtils::getFinalBoundingBoxes(floatOutput);
+
+    // Free the allocated memory
+    delete[] floatOutput;
+
+    return result;
 }

@@ -4,8 +4,6 @@
 // Sorting algorithm for vectors
 #include <bits/algorithmfwd.h>
 
-#include <cuda_fp16.h>
-
 // OpenCV for drawing bounding boxes
 #include <cmath>
 #include <opencv2/opencv.hpp>
@@ -25,13 +23,13 @@ public:
     ~aiHelperUtils();
 
     // Bounding boxes
-    static std::vector<std::vector<__half>> getFinalBoundingBoxes(const __half *detections);
-    static cv::Mat drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<__half>> boxes);
+    static std::vector<std::vector<float>> getFinalBoundingBoxes(const float *detections);
+    static cv::Mat drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<float>> boxes);
 
 private:
-    static std::vector<std::vector<__half>>
-    nonMaxSuppression(std::vector<std::vector<__half>> boxes);
-    static __half iou(std::vector<__half> box1, std::vector<__half> box2);
+    static std::vector<std::vector<float>>
+    nonMaxSuppression(std::vector<std::vector<float>> boxes);
+    static float iou(std::vector<float> box1, std::vector<float> box2);
 };
 
 #endif // AIHELPERUTILS_H

@@ -4,10 +4,10 @@ aiHelperUtils::aiHelperUtils() {}
 
 aiHelperUtils::~aiHelperUtils() {}
 
-std::vector<std::vector<__half>> aiHelperUtils::getFinalBoundingBoxes(const __half *detections)
+std::vector<std::vector<float>> aiHelperUtils::getFinalBoundingBoxes(const float *detections)
 {
     // Vecttor to store the bounding boxes
-    std::vector<std::vector<__half>> boxes;
+    std::vector<std::vector<float>> boxes;
     for (int i = 0; i < GRID_SIZE; i++)
     {
         for (int j = 0; j < GRID_SIZE; j++)
@@ -18,16 +18,16 @@ std::vector<std::vector<__half>> aiHelperUtils::getFinalBoundingBoxes(const __ha
                 const int index = (i * GRID_SIZE + j) * (5 * NUM_BOXES) + b * 5;
 
                 // Extract all of the bounding boxes and store them in the boxes vector
-                __half x_offset = detections[index];                                // x relative to the grid cell
-                __half y_offset = detections[index + 1];                            // y relative to the grid cell
-                __half w = __hmul(detections[index + 2], __float2half(IMG_HEIGHT)); // Width relative to image size
-                __half h = __hmul(detections[index + 3], __float2half(IMG_WIDTH));  // Height relative to image size
-                __half c = detections[index + 4];                                   // Confidence for the bounding box
+                float x_offset = detections[index];           // x relative to the grid cell
+                float y_offset = detections[index + 1];       // y relative to the grid cell
+                float w = detections[index + 2] * IMG_HEIGHT; // Width relative to image size
+                float h = detections[index + 3] * IMG_WIDTH;  // Height relative to image size
+                float c = detections[index + 4];              // Confidence for the bounding box
 
-                __half x_center = __hmul(__hadd(__float2half(j), x_offset), __float2half(IMG_HEIGHT / GRID_SIZE)); // Absolute x-center
-                __half y_center = __hmul(__hadd(__float2half(i), y_offset), __float2half(IMG_WIDTH / GRID_SIZE));  // Absolute y-center
+                float x_center = (j + x_offset) * (IMG_HEIGHT / GRID_SIZE); // Absolute x-center
+                float y_center = (i + y_offset) * (IMG_WIDTH / GRID_SIZE);  // Absolute y-center
 
-                std::vector<__half> box = {x_center, y_center, w, h, c};
+                std::vector<float> box = {x_center, y_center, w, h, c};
 
                 // Push the box to the boxes vector
                 boxes.push_back(box);
@@ -39,23 +39,22 @@ std::vector<std::vector<__half>> aiHelperUtils::getFinalBoundingBoxes(const __ha
     return aiHelperUtils::nonMaxSuppression(boxes);
 }
 
-cv::Mat aiHelperUtils::drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<__half>> boxes)
+cv::Mat aiHelperUtils::drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<float>> boxes)
 {
-    for (std::vector<__half> box : boxes)
+    for (std::vector<float> box : boxes)
     {
         // Extract the bounding box data
-        __half x_center = box[0];
-        __half y_center = box[1];
-        __half w = box[2];
-        __half h = box[3];
-        __half c = box[4];
+        float x_center = box[0];
+        float y_center = box[1];
+        float w = box[2];
+        float h = box[3];
+        float c = box[4];
 
         // Calculate the top-left and bottom-right points of the bounding box
-        __half half_two = __float2half(2.0);
-        int x1 = static_cast<int>(__hsub(x_center, __hdiv(w, half_two)));
-        int y1 = static_cast<int>(__hsub(y_center, __hdiv(h, half_two)));
-        int x2 = static_cast<int>(__hadd(x_center, __hdiv(w, half_two)));
-        int y2 = static_cast<int>(__hadd(y_center, __hdiv(h, half_two)));
+        int x1 = static_cast<int>(x_center - w / 2.0);
+        int y1 = static_cast<int>(y_center - h / 2.0);
+        int x2 = static_cast<int>(x_center + w / 2.0);
+        int y2 = static_cast<int>(y_center + h / 2.0);
 
         // Draw the bounding box on the image
         cv::rectangle(frame, cv::Point(x1, y1), cv::Point(x2, y2), cv::Scalar(0, 255, 0), 2);
@@ -81,28 +80,28 @@ cv::Mat aiHelperUtils::drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<
     return frame;
 }
 
-std::vector<std::vector<__half>> aiHelperUtils::nonMaxSuppression(std::vector<std::vector<__half>> boxes)
+std::vector<std::vector<float>> aiHelperUtils::nonMaxSuppression(std::vector<std::vector<float>> boxes)
 {
     // Remove any predictions from the list that have a confidence score less than the threshold
     // confidences are stored in the last element of the vector
-    std::vector<std::vector<__half>> filtered_boxes;
+    std::vector<std::vector<float>> filtered_boxes;
     for (int i = 0; i < boxes.size(); i++)
     {
-        if (__half2float(boxes[i][4]) > CONF_THRESH)
+        if (boxes[i][4] > 0)
         {
             filtered_boxes.push_back(boxes[i]);
         }
     }
 
     // Sort the boxes based on their confidence scores, highest first
-    std::sort(filtered_boxes.begin(), filtered_boxes.end(), [](const std::vector<__half> &a, const std::vector<__half> &b)
+    std::sort(filtered_boxes.begin(), filtered_boxes.end(), [](const std::vector<float> &a, const std::vector<float> &b)
               { return a[4] > b[4]; });
 
     // Perform non-maximum suppression
-    std::vector<std::vector<__half>> final_boxes;
+    std::vector<std::vector<float>> final_boxes;
     while (filtered_boxes.size() > 0)
     {
-        std::vector<__half> chosenBox = filtered_boxes[0];
+        std::vector<float> chosenBox = filtered_boxes[0];
         // Add the chosen box to the final list
         final_boxes.push_back(chosenBox);
         // Remove the chosen box from the list
@@ -110,9 +109,9 @@ std::vector<std::vector<__half>> aiHelperUtils::nonMaxSuppression(std::vector<st
 
         // Remove any boxes that have a high IoU with the chosen box
         filtered_boxes.erase(std::remove_if(filtered_boxes.begin(), filtered_boxes.end(),
-                                            [chosenBox](const std::vector<__half> &box)
+                                            [chosenBox](const std::vector<float> &box)
                                             {
-                                                return (aiHelperUtils::iou(chosenBox, box)) > __float2half(IOU_NMS_THRESH);
+                                                return aiHelperUtils::iou(chosenBox, box) > IOU_NMS_THRESH;
                                             }),
                              filtered_boxes.end());
     }
@@ -120,39 +119,28 @@ std::vector<std::vector<__half>> aiHelperUtils::nonMaxSuppression(std::vector<st
     return final_boxes;
 }
 
-__half aiHelperUtils::iou(std::vector<__half> box1, std::vector<__half> box2)
+float aiHelperUtils::iou(std::vector<float> box1, std::vector<float> box2)
 {
     // Calculate the intersection area of the two boxes
-    __half half_two = __float2half(2.0);
-    __half box1_x1 = __hsub(box1[0], __hdiv(box1[2], half_two));
-    __half box1_x2 = __hadd(box1[0], __hdiv(box1[2], half_two));
-    __half box1_y1 = __hsub(box1[1], __hdiv(box1[3], half_two));
-    __half box1_y2 = __hadd(box1[1], __hdiv(box1[3], half_two));
+    float box1_x1 = box1[0] - box1[2] / 2;
+    float box1_x2 = box1[0] + box1[2] / 2;
+    float box1_y1 = box1[1] - box1[3] / 2;
+    float box1_y2 = box1[1] + box1[3] / 2;
 
-    __half box2_x1 = __hsub(box2[0], __hdiv(box2[2], half_two));
-    __half box2_x2 = __hadd(box2[0], __hdiv(box2[2], half_two));
-    __half box2_y1 = __hsub(box2[1], __hdiv(box2[3], half_two));
-    __half box2_y2 = __hadd(box2[1], __hdiv(box2[3], half_two));
+    float box2_x1 = box2[0] - box2[2] / 2;
+    float box2_x2 = box2[0] + box2[2] / 2;
+    float box2_y1 = box2[1] - box2[3] / 2;
+    float box2_y2 = box2[1] + box2[3] / 2;
 
-    // Replace __hmax and __hmin with explicit comparisons
-    __half x1 = (__hgt(box1_x1, box2_x1)) ? box1_x1 : box2_x1; // Equivalent to max(box1_x1, box2_x1)
-    __half y1 = (__hgt(box1_y1, box2_y1)) ? box1_y1 : box2_y1; // Equivalent to max(box1_y1, box2_y1)
-    __half x2 = (__hlt(box1_x2, box2_x2)) ? box1_x2 : box2_x2; // Equivalent to min(box1_x2, box2_x2)
-    __half y2 = (__hlt(box1_y2, box2_y2)) ? box1_y2 : box2_y2; // Equivalent to min(box1_y2, box2_y2)
+    float x1 = std::max(box1_x1, box2_x1);
+    float y1 = std::max(box1_y1, box2_y1);
+    float x2 = std::min(box1_x2, box2_x2);
+    float y2 = std::min(box1_y2, box2_y2);
 
-    __half zero = __float2half(0.0f);
-    __half intersection = __hmul((__hgt(__hsub(x2, x1), zero) ? __hsub(x2, x1) : zero),
-                                 (__hgt(__hsub(y2, y1), zero) ? __hsub(y2, y1) : zero));
+    float intersection = std::max(0.0f, x2 - x1) * std::max(0.0f, y2 - y1);
 
-    // Calculate absolute values for box dimensions manually
-    __half box1_w_abs = (__hlt(box1[2], __float2half(0.0f))) ? __hneg(box1[2]) : box1[2];
-    __half box1_h_abs = (__hlt(box1[3], __float2half(0.0f))) ? __hneg(box1[3]) : box1[3];
-    __half box2_w_abs = (__hlt(box2[2], __float2half(0.0f))) ? __hneg(box2[2]) : box2[2];
-    __half box2_h_abs = (__hlt(box2[3], __float2half(0.0f))) ? __hneg(box2[3]) : box2[3];
+    float box1_area = fabs(box1[2] * box1[3]);
+    float box2_area = fabs(box2[2] * box2[3]);
 
-    // Compute the area using the absolute values
-    __half box1_area = __hmul(box1_w_abs, box1_h_abs);
-    __half box2_area = __hmul(box2_w_abs, box2_h_abs);
-
-    return __hdiv(intersection, __hsub(__hadd(box1_area, box2_area), __hadd(intersection, __float2half(1E-6))));
+    return intersection / (box1_area + box2_area - intersection + 1E-6);
 }
