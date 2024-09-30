@@ -62,8 +62,6 @@ std::vector<float> positionController::moveToGoal(float x, float y, float theta)
 {
     float distance = calculateP(x, y);
 
-    printf("Distance: %f\n", distance);
-
     if (distance < goalTolerance)
     {
         state = State::ROTATE_TO_GOAL_ORIENTATION; // Transition to rotating to goal orientation
@@ -91,6 +89,9 @@ std::vector<float> positionController::rotateToGoalOrientation(float theta)
 
     // PID control for rotation to goal orientation
     float W = pidTheta.compute(angleError, theta);
+    // print W
+    std::cout << "W: " << W << std::endl;
+
     return calculateVelocities(0, W); // Only rotate
 }
 
