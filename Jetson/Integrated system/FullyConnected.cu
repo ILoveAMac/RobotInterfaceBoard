@@ -31,9 +31,22 @@ __global__ void fullyConnectedKernel(const __half *input, const __half *weights,
         sum += biases[neuronIndex];
 
         // Only apply the activation if this is an inner layer
+        // Only apply the activation if this is an inner layer
         if (applyActivation)
         {
-            sum = (sum > 0.0f) ? sum : 0.1f * sum; // Leaky ReLu
+            __half zero = __float2half(0.0f);
+            __half one_tenth = __float2half(0.1f);
+
+            // Use the __hgt intrinsic to compare if sum > 0.0f
+            if (__hgt(sum, zero)) // __hgt(a, b) returns true if a > b
+            {
+                // sum remains unchanged
+            }
+            else
+            {
+                // Perform sum = 0.1f * sum using the __hmul intrinsic
+                sum = __hmul(one_tenth, sum);
+            }
         }
 
         // Write the result to the output
