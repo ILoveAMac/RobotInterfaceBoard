@@ -18,14 +18,14 @@ std::vector<std::vector<__half>> aiHelperUtils::getFinalBoundingBoxes(const __ha
                 const int index = (i * GRID_SIZE + j) * (5 * NUM_BOXES) + b * 5;
 
                 // Extract all of the bounding boxes and store them in the boxes vector
-                __half x_offset = detections[index];           // x relative to the grid cell
-                __half y_offset = detections[index + 1];       // y relative to the grid cell
-                __half w = detections[index + 2] * IMG_HEIGHT; // Width relative to image size
-                __half h = detections[index + 3] * IMG_WIDTH;  // Height relative to image size
-                __half c = detections[index + 4];              // Confidence for the bounding box
+                __half x_offset = detections[index];                                // x relative to the grid cell
+                __half y_offset = detections[index + 1];                            // y relative to the grid cell
+                __half w = __hmul(detections[index + 2], __float2half(IMG_HEIGHT)); // Width relative to image size
+                __half h = __hmul(detections[index + 3], __float2half(IMG_WIDTH));  // Height relative to image size
+                __half c = detections[index + 4];                                   // Confidence for the bounding box
 
-                __half x_center = (j + x_offset) * (IMG_HEIGHT / GRID_SIZE); // Absolute x-center
-                __half y_center = (i + y_offset) * (IMG_WIDTH / GRID_SIZE);  // Absolute y-center
+                __half x_center = __hmul(__hadd(__float2half(j), x_offset), __float2half(IMG_HEIGHT / GRID_SIZE)); // Absolute x-center
+                __half y_center = __hmul(__hadd(__float2half(i), y_offset), __float2half(IMG_WIDTH / GRID_SIZE));  // Absolute y-center
 
                 std::vector<__half> box = {x_center, y_center, w, h, c};
 
