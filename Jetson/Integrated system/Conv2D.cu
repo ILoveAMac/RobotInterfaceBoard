@@ -54,7 +54,13 @@ __global__ void conv2dForwardKernel(const __half *input, __half *output, const _
                     {
                         // Calculate the index in the flattened weights array
                         const int weightIndex = ((filter * inputChannels + inputChannel) * kernelSize * kernelSize) + (kh * kernelSize + kw);
-                        sum += input[(inputChannel * inputHeight + inputH) * inputWidth + inputW] * weights[weightIndex];
+
+                        // Retrieve input and weight values
+                        __half input_val = input[(inputChannel * inputHeight + inputH) * inputWidth + inputW];
+                        __half weight_val = weights[weightIndex];
+
+                        // Perform FP16 multiplication and accumulation
+                        sum = __hadd(sum, __hmul(input_val, weight_val));
                     }
                     // else the bounds are invalid,
                     // thus we treat this as padding with zeros and do not add anything to the sum
@@ -63,16 +69,49 @@ __global__ void conv2dForwardKernel(const __half *input, __half *output, const _
         }
 
         // Apply batch normalization
+        // Apply batch normalization
         const __half mean = runningMean[filter];
         const __half var = runningVar[filter];
         const __half gammaVal = gamma[filter];
         const __half betaVal = beta[filter];
-        sum = gammaVal * (sum - mean) / sqrtf(var + 1e-8) + betaVal;
 
-        // Apply LeRelu
-        sum = (sum > 0.0f) ? sum : 0.1f * sum;
+        // sum = gammaVal * (sum - mean) / sqrtf(var + 1e-8) + betaVal;
 
-        output[(filter * outputHeight + h) * outputWidth + w] = sum;
+        // Perform (sum - mean)
+        __half sum_minus_mean = __hsub(sum, mean);
+
+        // Perform (var + 1e-8)
+        __half var_plus_eps = __hadd(var, __float2half(1e-8f));
+
+        // Perform sqrt(var + 1e-8)
+        __half sqrt_var_plus_eps = hsqrt(var_plus_eps);
+
+        // Perform (sum - mean) / sqrt(var + 1e-8)
+        __half normalized = __hdiv(sum_minus_mean, sqrt_var_plus_eps);
+
+        // Perform gamma * normalized
+        __half scaled = __hmul(gammaVal, normalized);
+
+        // Perform gamma * normalized + beta
+        __half bn_sum = __hadd(scaled, betaVal);
+
+        // Apply Leaky ReLU: sum = (sum > 0.0f) ? sum : 0.1f * sum;
+        __half zero = __float2half(0.0f);
+        __half one_tenth = __float2half(0.1f);
+        __half relu_sum;
+
+        // Use conditional statements instead of ternary operator for __half
+        if (__hgt(bn_sum, zero)) // __hgt returns true if bn_sum > zero
+        {
+            relu_sum = bn_sum;
+        }
+        else
+        {
+            relu_sum = __hmul(one_tenth, bn_sum);
+        }
+
+        // Write the result to the output tensor
+        output[(filter * outputHeight + h) * outputWidth + w] = relu_sum;
     }
 }
 
