@@ -47,8 +47,6 @@ std::vector<float> positionController::rotateToGoal(float x, float y, float thet
 {
     float alpha = calculateAlpha(x, y, theta);
 
-    printf("alpha: %f\n", alpha);
-
     if (fabs(alpha) < thetaTolerance)
     {
         state = State::MOVE_TO_GOAL; // Transition to moving to the goal
@@ -63,6 +61,8 @@ std::vector<float> positionController::rotateToGoal(float x, float y, float thet
 std::vector<float> positionController::moveToGoal(float x, float y, float theta)
 {
     float distance = calculateP(x, y);
+
+    printf("Distance: %f\n", distance);
 
     if (distance < goalTolerance)
     {
