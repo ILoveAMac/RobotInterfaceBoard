@@ -3,8 +3,8 @@
 
 #include <chrono>
 
-#define INTEGRAL_MAX 10.0f
-#define INTEGRAL_MIN -10.0f
+#define INTEGRAL_MAX 1.0f
+#define INTEGRAL_MIN -1.0f
 
 using std::chrono::duration;
 using std::chrono::duration_cast;
