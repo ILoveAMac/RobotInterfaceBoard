@@ -5,7 +5,7 @@
 #include <math.h>
 #include <iostream>
 
-#include "PID.h"
+#include "pid.h"
 
 #define AXLE_LENGTH 0.307f
 #define MAX_LINEAR_VELOCITY 0.3f
