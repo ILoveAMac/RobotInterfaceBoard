@@ -97,6 +97,11 @@ std::vector<float> positionController::rotateToGoalOrientation(float theta)
     return calculateVelocities(0, W); // Only rotate
 }
 
+State positionController::getState()
+{
+    return this->state;
+}
+
 // Set the goal position
 void positionController::setGoal(float x, float y, float theta)
 {

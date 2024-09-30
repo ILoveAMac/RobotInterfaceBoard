@@ -65,6 +65,9 @@ private:
     std::vector<float> moveToGoal(float x, float y, float theta);
     std::vector<float> rotateToGoalOrientation(float theta);
 
+    // Function to get the current state
+    State getState();
+
     float goalTolerance;
     float thetaTolerance;
     float Kp;
