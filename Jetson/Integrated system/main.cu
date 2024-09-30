@@ -35,7 +35,7 @@ int main()
 
     serialHelper serial("/dev/ttyUSB0", 9600);
     // Create a position controller
-    positionController controller(0.5, 0.5, 0.1, 0.05);
+    positionController controller(0.5, 0.05, 0.1, 0.05);
     // Set the goal position
     controller.setGoal(1, 0, 0);
     // reset the position of the robot
