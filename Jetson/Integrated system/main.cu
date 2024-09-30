@@ -140,7 +140,7 @@ int main()
             }
         }
         duration<double, std::milli> ms_double = t2 - t1;
-        // std::cout << ms_double.count() << "ms\n";
+        std::cout << ms_double.count() << "ms\n";
 
         std::vector<float> position = serial.receivePosition();
         std::vector<float> velocities = controller.updateVelocities(position[0], position[1], position[2]);
