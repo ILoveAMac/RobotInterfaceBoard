@@ -76,9 +76,9 @@ int main()
     while (true)
     {
         auto t1 = high_resolution_clock::now();
-        auto t2 = high_resolution_clock::now();
         // Capture a frame from the webcam
         cap >> frame;
+        auto t2 = high_resolution_clock::now();
 
         // Check if the frame is empty
         if (frame.empty())
