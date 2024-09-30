@@ -114,11 +114,14 @@ int main()
         // Get the bounding boxes
         std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
 
+        // print the length of the bounding boxes
+        std::cout << "Number of bounding boxes: " << bboxes.size() << std::endl;
+
         // Draw the bounding boxes
         cv::cvtColor(resized_frame, resized_frame, cv::COLOR_RGB2BGR);
         resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
 
-                // Display the image
+        // Display the image
         cv::imshow("Detection", resized_frame);
 
         // Exit if 'q' is pressed
