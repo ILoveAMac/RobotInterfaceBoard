@@ -1,4 +1,4 @@
-#include "aiHelperUtils.h"
+#include "aiHelperUtils.cuh"
 
 aiHelperUtils::aiHelperUtils() {}
 
