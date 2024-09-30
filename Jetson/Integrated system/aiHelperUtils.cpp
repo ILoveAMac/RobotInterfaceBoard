@@ -87,7 +87,7 @@ std::vector<std::vector<float>> aiHelperUtils::nonMaxSuppression(std::vector<std
     std::vector<std::vector<float>> filtered_boxes;
     for (int i = 0; i < boxes.size(); i++)
     {
-        if (boxes[i][4] > 0)
+        if (boxes[i][4] > CONF_THRESH)
         {
             filtered_boxes.push_back(boxes[i]);
         }

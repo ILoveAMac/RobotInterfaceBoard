@@ -118,7 +118,7 @@ int main()
         cv::cvtColor(resized_frame, resized_frame, cv::COLOR_RGB2BGR);
         resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
 
-        // Display the image
+                // Display the image
         cv::imshow("Detection", resized_frame);
 
         // Exit if 'q' is pressed
