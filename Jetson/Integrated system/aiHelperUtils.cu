@@ -88,7 +88,7 @@ std::vector<std::vector<__half>> aiHelperUtils::nonMaxSuppression(std::vector<st
     std::vector<std::vector<__half>> filtered_boxes;
     for (int i = 0; i < boxes.size(); i++)
     {
-        if (boxes[i][4] > CONF_THRESH)
+        if (__half2float(boxes[i][4]) > CONF_THRESH)
         {
             filtered_boxes.push_back(boxes[i]);
         }
@@ -123,27 +123,25 @@ std::vector<std::vector<__half>> aiHelperUtils::nonMaxSuppression(std::vector<st
 __half aiHelperUtils::iou(std::vector<__half> box1, std::vector<__half> box2)
 {
     // Calculate the intersection area of the two boxes
-    __half half_two = __float2half(2.0);
-    __half box1_x1 = __hsub(box1[0], __hdiv(box1[2], half_two));
-    __half box1_x2 = __hadd(box1[0], __hdiv(box1[2], half_two));
-    __half box1_y1 = __hsub(box1[1], __hdiv(box1[3], half_two));
-    __half box1_y2 = __hadd(box1[1], __hdiv(box1[3], half_two));
+    __half box1_x1 = box1[0] - box1[2] / 2;
+    __half box1_x2 = box1[0] + box1[2] / 2;
+    __half box1_y1 = box1[1] - box1[3] / 2;
+    __half box1_y2 = box1[1] + box1[3] / 2;
 
-    __half box2_x1 = __hsub(box2[0], __hdiv(box2[2], half_two));
-    __half box2_x2 = __hadd(box2[0], __hdiv(box2[2], half_two));
-    __half box2_y1 = __hsub(box2[1], __hdiv(box2[3], half_two));
-    __half box2_y2 = __hadd(box2[1], __hdiv(box2[3], half_two));
+    __half box2_x1 = box2[0] - box2[2] / 2;
+    __half box2_x2 = box2[0] + box2[2] / 2;
+    __half box2_y1 = box2[1] - box2[3] / 2;
+    __half box2_y2 = box2[1] + box2[3] / 2;
 
-    __half x1 = __hmax(box1_x1, box2_x1);
-    __half y1 = __hmax(box1_y1, box2_y1);
-    __half x2 = __hmin(box1_x2, box2_x2);
-    __half y2 = __hmin(box1_y2, box2_y2);
+    __half x1 = std::max(box1_x1, box2_x1);
+    __half y1 = std::max(box1_y1, box2_y1);
+    __half x2 = std::min(box1_x2, box2_x2);
+    __half y2 = std::min(box1_y2, box2_y2);
 
-    __half zero = __float2half(0.0f);
-    __half intersection = __hmul(__hmax(zero, __hsub(x2, x1)), __hmax(zero, __hsub(y2, y1)));
+    __half intersection = std::max(0.0f, x2 - x1) * std::max(0.0f, y2 - y1);
 
-    __half box1_area = __hmul(fabs(box1[2]), fabs(box1[3]));
-    __half box2_area = __hmul(fabs(box2[2]), fabs(box2[3]));
+    __half box1_area = fabs(box1[2] * box1[3]);
+    __half box2_area = fabs(box2[2] * box2[3]);
 
-    return __hdiv(intersection, __hsub(__hadd(box1_area, box2_area), __hadd(intersection, __float2half(1E-6))));
+    return intersection / (box1_area + box2_area - intersection + 1E-6);
 }
