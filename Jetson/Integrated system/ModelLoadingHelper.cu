@@ -54,6 +54,11 @@ std::vector<std::vector<std::vector<std::vector<__half>>>> ModelLoadingHelper::l
                 for (const auto &value : conv_row)
                 {
                     conv_row_half.emplace_back(__float2half(value));
+                    // print value if it is nan
+                    if (std::isnan(value))
+                    {
+                        std::cout << "NAN value: " << value << std::endl;
+                    }
                 }
 
                 conv_filter_half.emplace_back(std::move(conv_row_half));
