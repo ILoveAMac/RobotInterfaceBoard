@@ -146,8 +146,11 @@ int main()
         std::vector<float> velocities = controller.updateVelocities(position[0], position[1], position[2]);
         serial.sendSpeeds(velocities[1], velocities[1], velocities[0], velocities[0]);
 
+        // print the current position
+        std::cout << "Current position: " << position[0] << " " << position[1] << " " << position[2] << std::endl;
+
         float distance = serial.receiveDistanceSensorMeasurement(SENSE_1);
-        std::cout << "Distance sensor: " << distance << std::endl;
+        // std::cout << "Distance sensor: " << distance << std::endl;
         if (distance < 0.2 && distance != -1)
         {
             break;
