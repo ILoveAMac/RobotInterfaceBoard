@@ -13,10 +13,10 @@
 
 // Angular Velocity PID controller parameters
 #define A_KP 0.5f
-#define A_KI 0.4f
-#define A_KD 0.0f
+#define A_KI 0.5f
+#define A_KD 0.1f
 
-#define ALPHA 0.8 // Smoothing factor
+#define ALPHA 0.9 // Smoothing factor
 
 // State machine states
 enum class State
