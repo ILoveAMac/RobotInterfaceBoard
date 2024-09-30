@@ -107,7 +107,7 @@ int main()
         cudaMemcpy(input_image, host_image, 3 * 448 * 448 * sizeof(__half), cudaMemcpyHostToDevice);
 
         // Get the bounding boxes
-        std::vector<std::vector<__half>> bboxes = yolo.getBoxPredictions(input_image);
+        std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
         auto t2 = high_resolution_clock::now();
 
         // Draw the bounding boxes
