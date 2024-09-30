@@ -112,10 +112,10 @@ int main()
 
         // Draw the bounding boxes
         cv::cvtColor(resized_frame, resized_frame, cv::COLOR_RGB2BGR);
-        resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
+        // resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
 
         // Display the image
-        cv::imshow("Detection", resized_frame);
+        // cv::imshow("Detection", resized_frame);
 
         // Exit if 'q' is pressed
         if (cv::waitKey(1) == 'c')
