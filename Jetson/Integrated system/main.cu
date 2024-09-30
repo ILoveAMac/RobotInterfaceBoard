@@ -153,6 +153,8 @@ int main()
         // std::cout << "Distance sensor: " << distance << std::endl;
         if (distance < 0.2 && distance != -1)
         {
+            // set velocities to 0
+            serial.sendSpeeds(0, 0, 0, 0);
             break;
         }
     }
