@@ -43,6 +43,9 @@ int main()
 
     // Initialize VideoCapture with default camera (index 0)
     cv::VideoCapture cap(0);
+    cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
+    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
+    cap.set(cv::CAP_PROP_FPS, 30);
 
     // Check if the webcam opened successfully
     if (!cap.isOpened())
