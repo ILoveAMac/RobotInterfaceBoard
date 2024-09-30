@@ -79,6 +79,9 @@ std::vector<std::vector<float>> yolo::getBoxPredictions(__half *inputImage)
     float floatOutput[7 * 7 * 10];
     convertHalfToFloat(this->hostOutput, floatOutput, 7 * 7 * 10);
 
+    // print the first element of the output
+    std::cout << "First element of the output: " << floatOutput[0] << std::endl;
+
     // Get the final bounding boxes
     return aiHelperUtils::getFinalBoundingBoxes(floatOutput);
 }
