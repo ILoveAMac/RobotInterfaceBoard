@@ -127,7 +127,7 @@ void robotController::moveAndDetect()
 void robotController::detectionAllignment()
 {
     // Check if the position controller is busy with a rotation
-    if (positionController.getState() != State::ROTATE_TO_GOAL && positionController.getState() != State::ROTATE_TO_GOAL_ORIENTATION)
+    if (positionController.getState() != State::ROTATE_TO_GOAL && positionController.getState() != State::ROTATE_TO_GOAL_ORIENTATION && positionController.getState() != State::MOVE_TO_GOAL)
     {
         // Detect poop with ai
         auto bboxes = getBoundingBoxesAndDraw();
