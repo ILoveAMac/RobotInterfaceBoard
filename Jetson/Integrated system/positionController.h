@@ -69,7 +69,7 @@ private:
     // Functions for the state machine
     std::vector<float> rotateToGoal(float x, float y, float theta);
     std::vector<float> moveToGoal(float x, float y, float theta);
-    std::vector<float> rotateToGoalOrientation(float theta);
+    std::vector<float> rotateToGoalOrientation(float x, float y, float theta);
 
     float goalTolerance;
     float thetaTolerance;

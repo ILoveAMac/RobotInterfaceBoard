@@ -35,7 +35,7 @@ std::vector<float> positionController::updateVelocities(float x, float y, float 
         return moveToGoal(x, y, theta);
 
     case State::ROTATE_TO_GOAL_ORIENTATION:
-        return rotateToGoalOrientation(theta);
+        return rotateToGoalOrientation(x, y, theta);
 
     default:
         // Handle unexpected states gracefully
@@ -77,7 +77,7 @@ std::vector<float> positionController::moveToGoal(float x, float y, float theta)
     return calculateVelocities(V, W);
 }
 
-std::vector<float> positionController::rotateToGoalOrientation(float theta)
+std::vector<float> positionController::rotateToGoalOrientation(float x, float y, float theta)
 {
     float angleError = normalizeAngle(goalTheta - theta);
 
@@ -86,6 +86,12 @@ std::vector<float> positionController::rotateToGoalOrientation(float theta)
         state = State::IDLE; // Goal reached, stop
         // Notify the caller that the goal has been reached
         std::cout << "Goal reached" << std::endl;
+
+        // set the goal to the current position
+        this->goalX = x;
+        this->goalY = y;
+        this->goalTheta = theta;
+
         return {0, 0};
     }
 
