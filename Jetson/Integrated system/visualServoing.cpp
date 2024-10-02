@@ -22,42 +22,48 @@ void visualServoing::setTargetDist(float targetDist)
 std::vector<float> visualServoing::calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition)
 {
     // Extract bounding box center
-    float x_b = boundingBox[0]; // x is already the center of the box
-    float y_b = boundingBox[1]; // y is already the center of the box
+    float x_b = boundingBox[0]; // x is the center of the box
+    float y_b = boundingBox[1]; // y is the center of the box
+
+    // Camera intrinsic matrix
+    float f_x = K[0][0];
+    float c_x = K[0][2];
+    float f_y = K[1][1];
+    float c_y = K[1][2];
 
     // Normalize the bounding box center coordinates using camera intrinsics
-    float u_prime = (x_b - CX) / FX;
-    float v_prime = (y_b - CY) / FY;
+    float u_prime = (x_b - c_x) / f_x;
+    float v_prime = (y_b - c_y) / f_y;
 
-    // Compute the target angle in the camera's 2D plane
-    float target_angle = std::atan2(v_prime, u_prime); // angle relative to camera
+    // Set a threshold for being "close enough" to the center
+    float threshold = 1e-3;
 
-    std::cout << "u': " << u_prime << std::endl;
-    std::cout << "v': " << v_prime << std::endl;
-
-    std::cout << "tg: " << target_angle << std::endl;
-
-    // Get the robot's current orientation (theta)
-    float robot_theta = robotCurrentPosition[2]; // assuming theta is in radians
-
-    // Compute the angular difference
-    float delta_theta = target_angle + robot_theta;
-
-    // Normalize the angle to the range [-pi, pi]
-    if (delta_theta > M_PI)
+    // If the box is near the center, no rotation is needed
+    float delta_theta = 0.0; // Default to no rotation
+    if (!(std::fabs(u_prime) < threshold && std::fabs(v_prime) < threshold))
     {
-        delta_theta -= 2 * M_PI;
-    }
-    else if (delta_theta < -M_PI)
-    {
-        delta_theta += 2 * M_PI;
+        // Compute the target angle in the camera's 2D plane
+        float target_angle = std::atan2(v_prime, u_prime); // angle relative to camera
+
+        // Get the robot's current orientation (theta)
+        float robot_theta = robotCurrentPosition[2]; // assuming theta is in radians
+
+        // Compute the angular difference
+        delta_theta = target_angle - robot_theta;
+
+        // Normalize the angle to the range [-pi, pi]
+        if (delta_theta > M_PI)
+        {
+            delta_theta -= 2 * M_PI;
+        }
+        else if (delta_theta < -M_PI)
+        {
+            delta_theta += 2 * M_PI;
+        }
     }
 
-    // Print delta angle
-    std::cout << "DA: " << delta_theta << std::endl;
-
-    // Return the control position (delta_theta) for rotation
-    return {robotCurrentPosition[0], robotCurrentPosition[1], delta_theta};
+    // Return the desired robot position: x, y remain the same, only theta is updated
+    return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2] + delta_theta};
 }
 
 std::vector<float> visualServoing::removeDistortion(std::vector<float> point)
