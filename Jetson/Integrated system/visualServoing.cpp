@@ -21,35 +21,83 @@ void visualServoing::setTargetDist(float targetDist)
 
 std::vector<float> visualServoing::calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition)
 {
-    // Step 1. Compute the relative 3D position of the bounding box center with respect to the camera
-    std::vector<float> relativePosition = computeRelativePosition(boundingBox);
+#include <vector>
+#include <cmath>
 
-    // Step 2. Convert the camera coordinates to world coordinates
-    std::vector<float> objectPositionWithRespectToRobot = cameraToWorld(relativePosition);
+    class visualServoing
+    {
+    public:
+        std::vector<float> calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, std::vector<std::vector<float>> K);
+    };
 
-    // Step 3. Compute the desired robot position
-    // Get the current robot position
-    const float robotX = robotCurrentPosition[0];
-    const float robotY = robotCurrentPosition[1];
-    const float robotTheta = robotCurrentPosition[2];
+    std::vector<float> visualServoing::calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, std::vector<std::vector<float>> K)
+    {
+        // Extract bounding box center
+        float x_b = boundingBox[0]; // x is already the center of the box
+        float y_b = boundingBox[1]; // y is already the center of the box
 
-    // Get the desired robot position
-    const float dx = objectPositionWithRespectToRobot[0];
-    const float dy = objectPositionWithRespectToRobot[1];
+        // Camera intrinsic matrix
+        float f_x = K[0][0];
+        float c_x = K[0][2];
+        float f_y = K[1][1];
+        float c_y = K[1][2];
 
-    // Calculate the distance and the angle to the object
-    const float distanceToTarget = sqrt(dx * dx + dy * dy);
-    const float desiredAngle = atan2(dx + robotX, dy + robotY);
+        // Normalize the bounding box center coordinates using camera intrinsics
+        float u_prime = (x_b - c_x) / f_x;
+        float v_prime = (y_b - c_y) / f_y;
 
-    // Print dx and dy and theta
-    std::cout << "dx :" << dx << " dy: " << dy << " theta: " << desiredAngle << std::endl;
+        // Compute the target angle in the camera's 2D plane
+        float target_angle = std::atan2(v_prime, u_prime); // angle relative to camera
 
-    // Calculate the desired robot position
-    float adjustedDistance = distanceToTarget - this->targetDist;
-    const float desiredX = robotX + adjustedDistance * cos(robotTheta + desiredAngle);
-    const float desiredY = robotY + adjustedDistance * sin(robotTheta + desiredAngle);
+        // Get the robot's current orientation (theta)
+        float robot_theta = robotCurrentPosition[2]; // assuming theta is in radians
 
-    return {robotX, robotY, desiredAngle};
+        // Compute the angular difference
+        float delta_theta = target_angle - robot_theta;
+
+        // Normalize the angle to the range [-pi, pi]
+        if (delta_theta > M_PI)
+        {
+            delta_theta -= 2 * M_PI;
+        }
+        else if (delta_theta < -M_PI)
+        {
+            delta_theta += 2 * M_PI;
+        }
+
+        // Return the control position (delta_theta) for rotation
+        return {robotCurrentPosition[0], robotCurrentPosition[1], delta_theta};
+    }
+
+    // // Step 1. Compute the relative 3D position of the bounding box center with respect to the camera
+    // std::vector<float> relativePosition = computeRelativePosition(boundingBox);
+
+    // // Step 2. Convert the camera coordinates to world coordinates
+    // std::vector<float> objectPositionWithRespectToRobot = cameraToWorld(relativePosition);
+
+    // // Step 3. Compute the desired robot position
+    // // Get the current robot position
+    // const float robotX = robotCurrentPosition[0];
+    // const float robotY = robotCurrentPosition[1];
+    // const float robotTheta = robotCurrentPosition[2];
+
+    // // Get the desired robot position
+    // const float dx = objectPositionWithRespectToRobot[0];
+    // const float dy = objectPositionWithRespectToRobot[1];
+
+    // // Calculate the distance and the angle to the object
+    // const float distanceToTarget = sqrt(dx * dx + dy * dy);
+    // const float desiredAngle = atan2(dx + robotX, dy + robotY);
+
+    // // Print dx and dy and theta
+    // std::cout << "dx :" << dx << " dy: " << dy << " theta: " << desiredAngle << std::endl;
+
+    // // Calculate the desired robot position
+    // float adjustedDistance = distanceToTarget - this->targetDist;
+    // const float desiredX = robotX + adjustedDistance * cos(robotTheta + desiredAngle);
+    // const float desiredY = robotY + adjustedDistance * sin(robotTheta + desiredAngle);
+
+    // return {robotX, robotY, desiredAngle};
 }
 
 std::vector<float> visualServoing::removeDistortion(std::vector<float> point)
