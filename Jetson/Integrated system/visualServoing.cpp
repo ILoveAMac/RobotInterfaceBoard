@@ -49,7 +49,7 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     }
 
     // Return the control position (delta_theta) for rotation
-    return {robotCurrentPosition[0], robotCurrentPosition[1], delta_theta};
+    return {robotCurrentPosition[0], robotCurrentPosition[1], delta_theta + robot_theta};
 }
 
 std::vector<float> visualServoing::removeDistortion(std::vector<float> point)
