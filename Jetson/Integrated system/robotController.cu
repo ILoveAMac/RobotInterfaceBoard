@@ -143,7 +143,7 @@ void robotController::detectionAllignment()
             // TODO: if the update position is small enough, set the robot state to pickup
 
             // Set the setpoint for the position controller
-            // this->positionController.setGoal(updatedPosition[0], updatedPosition[1], updatedPosition[2]);
+            this->positionController.setGoal(updatedPosition[0], updatedPosition[1], updatedPosition[2]);
         }
         else
         {
@@ -248,7 +248,7 @@ std::vector<std::vector<float>> robotController::getBoundingBoxesAndDraw()
     std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(this->input_image);
     // Draw the bounding boxes
     cv::cvtColor(this->resized_frame, this->resized_frame, cv::COLOR_RGB2BGR);
-    // resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
+    resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
     // Display the image
     cv::imshow("Detection", this->resized_frame);
     // Wait key
