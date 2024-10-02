@@ -25,7 +25,7 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     std::vector<float> relativePosition = computeRelativePosition(boundingBox);
 
     // Step 2. Convert the camera coordinates to world coordinates
-    std::vector<float> objectPositionWithRespectToRobot = cameraToWorld(relativePosition, robotCurrentPosition);
+    std::vector<float> objectPositionWithRespectToRobot = cameraToWorld(relativePosition);
 
     // Step 3. Compute the desired robot position
     // Get the current robot position
@@ -42,7 +42,7 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     const float desiredAngle = atan2(dy, dx);
 
     // Calculate the desired robot position
-    float adjustedDistance = distanceToTarget - this->targetDistance;
+    float adjustedDistance = distanceToTarget - this->targetDist;
     const float desiredX = robotX + adjustedDistance * cos(robotTheta + desiredAngle);
     const float desiredY = robotY + adjustedDistance * sin(robotTheta + desiredAngle);
 
@@ -82,8 +82,8 @@ std::vector<float> visualServoing::removeDistortion(std::vector<float> point)
             break; // Converged
         }
     }
-
-    return {x_u, y_u};
+    // return and cast to float
+    return {static_cast<float>(x_u), static_cast<float>(y_u)};
 }
 
 std::vector<float> visualServoing::computeRelativePosition(std::vector<float> boundingBox)
@@ -94,19 +94,18 @@ std::vector<float> visualServoing::computeRelativePosition(std::vector<float> bo
 
     // Assume an arbitrary Z = 1 unit distance for scaling purposes (relative depth)
     constexpr float Z = 1.0f; // TODO! Change and see how it affects the output
+                              // TODO! The Z parameter is currently always 1, I will need some kind of depth estimation
+                              // TODO! I can get this maybe using DIST sens 5, or maybe using the bounding box size
 
     // Calculate relative 3D coordinates in the camera frame
-    float X = u * Z;
-    float Y = v * Z;
+    float X = undistortedCenter[0] * Z;
+    float Y = undistortedCenter[1] * Z;
 
     return {X, Y, Z}; // Return relative position in the camera frame
 }
 
 std::vector<float> visualServoing::cameraToWorld(std::vector<float> cameraCoordinates)
 {
-    // TODO! The Z parameter is currently always 1, I will need some kind of depth estimation
-    // TODO! I can get this maybe using DIST sens 5, or maybe using the bounding box size
-
     // Applying rotation matrix R to convert camera frame coordinates to world frame
     float X_world = R.at<float>(0, 0) * cameraCoordinates[0] + R.at<float>(0, 1) * cameraCoordinates[1] + R.at<float>(0, 2) * cameraCoordinates[2];
     float Y_world = R.at<float>(1, 0) * cameraCoordinates[0] + R.at<float>(1, 1) * cameraCoordinates[1] + R.at<float>(1, 2) * cameraCoordinates[2];
