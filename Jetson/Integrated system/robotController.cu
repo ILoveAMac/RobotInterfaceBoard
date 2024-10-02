@@ -44,6 +44,8 @@ robotController::robotController() : aiHelper(),
 
     // Create a window to display the results
     cv::namedWindow("Detection", cv::WINDOW_AUTOSIZE);
+
+    this->image_counter = 0;
 }
 
 robotController::~robotController()
@@ -246,11 +248,24 @@ std::vector<std::vector<float>> robotController::getBoundingBoxesAndDraw()
     std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(this->input_image);
     // Draw the bounding boxes
     cv::cvtColor(this->resized_frame, this->resized_frame, cv::COLOR_RGB2BGR);
-    resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
+    // resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
     // Display the image
     cv::imshow("Detection", this->resized_frame);
     // Wait key
-    cv::waitKey(1);
+    if (cv::waitKey(1) == 'c')
+    {
+        // Save the current image
+        std::string filename = "cal/captured_image_" + std::to_string(this->image_counter) + ".png";
+        if (cv::imwrite(filename, 255 * this->resized_frame))
+        {
+            std::cout << "Image saved: " << filename << std::endl;
+            image_counter++;
+        }
+        else
+        {
+            std::cerr << "Error: Could not save image" << std::endl;
+        }
+    }
 
     return bboxes;
 }

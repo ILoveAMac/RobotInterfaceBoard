@@ -87,6 +87,8 @@ private:
 
     void delay(int ms);
 
+    int image_counter;
+
     // === Storage for Captured Images ===
     float *input_image;
     float *host_image;
