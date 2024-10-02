@@ -34,8 +34,8 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     const float robotTheta = robotCurrentPosition[2];
 
     // Get the desired robot position
-    const float dx = objectPositionWithRespectToRobot[0] * 0.2f;
-    const float dy = objectPositionWithRespectToRobot[1] * 0.2f;
+    const float dx = objectPositionWithRespectToRobot[0];
+    const float dy = objectPositionWithRespectToRobot[1];
 
     // Calculate the distance and the angle to the object
     const float distanceToTarget = sqrt(dx * dx + dy * dy);
