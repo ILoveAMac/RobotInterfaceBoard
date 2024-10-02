@@ -143,7 +143,7 @@ void robotController::detectionAllignment()
             // TODO: if the update position is small enough, set the robot state to pickup
 
             // Set the setpoint for the position controller
-            this->positionController.setGoal(updatedPosition[0], updatedPosition[1], updatedPosition[2]);
+            // this->positionController.setGoal(updatedPosition[0], updatedPosition[1], updatedPosition[2]);
         }
         else
         {
