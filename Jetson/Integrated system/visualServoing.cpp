@@ -34,8 +34,8 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     const float robotTheta = robotCurrentPosition[2];
 
     // Get the desired robot position
-    const float dx = objectPositionWithRespectToRobot[0];
-    const float dy = objectPositionWithRespectToRobot[1];
+    const float dx = objectPositionWithRespectToRobot[0] * 0.2f;
+    const float dy = objectPositionWithRespectToRobot[1] * 0.2f;
 
     // Calculate the distance and the angle to the object
     const float distanceToTarget = sqrt(dx * dx + dy * dy);
@@ -93,7 +93,7 @@ std::vector<float> visualServoing::computeRelativePosition(std::vector<float> bo
     // Points are now normalized
 
     // Assume an arbitrary Z = 1 unit distance for scaling purposes (relative depth)
-    constexpr float Z = 1.0f; // TODO! Change and see how it affects the output
+    constexpr float Z = 0.2f; // TODO! Change and see how it affects the output
                               // TODO! The Z parameter is currently always 1, I will need some kind of depth estimation
                               // TODO! I can get this maybe using DIST sens 5, or maybe using the bounding box size
 
