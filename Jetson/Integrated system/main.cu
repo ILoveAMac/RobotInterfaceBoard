@@ -20,15 +20,15 @@
 int main()
 {
     // Create a robot controller
-    robotController robotController;
+    robotController rController();
 
     // Set the controller state
-    robotController.setRobotState(RobotState::DETECTION_ALLIGNMENT);
+    rController.setRobotState(RobotState::DETECTION_ALLIGNMENT);
     // Main loop
     while (true)
     {
         // Update the robot controller
-        robotController.update();
+        rController.update();
     }
     return 0;
 }
