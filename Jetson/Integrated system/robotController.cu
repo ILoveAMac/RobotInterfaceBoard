@@ -5,7 +5,7 @@ robotController::robotController() : aiHelper(),
                                      visualServoing(IMAGE_HEIGHT, IMAGE_WIDTH),
                                      positionController(C_KP, C_KA, C_GOAL_TOLERANCE, C_ANGLE_TOLERANCE),
                                      serial(USB_CONNECTION, BAUD_RATE),
-                                     cap(IMAGE_CAPTURE_DEVICE)
+                                     cap(IMAGE_CAPTURE_DEVICE, cv2.CAP_DSHOW)
 {
     // Set robot to idle state
     this->robotState = RobotState::IDLE;
@@ -38,8 +38,8 @@ robotController::robotController() : aiHelper(),
     }
 
     // Set camera parameters
-    cap.set(cv::CAP_PROP_FRAME_WIDTH, 1280);
-    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 720);
+    cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
+    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
     cap.set(cv::CAP_PROP_FPS, 30);
 
     // Create a window to display the results
