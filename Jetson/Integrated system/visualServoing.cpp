@@ -23,13 +23,12 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
 {
     // Extract bounding box center
     float x_b = boundingBox[0]; // x is the center of the box
-    float y_b = boundingBox[1]; // y is the center of the box
 
     // Calculate the error in the x direction
     float delta_x = x_b - CX; // Error in pixels from the image center
 
     // Proportional control: the larger the error, the more we rotate
-    float rotation_speed = 0.01 * delta_x;
+    float rotation_speed = 0.001 * delta_x;
 
     // Update only the robot's theta (rotation), keep x and y the same
     return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2] + rotation_speed};
