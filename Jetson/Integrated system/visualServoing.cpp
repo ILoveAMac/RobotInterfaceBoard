@@ -25,39 +25,18 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     float x_b = boundingBox[0]; // x is the center of the box
     float y_b = boundingBox[1]; // y is the center of the box
 
-    // Normalize the bounding box center coordinates using camera intrinsics
-    float u_prime = (x_b - CX) / FX;
-    float v_prime = (y_b - CY) / FY;
+    // Camera intrinsic matrix
+    float c_x = K[0][2]; // Center of the image in x direction
+    float c_y = K[1][2]; // Center of the image in y direction (not needed for rotation)
 
-    // Set a threshold for being "close enough" to the center
-    float threshold = 1e-3;
+    // Calculate the error in the x direction
+    float delta_x = x_b - c_x; // Error in pixels from the image center
 
-    // If the box is near the center, no rotation is needed
-    float delta_theta = 0.0; // Default to no rotation
-    if (!(std::fabs(u_prime) < threshold && std::fabs(v_prime) < threshold))
-    {
-        // Compute the target angle in the camera's 2D plane
-        float target_angle = std::atan2(v_prime, u_prime); // angle relative to camera
+    // Proportional control: the larger the error, the more we rotate
+    float rotation_speed = 0.8 * delta_x;
 
-        // Get the robot's current orientation (theta)
-        float robot_theta = robotCurrentPosition[2]; // assuming theta is in radians
-
-        // Compute the angular difference
-        delta_theta = target_angle - robot_theta;
-
-        // Normalize the angle to the range [-pi, pi]
-        if (delta_theta > M_PI)
-        {
-            delta_theta -= 2 * M_PI;
-        }
-        else if (delta_theta < -M_PI)
-        {
-            delta_theta += 2 * M_PI;
-        }
-    }
-
-    // Return the desired robot position: x, y remain the same, only theta is updated
-    return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2] + delta_theta};
+    // Update only the robot's theta (rotation), keep x and y the same
+    return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2] + rotation_speed};
 }
 
 std::vector<float> visualServoing::removeDistortion(std::vector<float> point)
