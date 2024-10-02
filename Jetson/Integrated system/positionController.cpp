@@ -115,7 +115,7 @@ void positionController::setGoal(float x, float y, float theta)
     // Reset the PID controllers to avoid jumps in the control signal
     pidTheta.reset();
 
-    if (calculateP(0, 0) < goalTolerance)
+    if (calculateP(x, y) < goalTolerance)
     {
         this->state = State::ROTATE_TO_GOAL_ORIENTATION;
     }
