@@ -42,9 +42,7 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     const float desiredAngle = atan2(dy, dx);
 
     // Print dx and dy and theta
-    std::cout << "dx:" << dx << " dy:" << dy << " theta:" << desiredAngle << std::endl;
-    // Print current robot position
-    std::cout << "X:" << robotX << "Y:" << robotY << "theta" << robotTheta;
+    std::cout << "dx :" << dx << " dy: " << dy << " theta: " << desiredAngle << std::endl;
 
     // Calculate the desired robot position
     float adjustedDistance = distanceToTarget - this->targetDist;
