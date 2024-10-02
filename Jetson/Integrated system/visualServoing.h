@@ -15,8 +15,8 @@
 #define CY 245.354670424866
 
 // Distortion coefficients
-#define K1 0.106606071597603
-#define K2 -0.505400337387861
+#define K1_DIST 0.106606071597603
+#define K2_DIST -0.505400337387861
 
 // Maximum number of iterations to remove distortion
 #define MAX_ITER_DIST 10

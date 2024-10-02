@@ -68,7 +68,7 @@ std::vector<float> visualServoing::removeDistortion(std::vector<float> point)
         const double y_u_prev = y_u;
 
         const double r_u2 = x_u * x_u + y_u * y_u;
-        const double D = 1 + K1 * r_u2 + K2 * r_u2 * r_u2;
+        const double D = 1 + K1_DIST * r_u2 + K2_DIST * r_u2 * r_u2;
 
         // Corrected update using x_d and y_d
         x_u = x_d / D;
