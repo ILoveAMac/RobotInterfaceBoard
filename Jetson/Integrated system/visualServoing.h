@@ -27,8 +27,8 @@
 #define KP_POOP -0.0025
 #define KI_POOP -0.05
 #define KD_POOP 0
-#define MIN_POOP -0.3
-#define MAX_POOP 0.3
+#define MIN_POOP -0.15
+#define MAX_POOP 0.15
 
 // OpenCV Headers
 #include <opencv2/opencv.hpp>
