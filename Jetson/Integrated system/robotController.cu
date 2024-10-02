@@ -239,8 +239,11 @@ void robotController::updateRobotPosition()
 
 std::vector<std::vector<float>> robotController::getBoundingBoxesAndDraw()
 {
+    // Capture image
+    captureAndPreProcessImage();
+
     // Get the bounding boxes
-    std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
+    std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(this->input_image);
     // Draw the bounding boxes
     cv::cvtColor(this->resized_frame, this->resized_frame, cv::COLOR_RGB2BGR);
     resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
