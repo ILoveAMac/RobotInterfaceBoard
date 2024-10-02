@@ -49,7 +49,7 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     const float desiredX = robotX + adjustedDistance * cos(robotTheta + desiredAngle);
     const float desiredY = robotY + adjustedDistance * sin(robotTheta + desiredAngle);
 
-    return {desiredX, desiredY, desiredAngle};
+    return {robotX, robotY, desiredAngle};
 }
 
 std::vector<float> visualServoing::removeDistortion(std::vector<float> point)
