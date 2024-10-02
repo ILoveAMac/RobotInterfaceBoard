@@ -20,7 +20,6 @@ add_executable(YOLO_CUDA
     serialHelper.cpp        # C++ source files
     positionController.cpp
     aiHelperUtils.cpp
-    navigationHelper.cpp
     pid.cpp
     visualServoing.cpp
 )
