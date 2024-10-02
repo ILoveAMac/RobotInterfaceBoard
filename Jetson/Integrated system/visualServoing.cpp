@@ -39,7 +39,7 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
 
     // Calculate the distance and the angle to the object
     const float distanceToTarget = sqrt(dx * dx + dy * dy);
-    const float desiredAngle = atan2(dy, dx);
+    const float desiredAngle = atan2(dy, dx) - M_PI / 2;
 
     // Print dx and dy and theta
     std::cout << "dx :" << dx << " dy: " << dy << " theta: " << desiredAngle << std::endl;
