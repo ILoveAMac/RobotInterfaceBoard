@@ -248,7 +248,9 @@ std::vector<std::vector<float>> robotController::getBoundingBoxesAndDraw()
     cv::cvtColor(this->resized_frame, this->resized_frame, cv::COLOR_RGB2BGR);
     resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
     // Display the image
-    cv::imshow("Detection", resized_frame);
+    cv::imshow("Detection", this->resized_frame);
+    // Wait key
+    cv::waitKey(0);
 
     return bboxes;
 }
