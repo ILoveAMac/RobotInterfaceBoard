@@ -9,14 +9,14 @@
 
 // Camera Intrinsics and Distortion Coefficients
 // K matrix
-#define FX 658.596215580897
-#define FY 658.301628353110
-#define CX 313.811167083958
-#define CY 245.354670424866
+#define FX 441.824902112213
+#define FY 588.842877481113
+#define CX 222.518792028182
+#define CY 234.806657834434
 
 // Distortion coefficients
-#define K1_DIST 0.106606071597603
-#define K2_DIST -0.505400337387861
+#define K1_DIST 0.0395769787967721
+#define K2_DIST -0.161268896561332
 
 // Maximum number of iterations to remove distortion
 #define MAX_ITER_DIST 10
