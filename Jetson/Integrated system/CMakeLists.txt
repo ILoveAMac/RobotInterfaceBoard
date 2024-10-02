@@ -16,11 +16,13 @@ add_executable(YOLO_CUDA
     MaxPool2D.cu
     FullyConnected.cu
     yolo.cu
+    robotController.cu
     serialHelper.cpp        # C++ source files
     positionController.cpp
     aiHelperUtils.cpp
     navigationHelper.cpp
     pid.cpp
+    visualServoing.cpp
 )
 
 # Enable separable compilation for CUDA
