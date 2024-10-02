@@ -32,6 +32,9 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     // Compute the target angle in the camera's 2D plane
     float target_angle = std::atan2(v_prime, u_prime); // angle relative to camera
 
+    std::cout << "u': " << u_prime << std::endl;
+    std::cout << "v': " << v_prime << std::endl;
+
     std::cout << "tg: " << target_angle << std::endl;
 
     // Get the robot's current orientation (theta)
