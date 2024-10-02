@@ -28,7 +28,7 @@ robotController::robotController() : aiHelper(),
     this->positionController.setGoal(0, 0, 0);
 
     // set visual servoing setpoint
-    this->visualServoing.setSetpoint(0.2f); // target distance from the poop
+    this->visualServoing.setTargetDist(0.2f); // target distance from the poop
 }
 
 robotController::~robotController() {}
@@ -119,7 +119,7 @@ void robotController::detectionAllignment()
             // TODO: if the update position is small enough, set the robot state to pickup
 
             // Set the setpoint for the position controller
-            this->positionController.setSetpoint(updatedPosition);
+            this->positionController.setGoal(updatedPosition);
         }
         else
         {
