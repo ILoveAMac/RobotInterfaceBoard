@@ -25,7 +25,7 @@
 
 // Controller parameters
 #define KP_POOP -0.0025
-#define KI_POOP -0.05
+#define KI_POOP -0.008
 #define KD_POOP 0
 #define MIN_POOP -0.15
 #define MAX_POOP 0.15
