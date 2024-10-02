@@ -28,7 +28,7 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     float delta_x = x_b - CX; // Error in pixels from the image center
 
     // float rotation_speed = -0.0025 * delta_x;
-    float rotation_spped = this->pidController.compute(delta_x, 0);
+    float rotation_speed = this->pidController.compute(delta_x, 0);
 
     std::cout << "Rotation speed: " << rotation_speed << std::endl;
 
