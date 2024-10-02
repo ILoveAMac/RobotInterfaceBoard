@@ -36,7 +36,7 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     float robot_theta = robotCurrentPosition[2]; // assuming theta is in radians
 
     // Compute the angular difference
-    float delta_theta = target_angle - robot_theta;
+    float delta_theta = target_angle + robot_theta;
 
     // Normalize the angle to the range [-pi, pi]
     if (delta_theta > M_PI)
@@ -49,7 +49,7 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     }
 
     // Return the control position (delta_theta) for rotation
-    return {robotCurrentPosition[0], robotCurrentPosition[1], delta_theta + robot_theta};
+    return {robotCurrentPosition[0], robotCurrentPosition[1], delta_theta};
 }
 
 std::vector<float> visualServoing::removeDistortion(std::vector<float> point)
