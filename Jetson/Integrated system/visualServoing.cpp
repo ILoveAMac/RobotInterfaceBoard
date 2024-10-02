@@ -1,6 +1,6 @@
 #include "visualServoing.h"
 
-visualServoing::visualServoing(float imageHeight, float imageWidth)
+visualServoing::visualServoing(float imageHeight, float imageWidth) : pidController(KP_POOP, KI_POOP, KD_POOP, MIN_POOP, MAX_POOP, true)
 {
     this->imageHeight = imageHeight;
     this->imageWidth = imageWidth;
@@ -27,8 +27,8 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     // Calculate the error in the x direction
     float delta_x = x_b - CX; // Error in pixels from the image center
 
-    // Proportional control: the larger the error, the more we rotate
-    float rotation_speed = -0.0025 * delta_x;
+    // float rotation_speed = -0.0025 * delta_x;
+    float rotation_spped = this->pidController.compute(delta_x, 0);
 
     std::cout << "Rotation speed: " << rotation_speed << std::endl;
 

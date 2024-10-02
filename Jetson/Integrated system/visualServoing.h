@@ -23,9 +23,17 @@
 // Convergence tolerance for distortion removal
 #define CONV_TOLERANCE_DIST 1e-6
 
+// Controller parameters
+#define KP_POOP -0.0025
+#define KI_POOP -0.01
+#define KD_POOP 0
+#define MIN_POOP -0.1
+#define MAX_POOP 0.1
+
 // OpenCV Headers
 #include <opencv2/opencv.hpp>
 
+#include "pid.h"
 class visualServoing
 {
 public:
@@ -56,6 +64,9 @@ private:
 
     // Rotation matrix of the camera with respect to the ground
     cv::Mat R;
+
+    // Controller for controling the allignment of the robot with the target
+    pid pidController;
 };
 
 #endif // VISUAL_SERVOING_H
