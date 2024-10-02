@@ -30,6 +30,8 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     // Proportional control: the larger the error, the more we rotate
     float rotation_speed = 0.001 * delta_x;
 
+    std::cout << "Rotation speed: " << rotation_speed << std::endl;
+
     // Update only the robot's theta (rotation), keep x and y the same
     return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2] + rotation_speed};
 }
