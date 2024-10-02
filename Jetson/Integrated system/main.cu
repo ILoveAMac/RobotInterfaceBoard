@@ -20,7 +20,7 @@
 int main()
 {
     // Create a robot controller
-    robotController robotController();
+    robotController robotController;
 
     // Set the controller state
     robotController.setRobotState(RobotState::DETECTION_ALLIGNMENT);
