@@ -25,10 +25,10 @@
 
 // Controller parameters
 #define KP_POOP -0.0025
-#define KI_POOP -0.01
+#define KI_POOP -0.05
 #define KD_POOP 0
-#define MIN_POOP -0.1
-#define MAX_POOP 0.1
+#define MIN_POOP -0.3
+#define MAX_POOP 0.3
 
 // OpenCV Headers
 #include <opencv2/opencv.hpp>
