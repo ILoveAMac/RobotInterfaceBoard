@@ -28,7 +28,7 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     float delta_x = x_b - CX; // Error in pixels from the image center
 
     // Proportional control: the larger the error, the more we rotate
-    float rotation_speed = -0.005 * delta_x;
+    float rotation_speed = -0.001 * delta_x;
 
     std::cout << "Rotation speed: " << rotation_speed << std::endl;
 
