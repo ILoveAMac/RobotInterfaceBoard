@@ -66,7 +66,7 @@ private:
     cv::Mat R;
 
     // Controller for controling the allignment of the robot with the target
-    pid pidController;
+    PID pidController;
 };
 
 #endif // VISUAL_SERVOING_H
