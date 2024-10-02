@@ -108,9 +108,9 @@ std::vector<float> visualServoing::cameraToWorld(std::vector<float> cameraCoordi
     // TODO! I can get this maybe using DIST sens 5, or maybe using the bounding box size
 
     // Applying rotation matrix R to convert camera frame coordinates to world frame
-    float X_world = R[0][0] * cameraCoordinates[0] + R[0][1] * cameraCoordinates[1] + R[0][2] * cameraCoordinates[2];
-    float Y_world = R[1][0] * cameraCoordinates[0] + R[1][1] * cameraCoordinates[1] + R[1][2] * cameraCoordinates[2];
-    float Z_world = R[2][0] * cameraCoordinates[0] + R[2][1] * cameraCoordinates[1] + R[2][2] * cameraCoordinates[2];
+    float X_world = R.at<float>(0, 0) * cameraCoordinates[0] + R.at<float>(0, 1) * cameraCoordinates[1] + R.at<float>(0, 2) * cameraCoordinates[2];
+    float Y_world = R.at<float>(1, 0) * cameraCoordinates[0] + R.at<float>(1, 1) * cameraCoordinates[1] + R.at<float>(1, 2) * cameraCoordinates[2];
+    float Z_world = R.at<float>(2, 0) * cameraCoordinates[0] + R.at<float>(2, 1) * cameraCoordinates[1] + R.at<float>(2, 2) * cameraCoordinates[2];
 
     return {X_world, Y_world, Z_world};
 }
