@@ -250,7 +250,7 @@ std::vector<std::vector<float>> robotController::getBoundingBoxesAndDraw()
     // Display the image
     cv::imshow("Detection", this->resized_frame);
     // Wait key
-    cv::waitKey(0);
+    cv::waitKey(1);
 
     return bboxes;
 }
