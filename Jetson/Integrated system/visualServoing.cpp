@@ -25,15 +25,9 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     float x_b = boundingBox[0]; // x is the center of the box
     float y_b = boundingBox[1]; // y is the center of the box
 
-    // Camera intrinsic matrix
-    float f_x = K[0][0];
-    float c_x = K[0][2];
-    float f_y = K[1][1];
-    float c_y = K[1][2];
-
     // Normalize the bounding box center coordinates using camera intrinsics
-    float u_prime = (x_b - c_x) / f_x;
-    float v_prime = (y_b - c_y) / f_y;
+    float u_prime = (x_b - CX) / FX;
+    float v_prime = (y_b - CY) / FY;
 
     // Set a threshold for being "close enough" to the center
     float threshold = 1e-3;
