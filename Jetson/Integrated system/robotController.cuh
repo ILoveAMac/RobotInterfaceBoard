@@ -83,6 +83,8 @@ private:
 
     void updateRobotPosition(); // Function updates the robot position using the controller
 
+    std::vector<std::vector<float>> getBoundingBoxesAndDraw(); // Function gets bounding boxes from the YOLO model and draws them on the image
+
     void delay(int ms);
 
     // === Storage for Captured Images ===

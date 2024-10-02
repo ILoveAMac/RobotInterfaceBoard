@@ -29,9 +29,31 @@ robotController::robotController() : aiHelper(),
 
     // set visual servoing setpoint
     this->visualServoing.setTargetDist(0.2f); // target distance from the poop
+
+    // Check if the webcam opened successfully
+    if (!cap.isOpened())
+    {
+        std::cerr << "Error: Could not open the webcam" << std::endl;
+        throw std::runtime_error("Error: Could not open the webcam");
+    }
+
+    // Set camera parameters
+    cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
+    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
+    cap.set(cv::CAP_PROP_FPS, 30);
+
+    // Create a window to display the results
+    cv::namedWindow("Detection", cv::WINDOW_AUTOSIZE);
 }
 
-robotController::~robotController() {}
+robotController::~robotController()
+{
+    // Free device memory
+    cudaFree(this->input_image);
+
+    // Free host memory
+    free(this->host_image);
+}
 
 void robotController::update()
 {
@@ -106,8 +128,8 @@ void robotController::detectionAllignment()
     if (positionController.getState() != State::ROTATE_TO_GOAL && positionController.getState() != State::ROTATE_TO_GOAL_ORIENTATION)
     {
         // Detect poop with ai
-        // Get the bounding boxes
-        std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
+        auto bboxes = getBoundingBoxesAndDraw();
+
         if (bboxes.size() > 0)
         {
             // TODO: Pick the bounding box with highest confidence and area, for now just pick the first one
@@ -170,6 +192,13 @@ void robotController::captureAndPreProcessImage()
     // Capture an image from the camera
     this->cap >> this->frame;
 
+    // Check if the frame is empty
+    if (frame.empty())
+    {
+        std::cerr << "Error: Captured empty frame" << std::endl;
+        throw std::runtime_error("Error: Captured empty frame");
+    }
+
     // Resize the image
     cv::resize(this->frame, this->resized_frame, cv::Size(448, 448));
 
@@ -206,6 +235,19 @@ void robotController::updateRobotPosition()
     std::vector<float> position = this->robotPosition;
     std::vector<float> velocities = this->positionController.updateVelocities(position[0], position[1], position[2]);
     serial.sendSpeeds(velocities[1], velocities[1], velocities[0], velocities[0]);
+}
+
+std::vector<std::vector<float>> robotController::getBoundingBoxesAndDraw()
+{
+    // Get the bounding boxes
+    std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(input_image);
+    // Draw the bounding boxes
+    cv::cvtColor(this->resized_frame, this->resized_frame, cv::COLOR_RGB2BGR);
+    resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
+    // Display the image
+    cv::imshow("Detection", resized_frame);
+
+    return bboxes;
 }
 
 void robotController::delay(int ms)
