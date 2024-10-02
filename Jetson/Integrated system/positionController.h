@@ -51,6 +51,9 @@ public:
     // Set the control gains
     void setGains(float Kp, float Ka);
 
+    // Set the controller state
+    void setState(State state);
+
 private:
     // Internal functions
     float calculateAlpha(float x, float y, float theta);

@@ -109,7 +109,15 @@ void positionController::setGoal(float x, float y, float theta)
     // Reset the PID controllers to avoid jumps in the control signal
     pidTheta.reset();
 
-    this->state = State::ROTATE_TO_GOAL;
+    if (calculateP(0, 0) < goalTolerance)
+    {
+        this->state = State::ROTATE_TO_GOAL_ORIENTATION;
+    }
+    else
+    {
+
+        this->state = State::ROTATE_TO_GOAL;
+    }
 }
 
 // Set the goal tolerance
@@ -129,6 +137,11 @@ void positionController::setGains(float Kp, float Ka)
 {
     this->Kp = Kp;
     this->Ka = Ka;
+}
+
+void positionController::setState(State state)
+{
+    this->state = state;
 }
 
 // Private functions
