@@ -38,9 +38,9 @@ robotController::robotController() : aiHelper(),
     }
 
     // Set camera parameters
-    cap.set(cv::CAP_PROP_FRAME_WIDTH, 1080);
-    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 1920);
-    cap.set(cv::CAP_PROP_FPS, 30);
+    cap.set(cv::CAP_PROP_FRAME_WIDTH, 1920);
+    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 1080);
+    // cap.set(cv::CAP_PROP_FPS, 30);
 
     // Create a window to display the results
     cv::namedWindow("Detection", cv::WINDOW_AUTOSIZE);
