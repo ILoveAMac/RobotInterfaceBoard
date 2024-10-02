@@ -25,12 +25,8 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     float x_b = boundingBox[0]; // x is the center of the box
     float y_b = boundingBox[1]; // y is the center of the box
 
-    // Camera intrinsic matrix
-    float c_x = K[0][2]; // Center of the image in x direction
-    float c_y = K[1][2]; // Center of the image in y direction (not needed for rotation)
-
     // Calculate the error in the x direction
-    float delta_x = x_b - c_x; // Error in pixels from the image center
+    float delta_x = x_b - CX; // Error in pixels from the image center
 
     // Proportional control: the larger the error, the more we rotate
     float rotation_speed = 0.8 * delta_x;
