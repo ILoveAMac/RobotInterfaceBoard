@@ -63,7 +63,7 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     std::cout << "dy " << delta_y << std::endl;
     // Calculate the forward/backward speed based on delta_y
     // Here we will use the pixel difference for now, but eventually, you'll switch to a distance-based control
-    float forward_speed = -0.0025 * delta_y; // Proportional speed control
+    float forward_speed = -0.00025 * delta_y; // Proportional speed control
 
     // Extract the robot's current heading (theta) from robotCurrentPosition
     float theta = robotCurrentPosition[2]; // Assume theta is the third element (in radians)
