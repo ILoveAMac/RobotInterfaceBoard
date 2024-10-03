@@ -39,8 +39,8 @@
 #define KP_LINEAR -0.0015
 #define KI_LINEAR -0.002
 #define KD_LINEAR 0
-#define MIN_LINEAR -0.2
-#define MAX_LINEAR 0.2
+#define MIN_LINEAR -0.15
+#define MAX_LINEAR 0.15
 
 #include "pid.h"
 
