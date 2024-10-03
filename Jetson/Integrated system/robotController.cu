@@ -30,9 +30,6 @@ robotController::robotController() : aiHelper(),
     // Set the goal position
     this->positionController.setGoal(0, 0, 0);
 
-    // set visual servoing setpoint
-    this->visualServoing.setTargetDist(0.2f); // target distance from the poop
-
     // Check if the webcam opened successfully
     if (!cap.isOpened())
     {
