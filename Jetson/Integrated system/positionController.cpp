@@ -108,13 +108,6 @@ State positionController::getState()
 // Set the goal position
 void positionController::setGoal(float x, float y, float theta)
 {
-    this->goalX = x;
-    this->goalY = y;
-    this->goalTheta = theta;
-
-    // Reset the PID controllers to avoid jumps in the control signal
-    pidTheta.reset();
-
     if (calculateP(x, y) < goalTolerance)
     {
         this->state = State::ROTATE_TO_GOAL_ORIENTATION;
@@ -124,6 +117,13 @@ void positionController::setGoal(float x, float y, float theta)
 
         this->state = State::ROTATE_TO_GOAL;
     }
+
+    this->goalX = x;
+    this->goalY = y;
+    this->goalTheta = theta;
+
+    // Reset the PID controllers to avoid jumps in the control signal
+    pidTheta.reset();
 }
 
 // Set the goal tolerance
