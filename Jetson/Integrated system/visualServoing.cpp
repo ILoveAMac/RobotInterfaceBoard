@@ -56,7 +56,7 @@ std::vector<float> visualServoing::rotateState(std::vector<float> boundingBox, s
 std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition)
 {
     std::cout << "Move forwards state" << std::endl;
-    return std::vector<float>();
+    return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2]};
 }
 
 std::vector<float> visualServoing::removeDistortion(std::vector<float> point)
