@@ -160,7 +160,7 @@ void robotController::detectionAllignment()
             std::vector<float> bbox = bboxes[0];
 
             // Use the visual servoing algorithm to compute the updated desired robot position and orientation
-            std::vector<float> updatedPosition = this->visualServoing.calculateControlPosition(bbox, this->robotPosition);
+            std::vector<float> updatedPosition = this->visualServoing.calculateControlPosition(bbox, this->robotPosition, serial.receiveDistanceSensorMeasurement(SENSE_5));
 
             // TODO: if the update position is small enough, set the robot state to pickup
 

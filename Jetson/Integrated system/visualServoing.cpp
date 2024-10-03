@@ -10,7 +10,7 @@ visualServoing::visualServoing(float imageHeight, float imageWidth) : pidControl
 
 visualServoing::~visualServoing() {}
 
-std::vector<float> visualServoing::calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition)
+std::vector<float> visualServoing::calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, float dist5)
 {
     // State machine for visual servoing
     switch (this->currentState)
@@ -19,7 +19,7 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
         return this->rotateState(boundingBox, robotCurrentPosition);
         break;
     case servoingState::MOVE_FORWARD:
-        return this->moveForwardState(boundingBox, robotCurrentPosition);
+        return this->moveForwardState(boundingBox, robotCurrentPosition, dist5);
         break;
     case servoingState::STOP:
         return robotCurrentPosition;
@@ -53,10 +53,38 @@ std::vector<float> visualServoing::rotateState(std::vector<float> boundingBox, s
     return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2] + rotation_speed};
 }
 
-std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition)
+std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, float dist5)
 {
-    std::cout << "Move forwards state" << std::endl;
-    return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2]};
+    // Extract bounding box center
+    float y_b = boundingBox[1]; // y is the vertical center of the box
+
+    // Calculate the error in the y direction
+    float delta_y = y_b - CY; // Error in pixels from the image center vertically
+
+    // Calculate the forward/backward speed based on delta_y
+    // Here we will use the pixel difference for now, but eventually, you'll switch to a distance-based control
+    float forward_speed = -0.0025 * delta_y; // Proportional speed control
+
+    std::cout << "Forward speed: " << forward_speed << std::endl;
+
+    // Extract the robot's current heading (theta) from robotCurrentPosition
+    float theta = robotCurrentPosition[2]; // Assume theta is the third element (in radians)
+
+    // Check if the error in y direction is small enough to stop
+    if (std::abs(delta_y) < 10) // Assuming a 10-pixel threshold for being "centered"
+    {
+        // If the robot is centered, stop moving and transition to the next state or stop
+        this->currentState = servoingState::STOP; // Assuming you have a STOP state
+        return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2]};
+    }
+
+    // Update the robot's position in the world frame
+    // Forward movement affects both x and y positions based on the robot's heading (theta)
+    float new_x = robotCurrentPosition[0] + forward_speed * std::cos(theta);
+    float new_y = robotCurrentPosition[1] + forward_speed * std::sin(theta);
+
+    // Return the updated position with the new x, y, and unchanged theta
+    return {new_x, new_y, theta};
 }
 
 std::vector<float> visualServoing::removeDistortion(std::vector<float> point)

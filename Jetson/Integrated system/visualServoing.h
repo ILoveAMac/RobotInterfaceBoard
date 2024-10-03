@@ -52,7 +52,7 @@ public:
 
     // Returns the updated robot position in [x, y, theta]
     // Return values are in meters and radians
-    std::vector<float> calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition);
+    std::vector<float> calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, float dist5);
 
     // Function to get the current state machine state
     servoingState getCurrentState() { return this->currentState; }
@@ -65,7 +65,7 @@ private:
     std::vector<float> rotateState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition);
 
     // function for linear allignment
-    std::vector<float> moveForwardState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition);
+    std::vector<float> moveForwardState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, float dist5);
 
     // Function to remove distortion from a point
     std::vector<float> removeDistortion(std::vector<float> point);
