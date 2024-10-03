@@ -35,6 +35,13 @@
 #define MIN_POOP -0.15
 #define MAX_POOP 0.15
 
+// Controller parameters for linear motion
+#define KP_LINEAR -0.0015
+#define KI_LINEAR 0.01
+#define KD_LINEAR 0
+#define MIN_LINEAR -0.2
+#define MAX_LINEAR 0.2
+
 #include "pid.h"
 
 enum class servoingState
@@ -75,6 +82,8 @@ private:
 
     // Controller for controling the allignment of the robot with the target
     PID pidController;
+
+    PID linearController;
 
     // current servoing state
     servoingState currentState;

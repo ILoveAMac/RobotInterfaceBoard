@@ -1,6 +1,7 @@
 #include "visualServoing.h"
 
-visualServoing::visualServoing(float imageHeight, float imageWidth) : pidController(KP_POOP, KI_POOP, KD_POOP, MIN_POOP, MAX_POOP, true)
+visualServoing::visualServoing(float imageHeight, float imageWidth) : pidController(KP_POOP, KI_POOP, KD_POOP, MIN_POOP, MAX_POOP, true),
+                                                                      linearController(KP_LINEAR, KI_LINEAR, KD_LINEAR, MIN_LINEAR, MAX_LINEAR, true)
 {
     this->imageHeight = imageHeight;
     this->imageWidth = imageWidth;
@@ -63,13 +64,13 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     std::cout << "dy " << delta_y << std::endl;
     // Calculate the forward/backward speed based on delta_y
     // Here we will use the pixel difference for now, but eventually, you'll switch to a distance-based control
-    float forward_speed = -0.0015 * delta_y; // Proportional speed control
+    float forward_speed = this->linearController.compute(delta_y, 0);
 
     // Extract the robot's current heading (theta) from robotCurrentPosition
     float theta = robotCurrentPosition[2]; // Assume theta is the third element (in radians)
 
     // Check if the error in y direction is small enough to stop
-    if (std::abs(delta_y) < 10) // Assuming a 10-pixel threshold for being "centered"
+    if (std::abs(delta_y) < 20) // Assuming a 10-pixel threshold for being "centered"
     {
         // If the robot is centered, stop moving and transition to the next state or stop
         this->currentState = servoingState::STOP; // Assuming you have a STOP state
