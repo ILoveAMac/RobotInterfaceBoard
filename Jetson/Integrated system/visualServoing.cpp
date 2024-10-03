@@ -78,8 +78,8 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
 
     // Update the robot's position in the world frame
     // Forward movement affects both x and y positions based on the robot's heading (theta)
-    float new_x = robotCurrentPosition[0] + forward_speed * std::cos(theta);
-    float new_y = robotCurrentPosition[1] + forward_speed * std::sin(theta);
+    float new_x = robotCurrentPosition[0] + forward_speed * std::sin(theta);
+    float new_y = robotCurrentPosition[1] + forward_speed * std::cos(theta);
 
     std::cout << "new_x: " << new_x << " new_y: " << new_y << std::endl;
     std::cout << "old_x: " << robotCurrentPosition[0] << " old_y: " << robotCurrentPosition[1] << std::endl;

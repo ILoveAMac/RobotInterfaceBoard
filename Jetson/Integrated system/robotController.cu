@@ -23,7 +23,7 @@ robotController::robotController() : aiHelper(),
     this->serial.resetPosition();
 
     // Set the camera angle
-    this->serial.setCameraAngle(162);
+    this->serial.setCameraAngle(165);
 
     this->robotPosition = {0, 0, 0};
 
@@ -101,6 +101,7 @@ void robotController::update()
 
     // START: Area to put code that should run after every loop iteration
     // Display the captured image
+    cv::cvtColor(this->resized_frame, this->resized_frame, cv::COLOR_RGB2BGR);
     cv::imshow("Detection", this->resized_frame);
     // Wait key
     if (cv::waitKey(1) == 'c')
@@ -268,7 +269,7 @@ std::vector<std::vector<float>> robotController::getBoundingBoxesAndDraw()
     // Draw the bounding boxes
     cv::cvtColor(this->resized_frame, this->resized_frame, cv::COLOR_RGB2BGR);
     resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
-
+    cv::cvtColor(this->resized_frame, this->resized_frame, cv::COLOR_BGR2RGB);
     return bboxes;
 }
 
