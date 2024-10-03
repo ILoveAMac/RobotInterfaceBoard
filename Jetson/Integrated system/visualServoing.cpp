@@ -4,11 +4,33 @@ visualServoing::visualServoing(float imageHeight, float imageWidth) : pidControl
 {
     this->imageHeight = imageHeight;
     this->imageWidth = imageWidth;
+
+    this->currentState = servoingState::ROTATE;
 }
 
 visualServoing::~visualServoing() {}
 
 std::vector<float> visualServoing::calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition)
+{
+    // State machine for visual servoing
+    switch (this->currentState)
+    {
+    case servoingState::ROTATE:
+        return this->rotateState(boundingBox, robotCurrentPosition);
+        break;
+    case servoingState::MOVE_FORWARD:
+        return this->moveForwardState(boundingBox, robotCurrentPosition);
+        break;
+    case servoingState::STOP:
+        return robotCurrentPosition;
+        break;
+    default:
+        return robotCurrentPosition;
+        break;
+    }
+}
+
+std::vector<float> visualServoing::rotateState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition)
 {
     // Extract bounding box center
     float x_b = boundingBox[0]; // x is the center of the box
@@ -18,11 +40,23 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
 
     // float rotation_speed = -0.0025 * delta_x;
     float rotation_speed = this->pidController.compute(delta_x, 0);
-
     std::cout << "Rotation speed: " << rotation_speed << std::endl;
+
+    // check if the rotation speed is sufficently low and transition to the vertical allignment state
+    if (std::abs(rotation_speed) < 0.048)
+    {
+        this->currentState = servoingState::MOVE_FORWARD; // State transition
+        return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2]};
+    }
 
     // Update only the robot's theta (rotation), keep x and y the same
     return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2] + rotation_speed};
+}
+
+std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition)
+{
+    std::cout << "Move forwards state" << std::endl;
+    return std::vector<float>();
 }
 
 std::vector<float> visualServoing::removeDistortion(std::vector<float> point)

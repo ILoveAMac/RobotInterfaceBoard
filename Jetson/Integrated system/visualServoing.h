@@ -36,6 +36,14 @@
 #define MAX_POOP 0.15
 
 #include "pid.h"
+
+class enum servoingState
+{
+    ROTATE,
+    MOVE_FORWARD,
+    STOP
+};
+
 class visualServoing
 {
 public:
@@ -46,7 +54,19 @@ public:
     // Return values are in meters and radians
     std::vector<float> calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition);
 
+    // Function to get the current state machine state
+    servoingState getCurrentState() { return this->currentState; }
+
+    // Function to reset the state machine
+    void resetState() { this->currentState = servoingState::ROTATE; }
+
 private:
+    // Function for angular allignment
+    std::vector<float> rotateState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition);
+
+    // function for linear allignment
+    std::vector<float> moveForwardState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition);
+
     // Function to remove distortion from a point
     std::vector<float> removeDistortion(std::vector<float> point);
 
@@ -55,6 +75,9 @@ private:
 
     // Controller for controling the allignment of the robot with the target
     PID pidController;
+
+    // current servoing state
+    servoingState currentState;
 };
 
 #endif // VISUAL_SERVOING_H
