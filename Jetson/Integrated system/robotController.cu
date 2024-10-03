@@ -22,7 +22,10 @@ robotController::robotController() : aiHelper(),
     // Reset the position of the robot
     this->serial.resetPosition();
 
-    robotPosition = {0, 0, 0};
+    // Set the camera angle
+    this->serial.setCameraAngle(160);
+
+    this->robotPosition = {0, 0, 0};
 
     // Set the goal position
     this->positionController.setGoal(0, 0, 0);
@@ -40,7 +43,6 @@ robotController::robotController() : aiHelper(),
     // Set camera parameters
     cap.set(cv::CAP_PROP_FRAME_WIDTH, 1920);
     cap.set(cv::CAP_PROP_FRAME_HEIGHT, 1080);
-    // cap.set(cv::CAP_PROP_FPS, 30);
 
     // Create a window to display the results
     cv::namedWindow("Detection", cv::WINDOW_AUTOSIZE);
@@ -62,6 +64,9 @@ void robotController::update()
     // === START: Area to put code that should run every loop iteration ===
     // get the current robot position
     this->robotPosition = this->getRobotPosition();
+
+    // Capture and pre-process an image from the camera
+    captureAndPreProcessImage();
     // === END: Area to put code that should run every loop iteration ===
 
     switch (this->robotState)
@@ -96,6 +101,26 @@ void robotController::update()
     default:
         break;
     }
+
+    // START: Area to put code that should run after every loop iteration
+    // Display the captured image
+    cv::imshow("Detection", this->resized_frame);
+    // Wait key
+    if (cv::waitKey(1) == 'c')
+    {
+        // Save the current image
+        std::string filename = "cal/captured_image_" + std::to_string(this->image_counter) + ".png";
+        if (cv::imwrite(filename, 255 * this->resized_frame))
+        {
+            std::cout << "Image saved: " << filename << std::endl;
+            image_counter++;
+        }
+        else
+        {
+            std::cerr << "Error: Could not save image" << std::endl;
+        }
+    }
+    // END: Area to put code that should run after every loop iteration
 }
 
 void robotController::setRobotState(RobotState state)
@@ -241,31 +266,11 @@ void robotController::updateRobotPosition()
 
 std::vector<std::vector<float>> robotController::getBoundingBoxesAndDraw()
 {
-    // Capture image
-    captureAndPreProcessImage();
-
     // Get the bounding boxes
     std::vector<std::vector<float>> bboxes = yolo.getBoxPredictions(this->input_image);
     // Draw the bounding boxes
     cv::cvtColor(this->resized_frame, this->resized_frame, cv::COLOR_RGB2BGR);
     resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
-    // Display the image
-    cv::imshow("Detection", this->resized_frame);
-    // Wait key
-    if (cv::waitKey(1) == 'c')
-    {
-        // Save the current image
-        std::string filename = "cal/captured_image_" + std::to_string(this->image_counter) + ".png";
-        if (cv::imwrite(filename, 255 * this->resized_frame))
-        {
-            std::cout << "Image saved: " << filename << std::endl;
-            image_counter++;
-        }
-        else
-        {
-            std::cerr << "Error: Could not save image" << std::endl;
-        }
-    }
 
     return bboxes;
 }

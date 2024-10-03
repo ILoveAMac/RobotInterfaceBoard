@@ -16,19 +16,22 @@
 #define IMG_HEIGHT 448
 #define IMG_WIDTH 448
 
-class aiHelperUtils {
-   public:
+class aiHelperUtils
+{
+public:
     aiHelperUtils();
     ~aiHelperUtils();
 
     // Bounding boxes
-    static std::vector<std::vector<float>> getFinalBoundingBoxes(const float* detections);
+    static std::vector<std::vector<float>> getFinalBoundingBoxes(const float *detections);
     static cv::Mat drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<float>> boxes);
+    static float getBoundingBoxArea(std::vector<float> box);
+    static float getBoundingBoxConfidence(std::vector<float> box);
 
-   private:
+private:
     static std::vector<std::vector<float>>
     nonMaxSuppression(std::vector<std::vector<float>> boxes);
     static float iou(std::vector<float> box1, std::vector<float> box2);
 };
 
-#endif  // AIHELPERUTILS_H
+#endif // AIHELPERUTILS_H
