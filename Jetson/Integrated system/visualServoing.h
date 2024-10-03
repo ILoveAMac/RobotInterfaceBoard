@@ -37,7 +37,7 @@
 
 // Controller parameters for linear motion
 #define KP_LINEAR -0.0025
-#define KI_LINEAR -0.01
+#define KI_LINEAR -0.005
 #define KD_LINEAR 0
 #define MIN_LINEAR -0.2
 #define MAX_LINEAR 0.2
