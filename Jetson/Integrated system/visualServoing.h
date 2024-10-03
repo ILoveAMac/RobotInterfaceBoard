@@ -42,8 +42,6 @@ public:
     visualServoing(float imageHeight, float imageWidth);
     ~visualServoing();
 
-    void setTargetDist(float targetDist);
-
     // Returns the updated robot position in [x, y, theta]
     // Return values are in meters and radians
     std::vector<float> calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition);

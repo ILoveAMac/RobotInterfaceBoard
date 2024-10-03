@@ -8,11 +8,6 @@ visualServoing::visualServoing(float imageHeight, float imageWidth) : pidControl
 
 visualServoing::~visualServoing() {}
 
-void visualServoing::setTargetDist(float targetDist)
-{
-    this->targetDist = targetDist;
-}
-
 std::vector<float> visualServoing::calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition)
 {
     // Extract bounding box center
