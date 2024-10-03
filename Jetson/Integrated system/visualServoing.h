@@ -37,7 +37,7 @@
 
 #include "pid.h"
 
-class enum servoingState
+enum class servoingState
 {
     ROTATE,
     MOVE_FORWARD,
