@@ -193,6 +193,13 @@ void robotController::detectionAllignment()
 void robotController::pickup()
 {
     std::cout << "Picking up poop" << std::endl;
+    this->serial.requestAndWaitForPoopPickup();
+
+    // wait forever
+    while (true)
+    {
+        this->delay(1000);
+    }
 }
 
 void robotController::moveBackToPositionBeforePickup()
