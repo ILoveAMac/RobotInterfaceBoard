@@ -157,13 +157,20 @@ void robotController::detectionAllignment()
 
         if (bboxes.size() > 0)
         {
-            // TODO: Pick the bounding box with highest confidence and area, for now just pick the first one
+            // TODO: Pick the bounding box with highest confidence and/or area, for now just pick the first one
             std::vector<float> bbox = bboxes[0];
 
             // Use the visual servoing algorithm to compute the updated desired robot position and orientation
             std::vector<float> updatedPosition = this->visualServoing.calculateControlPosition(bbox, this->robotPosition, serial.receiveDistanceSensorMeasurement(SENSE_5));
 
-            // TODO: if the update position is small enough, set the robot state to pickup
+            if (this->visualServoing.getCurrentState() == servoingState::STOP)
+            {
+                this->visualServoing.resetState();
+
+                // Move to the pickup state
+                this->setRobotState(RobotState::PICKUP);
+                return;
+            }
 
             // Set the setpoint for the position controller
             this->positionController.setGoal(updatedPosition[0], updatedPosition[1], updatedPosition[2]);
@@ -185,6 +192,7 @@ void robotController::detectionAllignment()
 
 void robotController::pickup()
 {
+    std::cout << "Picking up poop" << std::endl;
 }
 
 void robotController::moveBackToPositionBeforePickup()
