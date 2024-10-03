@@ -65,8 +65,6 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     // Here we will use the pixel difference for now, but eventually, you'll switch to a distance-based control
     float forward_speed = -0.0025 * delta_y; // Proportional speed control
 
-    std::cout << "Forward speed: " << forward_speed << std::endl;
-
     // Extract the robot's current heading (theta) from robotCurrentPosition
     float theta = robotCurrentPosition[2]; // Assume theta is the third element (in radians)
 
@@ -82,6 +80,9 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     // Forward movement affects both x and y positions based on the robot's heading (theta)
     float new_x = robotCurrentPosition[0] + forward_speed * std::cos(theta);
     float new_y = robotCurrentPosition[1] + forward_speed * std::sin(theta);
+
+    std::cout << "new_x: " << new_x << " new_y: " << new_y << std::endl;
+    std::cout << "old_x: " << robotCurrentPosition[0] << " old_y: " << robotCurrentPosition[1] << std::endl;
 
     // Return the updated position with the new x, y, and unchanged theta
     return {new_x, new_y, theta};
