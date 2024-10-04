@@ -60,7 +60,7 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     float y_b = boundingBox[1]; // y is the vertical center of the box
 
     // Calculate the error in the y direction
-    float delta_y = y_b - CY - 50; // Error in pixels from the image center vertically
+    float delta_y = y_b - CY + 50; // Error in pixels from the image center vertically
     std::cout << "dy " << delta_y << std::endl;
     // Calculate the forward/backward speed based on delta_y
     // Here we will use the pixel difference for now, but eventually, you'll switch to a distance-based control
