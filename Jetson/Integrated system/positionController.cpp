@@ -108,7 +108,7 @@ State positionController::getState()
 // Set the goal position
 void positionController::setGoal(float x, float y, float theta)
 {
-    if (calculateP(x, y) < 0.05)
+    if (calculateP(x, y) < goalTolerance)
     {
         this->state = State::ROTATE_TO_GOAL_ORIENTATION;
     }
