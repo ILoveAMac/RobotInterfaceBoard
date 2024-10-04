@@ -60,7 +60,7 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     float y_b = boundingBox[1]; // y is the vertical center of the box
 
     // Calculate the error in the y direction
-    float delta_y = y_b - (CY + 60); // Error in pixels from the image center vertically
+    float delta_y = y_b - (CY + 40); // Error in pixels from the image center vertically
     std::cout << "dy " << delta_y << std::endl;
     // Calculate the forward/backward speed based on delta_y
     // Here we will use the pixel difference for now, but eventually, you'll switch to a distance-based control
@@ -82,8 +82,10 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     float new_x = robotCurrentPosition[0] + forward_speed * std::cos(theta);
     float new_y = robotCurrentPosition[1] + forward_speed * std::sin(theta);
 
-    std::cout << "new_x: " << new_x << " new_y: " << new_y << std::endl;
-    std::cout << "old_x: " << robotCurrentPosition[0] << " old_y: " << robotCurrentPosition[1] << std::endl;
+    std::cout << "dist: " << dist5 << std::endl;
+
+    // std::cout << "new_x: " << new_x << " new_y: " << new_y << std::endl;
+    // std::cout << "old_x: " << robotCurrentPosition[0] << " old_y: " << robotCurrentPosition[1] << std::endl;
 
     // Return the updated position with the new x, y, and unchanged theta
     return {new_x, new_y, theta};
