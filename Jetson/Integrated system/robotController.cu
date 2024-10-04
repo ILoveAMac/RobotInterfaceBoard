@@ -206,6 +206,8 @@ void robotController::pickup()
     // Set the goal position to the current position
     this->positionController.setGoal(position[0], position[1], position[2]);
 
+    this->serial.requestAndWaitForPickupLift();
+
     // wait forever
     while (true)
     {
