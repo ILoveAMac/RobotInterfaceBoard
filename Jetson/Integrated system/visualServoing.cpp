@@ -89,9 +89,16 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     // Check if the error in y direction is small enough to stop
     if (std::fabs(forward_speed) < 0.1) // Assuming a 10-pixel threshold for being "centered"
     {
+        std::cout << "stop" << std::endl;
         // If the robot is centered, stop moving and transition to the next state or stop
         this->currentState = servoingState::STOP; // Assuming you have a STOP state
         return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2]};
+    }
+
+    if (forward_speed < 0)
+    {
+        std::cout << "backward" << std::endl;
+        forward_speed = 0;
     }
 
     // Update the robot's position in the world frame
