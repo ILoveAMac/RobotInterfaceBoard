@@ -98,6 +98,7 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     if (forward_speed < 0)
     {
         std::cout << "backward" << std::endl;
+        std::cout << "forward speed: " << forward_speed << std::endl;
         forward_speed = 0;
     }
 
