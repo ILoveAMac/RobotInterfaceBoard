@@ -56,12 +56,29 @@ std::vector<float> visualServoing::rotateState(std::vector<float> boundingBox, s
 
 std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, float dist5)
 {
+    // Check if the rotation error is small enough to move forward, if not go back to the rotation state
+    // Extract bounding box center
+    float x_b = boundingBox[0]; // x is the center of the box
+
+    // Calculate the error in the x direction
+    float delta_x = x_b - (CX); // Error in pixels from the image center
+
+    // float rotation_speed = -0.0025 * delta_x;
+    float rotation_speed = this->pidController.compute(delta_x, 0);
+
+    // check if the rotation speed is sufficently low and transition to the vertical allignment state
+    if (!(std::fabs(rotation_speed) < 0.048))
+    {
+        this->currentState = servoingState::ROTATE; // State transition
+        return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2]};
+    }
+
     // Extract bounding box center
     float y_b = boundingBox[1]; // y is the vertical center of the box
 
     // Calculate the error in the y direction
     float delta_y = y_b - (CY + 5); // Error in pixels from the image center vertically
-    std::cout << "dy " << delta_y << std::endl;
+
     // Calculate the forward/backward speed based on delta_y
     // Here we will use the pixel difference for now, but eventually, you'll switch to a distance-based control
     float forward_speed = this->linearController.compute(delta_y, 0);
@@ -81,11 +98,6 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     // Forward movement affects both x and y positions based on the robot's heading (theta)
     float new_x = robotCurrentPosition[0] + forward_speed * std::cos(theta);
     float new_y = robotCurrentPosition[1] + forward_speed * std::sin(theta);
-
-    std::cout << "dist: " << dist5 << std::endl;
-
-    // std::cout << "new_x: " << new_x << " new_y: " << new_y << std::endl;
-    // std::cout << "old_x: " << robotCurrentPosition[0] << " old_y: " << robotCurrentPosition[1] << std::endl;
 
     // Return the updated position with the new x, y, and unchanged theta
     return {new_x, new_y, theta};
