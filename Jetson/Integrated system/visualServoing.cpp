@@ -44,7 +44,7 @@ std::vector<float> visualServoing::rotateState(std::vector<float> boundingBox, s
     std::cout << "Rotation speed: " << rotation_speed << std::endl;
 
     // check if the rotation speed is sufficently low and transition to the vertical allignment state
-    if (std::abs(rotation_speed) < 0.048)
+    if (std::fabs(rotation_speed) < 0.048)
     {
         this->currentState = servoingState::MOVE_FORWARD; // State transition
         return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2]};
@@ -70,7 +70,7 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     float theta = robotCurrentPosition[2]; // Assume theta is the third element (in radians)
 
     // Check if the error in y direction is small enough to stop
-    if (std::abs(delta_y) < 50) // Assuming a 10-pixel threshold for being "centered"
+    if (std::fabs(delta_y) < 50) // Assuming a 10-pixel threshold for being "centered"
     {
         // If the robot is centered, stop moving and transition to the next state or stop
         this->currentState = servoingState::STOP; // Assuming you have a STOP state
