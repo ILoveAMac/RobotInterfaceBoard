@@ -220,9 +220,6 @@ void robotController::pickup()
     serial.requestAndWaitForArmPosition(STEPPER_3, CLOCKWISE, 20);
     this->delay(600);
 
-    serial.requestAndWaitForArmPosition(STEPPER_2, CLOCKWISE, 20);
-    this->delay(600);
-
     // Get the current robot position
     std::vector<float> position = this->getRobotPosition();
     this->delay(600);
