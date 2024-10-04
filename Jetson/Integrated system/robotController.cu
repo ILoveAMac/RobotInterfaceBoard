@@ -196,8 +196,8 @@ void robotController::pickup()
     this->serial.requestAndWaitForPoopPickup();
 
     // Move the robot slightly forward linearly
-    this->serial.sendSpeeds(0.3, 0.3, 0.3, 0.3);
-    this->delay(400);
+    this->serial.sendSpeeds(0.2, 0.2, 0.2, 0.2);
+    this->delay(600);
     this->serial.sendSpeeds(0, 0, 0, 0);
 
     // Get the current robot position
