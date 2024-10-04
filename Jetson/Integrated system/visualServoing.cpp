@@ -70,7 +70,7 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     float theta = robotCurrentPosition[2]; // Assume theta is the third element (in radians)
 
     // Check if the error in y direction is small enough to stop
-    if (std::fabs(delta_y) < 50) // Assuming a 10-pixel threshold for being "centered"
+    if (std::fabs(forward_speed) < 0.05) // Assuming a 10-pixel threshold for being "centered"
     {
         // If the robot is centered, stop moving and transition to the next state or stop
         this->currentState = servoingState::STOP; // Assuming you have a STOP state
