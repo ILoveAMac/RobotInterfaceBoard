@@ -199,6 +199,7 @@ void robotController::pickup()
     this->serial.sendSpeeds(0.2, 0.2, 0.2, 0.2);
     this->delay(600);
     this->serial.sendSpeeds(0, 0, 0, 0);
+    this->delay(2000);
 
     // Get the current robot position
     std::vector<float> position = this->getRobotPosition();
