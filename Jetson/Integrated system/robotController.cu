@@ -196,13 +196,15 @@ void robotController::pickup()
     this->serial.requestAndWaitForPoopPickup();
 
     // Move the robot slightly forward linearly
-    this->serial.sendSpeeds(0.2, 0.2, 0.2, 0.2);
     this->delay(600);
+    this->serial.sendSpeeds(0.1, 0.1, 0.1, 0.1);
+    this->delay(700);
     this->serial.sendSpeeds(0, 0, 0, 0);
     this->delay(2000);
 
     // Get the current robot position
     std::vector<float> position = this->getRobotPosition();
+    this->delay(600);
 
     // Set the goal position to the current position
     this->positionController.setGoal(position[0], position[1], position[2]);
