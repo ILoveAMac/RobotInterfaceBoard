@@ -208,7 +208,7 @@ void robotController::pickup()
 
     serial.requestAndWaitForArmPosition(STEPPER_2, CLOCKWISE, 5);
 
-    serial.requestAndWaitForArmPosition(STEPPER_3, COUNTERCLOCKWISE, 50);
+    serial.requestAndWaitForArmPosition(STEPPER_3, CLOCKWISE, 150);
     this->delay(600);
 
     this->delay(600);
