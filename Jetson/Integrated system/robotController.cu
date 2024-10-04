@@ -202,7 +202,7 @@ void robotController::pickup()
     this->serial.sendSpeeds(0, 0, 0, 0);
     this->delay(600);
 
-    serial.requestAndWaitForArmPosition(STEPPER_2, CLOCKWISE, 5);
+    serial.requestAndWaitForArmPosition(STEPPER_2, CLOCKWISE, 10);
 
     this->delay(600);
     this->serial.sendSpeeds(0.1, 0.1, 0.1, 0.1);
@@ -210,7 +210,7 @@ void robotController::pickup()
     this->serial.sendSpeeds(0, 0, 0, 0);
     this->delay(600);
 
-    serial.requestAndWaitForArmPosition(STEPPER_2, CLOCKWISE, 10);
+    serial.requestAndWaitForArmPosition(STEPPER_2, CLOCKWISE, 20);
     this->delay(600);
 
     // Get the current robot position
