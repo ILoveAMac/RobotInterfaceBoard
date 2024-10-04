@@ -19,6 +19,7 @@
 #define POOP_PICKUP_COMMAND 0x08
 #define HOME_ARM_ONLY_COMMAND 0x09
 #define HOME_ALL_COMMAND 0x0A
+#define PICKUP_LIFT_COMMAND 0x0B
 
 #include <thread>
 #include <chrono>
@@ -67,6 +68,7 @@ public:
     void setCameraAngle(float angle);
     void requestHomeArmOnly();
     void requestHomeAll();
+    void requestPickupLift();
 
     // Functions to receive specific data
     std::vector<float> receivePosition();
@@ -75,6 +77,7 @@ public:
     int requestAndWaitForArmPosition(enum Stepper stepper, enum Dir dir, float degrees);
     int requestAndWaitForHomeArmOnly();
     int requestAndWaitForHomeAll();
+    int requestAndWaitForPickupLift();
 
 private:
     void floatToBytesBE(float value, uint8_t *bytes);

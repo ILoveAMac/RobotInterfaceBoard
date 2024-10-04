@@ -179,6 +179,21 @@ void serialHelper::requestHomeAll()
     sendData(data_packet);
 }
 
+void serialHelper::requestPickupLift()
+{
+    // Build the data packet
+    vector<uint8_t> data_packet;
+    data_packet.push_back(START_BYTE);
+    data_packet.push_back(0x01);                // Length byte
+    data_packet.push_back(PICKUP_LIFT_COMMAND); // Poop lift command
+
+    // Send the data packet
+    sendData(data_packet);
+
+    // Print a message to the console
+    cout << "Poop lift requested" << endl;
+}
+
 void serialHelper::sendData(const std::vector<uint8_t> &data)
 {
     try
@@ -266,7 +281,7 @@ int serialHelper::requestAndWaitForPoopPickup()
     // Check dat data[1] = 99, 99 is the success code
     if (data[1] == 99)
     {
-        cout << "Poop pickup successful" << endl;
+        cout << "Poop pickup initate success" << endl;
         return 0;
     }
 
@@ -329,6 +344,25 @@ int serialHelper::requestAndWaitForHomeAll()
     }
 
     cout << "All home failed" << endl;
+    return -1;
+}
+
+int serialHelper::requestAndWaitForPickupLift()
+{
+    // Request the poop lift
+    requestPickupLift();
+
+    // Receive the data packet
+    vector<uint8_t> data = receiveData(2);
+
+    // Check dat data[1] = 99, 99 is the success code
+    if (data[1] == 99)
+    {
+        cout << "Poop lift success" << endl;
+        return 0;
+    }
+
+    cout << "Poop lift failed" << endl;
     return -1;
 }
 
