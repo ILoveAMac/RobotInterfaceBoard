@@ -196,7 +196,7 @@ void robotController::pickup()
     this->serial.requestAndWaitForPoopPickup();
 
     this->delay(600);
-    serial.requestAndWaitForArmPosition(STEPPER_2, CLOCKWISE, 32);
+    serial.requestAndWaitForArmPosition(STEPPER_2, CLOCKWISE, 35);
     this->delay(600);
 
     // Move the robot slightly forward linearly
