@@ -195,6 +195,10 @@ void robotController::pickup()
     std::cout << "Picking up poop" << std::endl;
     this->serial.requestAndWaitForPoopPickup();
 
+    this->delay(600);
+    serial.requestAndWaitForArmPosition(STEPPER_2, CLOCKWISE, 10);
+    this->delay(600);
+
     // Move the robot slightly forward linearly
     this->delay(600);
     this->serial.sendSpeeds(0.2, 0.2, 0.2, 0.2);
@@ -202,7 +206,7 @@ void robotController::pickup()
     this->serial.sendSpeeds(0, 0, 0, 0);
     this->delay(600);
 
-    serial.requestAndWaitForArmPosition(STEPPER_2, CLOCKWISE, 10);
+    serial.requestAndWaitForArmPosition(STEPPER_2, CLOCKWISE, 2);
 
     this->delay(600);
     this->serial.sendSpeeds(0.3, 0.3, 0.3, 0.3);
