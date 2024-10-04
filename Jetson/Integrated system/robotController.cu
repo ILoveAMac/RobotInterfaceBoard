@@ -23,7 +23,7 @@ robotController::robotController() : aiHelper(),
     this->serial.resetPosition();
 
     // Set the camera angle
-    this->serial.setCameraAngle(165);
+    this->serial.setCameraAngle(155);
 
     this->robotPosition = {0, 0, 0};
 
