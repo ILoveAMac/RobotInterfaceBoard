@@ -195,6 +195,11 @@ void robotController::pickup()
     std::cout << "Picking up poop" << std::endl;
     this->serial.requestAndWaitForPoopPickup();
 
+    // Move the robot slightly forward linearly
+    this->serial.sendSpeeds(0.2, 0.2, 0.2, 0.2);
+    this->delay(1000);
+    this->serial.sendSpeeds(0, 0, 0, 0);
+
     // wait forever
     while (true)
     {
