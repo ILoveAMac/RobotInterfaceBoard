@@ -285,11 +285,17 @@ void robotController::moveBackToPositionBeforePickup()
     // The setpoint for the position controller is already set
     if (this->positionController.getState() == State::IDLE)
     {
+        // disable reverse mode
+        this->positionController.setReverseMode(false);
+
         // Set the robot state to move and detect
         this->setRobotState(RobotState::MOVE_AND_DETECT);
     }
     else
     {
+        // enable reverse mode
+        this->positionController.setReverseMode(true);
+
         // Update the robot position
         this->updateRobotPosition();
         this->delay(DELAY_TIME);
