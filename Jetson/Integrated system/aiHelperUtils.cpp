@@ -83,7 +83,7 @@ cv::Mat aiHelperUtils::drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<
 void aiHelperUtils::drawSensorReadingsOnFrame(cv::Mat &frame, const std::vector<float> &sensorData)
 {
     // Reorder sensor data: 4, 2, 5, 1, 3
-    std::vector<float> ro = {sensorData[3], sensorData[1], sensorData[4], sensorData[0], sensorData[2]};
+    std::vector<float> ro = {sensorData[0], sensorData[1], sensorData[2], sensorData[3], sensorData[4]};
 
     // Get frame dimensions
     int frameHeight = frame.rows;
@@ -165,7 +165,7 @@ std::vector<std::vector<float>> aiHelperUtils::nonMaxSuppression(std::vector<std
     // Remove any predictions from the list that have a confidence score less than the threshold
     // confidences are stored in the last element of the vector
     std::vector<std::vector<float>> filtered_boxes;
-    for (int i = 0; i < boxes.size(); i++)
+    for (int i = 0; i < static_cast<int>(boxes.size()); i++)
     {
         if (boxes[i][4] > CONF_THRESH)
         {
