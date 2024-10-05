@@ -89,6 +89,8 @@ private:
 
     void openBucket(); // Function opens the bucket for 5 seconds then closes it
 
+    void updateSystemStateString(); // Function updates the system state string
+
     void delay(int ms);
 
     int image_counter;
@@ -104,6 +106,8 @@ private:
     // === Variables ===
     std::vector<float> robotPosition;
     std::vector<float> distanceMeasurements;
+
+    std::string stateString;
 
     // === Objects ===
 

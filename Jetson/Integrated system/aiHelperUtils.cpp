@@ -123,6 +123,26 @@ void aiHelperUtils::drawSensorReadingsOnFrame(cv::Mat &frame, const std::vector<
     cv::putText(frame, distanceText, cv::Point(textX, textY), cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(255, 255, 255), 1, cv::LINE_AA);
 }
 
+void aiHelperUtils::drawSystemStateOnFrame(cv::Mat &frame, const std::string &stateString)
+{
+    // Get frame dimensions
+    int frameHeight = frame.rows;
+    int frameWidth = frame.cols;
+
+    // Draw black box at the top of the frame
+    int boxHeight = 40;
+    cv::rectangle(frame, cv::Point(0, 0), cv::Point(frameWidth, boxHeight), cv::Scalar(0, 0, 0), -1);
+
+    // Calculate text size and position
+    int baseline = 0;
+    cv::Size textSize = cv::getTextSize(stateString, cv::FONT_HERSHEY_SIMPLEX, 0.4, 1, &baseline);
+    int textX = (frameWidth - textSize.width) / 2;
+    int textY = boxHeight / 2 + textSize.height / 2;
+
+    // Draw system state text in white
+    cv::putText(frame, stateString, cv::Point(textX, textY), cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(255, 255, 255), 1, cv::LINE_AA);
+}
+
 float aiHelperUtils::getBoundingBoxArea(std::vector<float> box)
 {
     if (box.size() < 5)

@@ -108,6 +108,11 @@ void robotController::update()
     // Display the captured image
     cv::cvtColor(this->resized_frame, this->resized_frame, cv::COLOR_RGB2BGR);
     aiHelperUtils::drawSensorReadingsOnFrame(this->resized_frame, this->distanceMeasurements);
+
+    // Update the system state string
+    updateSystemStateString();
+    aiHelperUtils::drawSystemStateOnFrame(this->resized_frame, this->systemStateString);
+
     cv::imshow("Detection", this->resized_frame);
     // Wait key
     if (cv::waitKey(1) == 'c')
@@ -372,6 +377,84 @@ void robotController::openBucket()
     delay(5000);
     serial.requestAndWaitForArmPosition(STEPPER_3, CLOCKWISE, 220);
     delay(100);
+}
+
+void robotController::updateSystemStateString()
+{
+    std::string mainRobotState;
+    switch (this->robotState)
+    {
+    case RobotState::IDLE:
+        mainRobotState = "IDLE";
+        break;
+    case RobotState::MOVE_AND_DETECT:
+        mainRobotState = "MOVE_AND_DETECT";
+        break;
+    case RobotState::DETECTION_ALLIGNMENT:
+
+        mainRobotState = "DETECTION_ALLIGNMENT";
+        break;
+    case RobotState::PICKUP:
+        mainRobotState = "PICKUP";
+        break;
+    case RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP:
+        mainRobotState = "MOVE_BACK_TO_POSITION_BEFORE_PICKUP";
+        break;
+    case RobotState::SEARCH_FOR_MARKER:
+        mainRobotState = "SEARCH_FOR_MARKER";
+        break;
+    case RobotState::NAVIGATE_TO_MARKER:
+        mainRobotState = "NAVIGATE_TO_MARKER";
+        break;
+    case RobotState::ALLIGN_TO_MARKER:
+        mainRobotState = "ALLIGN_TO_MARKER";
+        break;
+    case RobotState::DROP_OFF:
+        mainRobotState = "DROP_OFF";
+        break;
+    default:
+        mainRobotState = "UNKNOWN";
+        break;
+    }
+
+    std::string positionControllerState;
+    switch (this->positionController.getState())
+    {
+    case State::IDLE:
+        positionControllerState = "IDLE";
+        break;
+    case State::MOVE_TO_GOAL:
+        positionControllerState = "MOVE_TO_GOAL";
+        break;
+    case State::ROTATE_TO_GOAL:
+        positionControllerState = "ROTATE_TO_GOAL";
+        break;
+    case State::ROTATE_TO_GOAL_ORIENTATION:
+        positionControllerState = "ROTATE_TO_GOAL_ORIENTATION";
+        break;
+    default:
+        positionControllerState = "UNKNOWN";
+        break;
+    }
+
+    std::string visualServoingState;
+    switch (this->visualServoing.getCurrentState())
+    {
+    case servoingState::STOP:
+        visualServoingState = "STOP";
+        break;
+    case servoingState::ROTATE
+        visualServoingState = "ROTATE";
+        break;
+        case servoingState::MOVE_FORWARD:
+        visualServoingState = "MOVE_FORWARD";
+        break;
+    default:
+        visualServoingState = "UNKNOWN";
+        break;
+    }
+
+    std::string systemStateString = "RS: " + mainRobotState + " | PC: " + positionControllerState + " | VS: " + visualServoingState;
 }
 
 void robotController::delay(int ms)
