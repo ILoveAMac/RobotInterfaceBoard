@@ -259,10 +259,17 @@ void robotController::pickup()
 
     this->serial.requestAndWaitForPickupLift();
 
-    // wait forever
-    while (true)
+    // Detect poop with ai
+    auto bboxes = getBoundingBoxesAndDraw();
+
+    // if there are still poop in the frame, go back to detection allignment
+    if (bboxes.size() > 0)
     {
-        this->delay(1000);
+        this->setRobotState(RobotState::DETECTION_ALLIGNMENT);
+    }
+    else
+    {
+        this->setRobotState(RobotState::IDLE);
     }
 }
 
