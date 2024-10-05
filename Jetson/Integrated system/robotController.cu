@@ -264,7 +264,7 @@ void robotController::pickup()
 
     // if there are still poop in the frame, go back to detection allignment
     // if space premits only. Dist sense 1 and 2 shoud be -1 or greater than 0.3
-    if (bboxes.size() > 0 && (this->distanceMeasurements[0] > 0.3 || this->this->distanceMeasurements[0] == -1) && (this->distanceMeasurements[1] > 0.3 || this->this->distanceMeasurements[1] == -1))
+    if (bboxes.size() > 0 && (this->distanceMeasurements[0] > 0.3 || this->this->distanceMeasurements[0] == -1) && (this->distanceMeasurements[1] > 0.3 || this->distanceMeasurements[1] == -1))
     {
         this->setRobotState(RobotState::DETECTION_ALLIGNMENT);
     }
