@@ -443,10 +443,10 @@ void robotController::updateSystemStateString()
     case servoingState::STOP:
         visualServoingState = "STOP";
         break;
-    case servoingState::ROTATE
+    case servoingState::ROTATE:
         visualServoingState = "ROTATE";
         break;
-        case servoingState::MOVE_FORWARD:
+    case servoingState::MOVE_FORWARD:
         visualServoingState = "MOVE_FORWARD";
         break;
     default:
