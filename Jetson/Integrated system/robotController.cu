@@ -80,6 +80,7 @@ void robotController::update()
         moveAndDetect();
         break;
     case RobotState::DETECTION_ALLIGNMENT:
+        this->robotPositionBeforePickup = this->robotPosition;
         detectionAllignment();
         break;
     case RobotState::PICKUP:
@@ -262,6 +263,7 @@ void robotController::pickup()
     // Detect poop with ai
     captureAndPreProcessImage();
     auto bboxes = getBoundingBoxesAndDraw();
+    this->distanceMeasurements = getDistanceMeasurements();
 
     // if there are still poop in the frame, go back to detection allignment
     // if space premits only. Dist sense 1 and 2 shoud be -1 or greater than 0.3
@@ -271,12 +273,27 @@ void robotController::pickup()
     }
     else
     {
+        // Set goal position to the position before pickup
+        this->positionController.setGoal(this->robotPositionBeforePickup[0], this->robotPositionBeforePickup[1], this->robotPositionBeforePickup[2]);
         this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
     }
 }
 
 void robotController::moveBackToPositionBeforePickup()
 {
+    // Move the robot back to the position before the pickup
+    // The setpoint for the position controller is already set
+    if (this->positionController.getState() == State::IDLE)
+    {
+        // Set the robot state to move and detect
+        this->setRobotState(RobotState::MOVE_AND_DETECT);
+    }
+    else
+    {
+        // Update the robot position
+        this->updateRobotPosition();
+        this->delay(DELAY_TIME);
+    }
 }
 
 void robotController::searchForMarker()

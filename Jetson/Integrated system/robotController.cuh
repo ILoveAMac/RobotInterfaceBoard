@@ -105,6 +105,7 @@ private:
 
     // === Variables ===
     std::vector<float> robotPosition;
+    std::vector<float> robotPositionBeforePickup;
     std::vector<float> distanceMeasurements;
 
     std::string stateString;
