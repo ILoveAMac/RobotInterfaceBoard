@@ -60,7 +60,7 @@ public:
 
     // Returns the updated robot position in [x, y, theta]
     // Return values are in meters and radians
-    std::vector<float> calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, float dist5);
+    std::vector<float> calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, positionController &controller);
 
     // Function to get the current state machine state
     servoingState getCurrentState() { return this->currentState; }

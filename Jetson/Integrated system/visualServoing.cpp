@@ -11,7 +11,7 @@ visualServoing::visualServoing(float imageHeight, float imageWidth) : pidControl
 
 visualServoing::~visualServoing() {}
 
-std::vector<float> visualServoing::calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, float dist5)
+std::vector<float> visualServoing::calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, positionController &controller)
 {
     // State machine for visual servoing
     switch (this->currentState)
@@ -20,7 +20,7 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
         return this->rotateState(boundingBox, robotCurrentPosition);
         break;
     case servoingState::MOVE_FORWARD:
-        return this->moveForwardState(boundingBox, robotCurrentPosition, dist5);
+        return this->moveForwardState(boundingBox, robotCurrentPosition, controller);
         break;
     case servoingState::STOP:
         return robotCurrentPosition;
