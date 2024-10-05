@@ -25,6 +25,7 @@ public:
     // Bounding boxes
     static std::vector<std::vector<float>> getFinalBoundingBoxes(const float *detections);
     static cv::Mat drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<float>> boxes);
+    static void drawSensorReadingsOnFrame(cv::Mat &frame, const std::vector<float> &sensorData);
     static float getBoundingBoxArea(std::vector<float> box);
     static float getBoundingBoxConfidence(std::vector<float> box);
     static std::vector<float> getBoindingBoxWithLargestArea(std::vector<std::vector<float>> boxes);

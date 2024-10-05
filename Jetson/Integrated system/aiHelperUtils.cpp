@@ -80,6 +80,48 @@ cv::Mat aiHelperUtils::drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<
     return frame;
 }
 
+void aiHelperUtils::drawSensorReadingsOnFrame(cv::Mat &frame, const std::vector<float> &sensorData)
+{
+    // Reorder sensor data: 4, 2, 5, 1, 3
+    std::vector<float> ro = {sensorData[3], sensorData[1], sensorData[4], sensorData[0], sensorData[2]};
+
+    // Get frame dimensions
+    int frameHeight = frame.rows;
+    int frameWidth = frame.cols;
+
+    // Draw black box at the bottom of the frame
+    int boxHeight = 40;
+    cv::rectangle(frame, cv::Point(0, frameHeight - boxHeight), cv::Point(frameWidth, frameHeight), cv::Scalar(0, 0, 0), -1);
+
+    // Create sensor readings text
+    std::ostringstream distanceTextStream;
+    for (size_t i = 0; i < ro.size(); ++i)
+    {
+        if (i > 0)
+        {
+            distanceTextStream << " | ";
+        }
+        if (ro[i] != -1)
+        {
+            distanceTextStream << "S" << (i + 1) << ": " << std::fixed << std::setprecision(2) << ro[i] << "m";
+        }
+        else
+        {
+            distanceTextStream << "S" << (i + 1) << ": N/A";
+        }
+    }
+    std::string distanceText = distanceTextStream.str();
+
+    // Calculate text size and position
+    int baseline = 0;
+    cv::Size textSize = cv::getTextSize(distanceText, cv::FONT_HERSHEY_SIMPLEX, 0.4, 1, &baseline);
+    int textX = (frameWidth - textSize.width) / 2;
+    int textY = frameHeight - boxHeight / 2 + textSize.height / 2;
+
+    // Draw sensor readings text in white
+    cv::putText(frame, distanceText, cv::Point(textX, textY), cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(255, 255, 255), 1, cv::LINE_AA);
+}
+
 float aiHelperUtils::getBoundingBoxArea(std::vector<float> box)
 {
     if (box.size() < 5)
