@@ -341,11 +341,16 @@ std::vector<float> robotController::getDistanceMeasurements()
 {
     // Measure distance from each sensor with a 5ms delay between each measurement
     std::vector<float> distances;
-    for (int i = 0; i < 5; i++)
-    {
-        distances.push_back(serial.receiveDistanceSensorMeasurement(i));
-        delay(5);
-    }
+    distances.push_back(serial.getDistance(DistSense::SENSE_1));
+    delay(5);
+    distances.push_back(serial.getDistance(DistSense::SENSE_2));
+    delay(5);
+    distances.push_back(serial.getDistance(DistSense::SENSE_3));
+    delay(5);
+    distances.push_back(serial.getDistance(DistSense::SENSE_4));
+    delay(5);
+    distances.push_back(serial.getDistance(DistSense::SENSE_5));
+    delay(5);
 
     return distances;
 }
