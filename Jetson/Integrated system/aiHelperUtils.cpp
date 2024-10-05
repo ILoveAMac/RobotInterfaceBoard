@@ -83,7 +83,8 @@ cv::Mat aiHelperUtils::drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<
 void aiHelperUtils::drawSensorReadingsOnFrame(cv::Mat &frame, const std::vector<float> &sensorData)
 {
     // Reorder sensor data: 4, 2, 5, 1, 3
-    std::vector<float> ro = {sensorData[0], sensorData[1], sensorData[2], sensorData[3], sensorData[4]};
+    std::vector<float> ro = {sensorData[3], sensorData[1], sensorData[4], sensorData[0], sensorData[2]};
+    std::vector<std::string> sensorNames = {"S4", "S2", "S5", "S1", "S3"};
 
     // Get frame dimensions
     int frameHeight = frame.rows;
@@ -103,11 +104,11 @@ void aiHelperUtils::drawSensorReadingsOnFrame(cv::Mat &frame, const std::vector<
         }
         if (ro[i] != -1)
         {
-            distanceTextStream << "S" << (i + 1) << ": " << std::fixed << std::setprecision(2) << ro[i] << "m";
+            distanceTextStream << sensorNames[i] << ": " << std::fixed << std::setprecision(2) << ro[i] << "m";
         }
         else
         {
-            distanceTextStream << "S" << (i + 1) << ": N/A";
+            distanceTextStream << sensorNames[i] << ": N/A";
         }
     }
     std::string distanceText = distanceTextStream.str();
