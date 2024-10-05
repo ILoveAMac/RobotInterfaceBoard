@@ -43,6 +43,7 @@
 #define MAX_LINEAR 0.15
 
 #include "pid.h"
+#include "positionController.h"
 
 enum class servoingState
 {
@@ -72,7 +73,7 @@ private:
     std::vector<float> rotateState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition);
 
     // function for linear allignment
-    std::vector<float> moveForwardState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, float dist5);
+    std::vector<float> moveForwardState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, positionController &controller);
 
     // Function to remove distortion from a point
     std::vector<float> removeDistortion(std::vector<float> point);

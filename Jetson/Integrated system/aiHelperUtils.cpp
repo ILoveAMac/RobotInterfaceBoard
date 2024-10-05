@@ -100,6 +100,24 @@ float aiHelperUtils::getBoundingBoxConfidence(std::vector<float> box)
     return box[4];
 }
 
+std::vector<float> aiHelperUtils::getBoindingBoxWithLargestArea(std::vector<std::vector<float>> boxes)
+{
+    // Find the bounding box with the largest area
+    float max_area = -1.0f;
+    std::vector<float> largest_box;
+    for (std::vector<float> box : boxes)
+    {
+        float area = aiHelperUtils::getBoundingBoxArea(box);
+        if (area > max_area)
+        {
+            max_area = area;
+            largest_box = box;
+        }
+    }
+
+    return largest_box;
+}
+
 std::vector<std::vector<float>> aiHelperUtils::nonMaxSuppression(std::vector<std::vector<float>> boxes)
 {
     // Remove any predictions from the list that have a confidence score less than the threshold

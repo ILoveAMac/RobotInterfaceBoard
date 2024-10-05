@@ -27,6 +27,7 @@ public:
     static cv::Mat drawBoundingBoxes(cv::Mat frame, std::vector<std::vector<float>> boxes);
     static float getBoundingBoxArea(std::vector<float> box);
     static float getBoundingBoxConfidence(std::vector<float> box);
+    static std::vector<float> getBoindingBoxWithLargestArea(std::vector<std::vector<float>> boxes);
 
 private:
     static std::vector<std::vector<float>>

@@ -16,6 +16,9 @@ positionController::positionController(float Kp, float Ka, float goalTolerance, 
 
     // Current state
     this->state = State::IDLE;
+
+    // Reverse mode
+    this->reverseMode = false;
 }
 
 positionController::~positionController() {}
@@ -150,9 +153,20 @@ void positionController::setState(State state)
     this->state = state;
 }
 
+void positionController::setReverseMode(bool reverseMode)
+{
+    this->reverseMode = reverseMode;
+}
+
 // Private functions
 float positionController::calculateAlpha(float x, float y, float theta)
 {
+    // If reverse mode is enabled, consider the opposite orientation
+    if (reverseMode)
+    {
+        theta = normalizeAngle(theta + M_PI);
+    }
+
     // calculate the angle to the goal x,y position
     float beta = atan2(this->goalY - y, this->goalX - x);
 
@@ -170,6 +184,11 @@ float positionController::calculateV(float alpha, float p)
 {
     // calculate the linear velocity
     float V = this->Kp * p * cos(alpha);
+
+    if (reverseMode)
+    {
+        V = -V;
+    }
 
     // check if the linear velocity is greater than the maximum
     if (V > MAX_LINEAR_VELOCITY)

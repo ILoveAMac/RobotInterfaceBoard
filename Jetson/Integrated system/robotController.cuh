@@ -85,6 +85,8 @@ private:
 
     std::vector<std::vector<float>> getBoundingBoxesAndDraw(); // Function gets bounding boxes from the YOLO model and draws them on the image
 
+    std::vector<float> getDistanceMeasurements(); // Function gets distance measurements from the onboard sensors
+
     void delay(int ms);
 
     int image_counter;
@@ -99,6 +101,7 @@ private:
 
     // === Variables ===
     std::vector<float> robotPosition;
+    std::vector<float> distanceMeasurements;
 
     // === Objects ===
 

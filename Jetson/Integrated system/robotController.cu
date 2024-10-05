@@ -45,6 +45,8 @@ robotController::robotController() : aiHelper(),
     cv::namedWindow("Detection", cv::WINDOW_AUTOSIZE);
 
     this->image_counter = 0;
+
+    this->distanceMeasurements = {0, 0, 0, 0, 0};
 }
 
 robotController::~robotController()
@@ -60,7 +62,10 @@ void robotController::update()
 {
     // === START: Area to put code that should run every loop iteration ===
     // get the current robot position
-    this->robotPosition = this->getRobotPosition();
+    this->robotPosition = getRobotPosition();
+
+    // get the distance measurements
+    this->distanceMeasurements = getDistanceMeasurements();
 
     // Capture and pre-process an image from the camera
     captureAndPreProcessImage();
@@ -135,7 +140,11 @@ void robotController::idle()
     this->delay(DELAY_TIME);
 
     // === TRANSITION ===
-    // TODO: Implement a transition to the next state from the idle state
+    if (cv::waitKey(1) == 's')
+    {
+        // Set the robot state to move and detect
+        this->setRobotState(RobotState::MOVE_AND_DETECT);
+    }
 }
 
 void robotController::moveAndDetect()
@@ -157,11 +166,10 @@ void robotController::detectionAllignment()
 
         if (bboxes.size() > 0)
         {
-            // TODO: Pick the bounding box with highest confidence and/or area, for now just pick the first one
-            std::vector<float> bbox = bboxes[0];
+            std::vector<float> bbox = aiHelperUtils::getBoindingBoxWithLargestArea(bboxes);
 
             // Use the visual servoing algorithm to compute the updated desired robot position and orientation
-            std::vector<float> updatedPosition = this->visualServoing.calculateControlPosition(bbox, this->robotPosition, serial.receiveDistanceSensorMeasurement(SENSE_5));
+            std::vector<float> updatedPosition = this->visualServoing.calculateControlPosition(bbox, this->robotPosition, this->positionController);
 
             if (this->visualServoing.getCurrentState() == servoingState::STOP)
             {
@@ -177,7 +185,7 @@ void robotController::detectionAllignment()
         }
         else
         {
-            // Go back to search pattern
+            // Go back to search pattern, it seems we have lost the poop
             // this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
         }
         // updtate the robot position
@@ -327,6 +335,19 @@ std::vector<std::vector<float>> robotController::getBoundingBoxesAndDraw()
     resized_frame = aiHelper.drawBoundingBoxes(resized_frame, bboxes);
     cv::cvtColor(this->resized_frame, this->resized_frame, cv::COLOR_BGR2RGB);
     return bboxes;
+}
+
+std::vector<float> robotController::getDistanceMeasurements()
+{
+    // Measure distance from each sensor with a 5ms delay between each measurement
+    std::vector<float> distances;
+    for (int i = 0; i < 5; i++)
+    {
+        distances.push_back(serial.receiveDistanceSensorMeasurement(i));
+        delay(5);
+    }
+
+    return distances;
 }
 
 void robotController::delay(int ms)

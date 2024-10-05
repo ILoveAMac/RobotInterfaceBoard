@@ -54,6 +54,9 @@ public:
     // Set the controller state
     void setState(State state);
 
+    // Enable and disable the reverse mode
+    void setReverseMode(bool reverseMode);
+
 private:
     // Internal functions
     float calculateAlpha(float x, float y, float theta);
@@ -75,6 +78,9 @@ private:
     float thetaTolerance;
     float Kp;
     float Ka;
+
+    // Flag to allow the robot to reverse its orientation
+    bool reverseMode;
 
     // Goal position
     float goalX;
