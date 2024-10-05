@@ -12,7 +12,7 @@
 #include "yolo.cuh"
 
 // Delay Time (ms)
-#define DELAY_TIME 50
+#define DELAY_TIME 25
 
 // Ai Model Path
 #define MODEL_PATH "/home/wihan/model/"
@@ -86,6 +86,8 @@ private:
     std::vector<std::vector<float>> getBoundingBoxesAndDraw(); // Function gets bounding boxes from the YOLO model and draws them on the image
 
     std::vector<float> getDistanceMeasurements(); // Function gets distance measurements from the onboard sensors
+
+    void openBucket(); // Function opens the bucket for 5 seconds then closes it
 
     void delay(int ms);
 

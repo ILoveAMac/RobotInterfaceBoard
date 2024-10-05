@@ -124,6 +124,15 @@ void robotController::update()
             std::cerr << "Error: Could not save image" << std::endl;
         }
     }
+
+    // Check if the o key is pressed, if so open the bucket
+    if (cv::waitKey(1) == 'o')
+    {
+        std::cout << "Bucket opened" << std::endl;
+        openBucket(); // opens the bucket, waits for 5 seconds then closes it
+        std::cout << "Bucket closed" << std::endl;
+    }
+
     // END: Area to put code that should run after every loop iteration
 }
 
@@ -354,6 +363,15 @@ std::vector<float> robotController::getDistanceMeasurements()
     delay(5);
 
     return distances;
+}
+
+void robotController::openBucket()
+{
+    delay(100);
+    serial.requestAndWaitForArmPosition(STEPPER_3, COUNTERCLOCKWISE, 220);
+    delay(5000);
+    serial.requestAndWaitForArmPosition(STEPPER_3, CLOCKWISE, 220);
+    delay(100);
 }
 
 void robotController::delay(int ms)
