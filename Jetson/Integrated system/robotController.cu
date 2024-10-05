@@ -27,6 +27,8 @@ robotController::robotController() : aiHelper(),
 
     this->robotPosition = {0, 0, 0};
 
+    this->robotPositionBeforePickup = {0, 0, 0}; // TODO! remember to update this on transition to the detection allignment state
+
     // Set the goal position
     this->positionController.setGoal(0, 0, 0);
 
@@ -80,7 +82,6 @@ void robotController::update()
         moveAndDetect();
         break;
     case RobotState::DETECTION_ALLIGNMENT:
-        this->robotPositionBeforePickup = this->robotPosition;
         detectionAllignment();
         break;
     case RobotState::PICKUP:
