@@ -202,7 +202,11 @@ void robotController::pickup()
     // Move the robot slightly forward linearly
     this->delay(600);
     this->serial.sendSpeeds(0.2, 0.2, 0.2, 0.2);
-    this->delay(700);
+
+    this->delay(10);
+    serial.requestAndWaitForArmPosition(STEPPER_2, CLOCKWISE, 1.5);
+
+    this->delay(400);
     this->serial.sendSpeeds(0, 0, 0, 0);
     this->delay(600);
 
