@@ -260,6 +260,7 @@ void robotController::pickup()
     this->serial.requestAndWaitForPickupLift();
 
     // Detect poop with ai
+    captureAndPreProcessImage();
     auto bboxes = getBoundingBoxesAndDraw();
 
     // if there are still poop in the frame, go back to detection allignment
