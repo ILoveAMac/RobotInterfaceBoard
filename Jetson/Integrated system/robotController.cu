@@ -111,7 +111,7 @@ void robotController::update()
 
     // Update the system state string
     updateSystemStateString();
-    aiHelperUtils::drawSystemStateOnFrame(this->resized_frame, this->systemStateString);
+    aiHelperUtils::drawSystemStateOnFrame(this->resized_frame, this->stateString);
 
     cv::imshow("Detection", this->resized_frame);
     // Wait key
@@ -454,7 +454,7 @@ void robotController::updateSystemStateString()
         break;
     }
 
-    std::string systemStateString = "RS: " + mainRobotState + " | PC: " + positionControllerState + " | VS: " + visualServoingState;
+    this->stateString = "RS: " + mainRobotState + " | PC: " + positionControllerState + " | VS: " + visualServoingState;
 }
 
 void robotController::delay(int ms)
