@@ -204,7 +204,7 @@ void robotController::pickup()
     // Move the robot slightly forward linearly
     this->delay(600);
     this->serial.sendSpeeds(0.2, 0.2, 0.2, 0.2);
-    this->delay(600);
+    this->delay(700);
     this->serial.sendSpeeds(0, 0, 0, 0);
     this->delay(600);
 
@@ -218,9 +218,6 @@ void robotController::pickup()
 
     serial.requestAndWaitForArmPosition(STEPPER_2, CLOCKWISE, 35);
     this->delay(600);
-
-    // serial.requestAndWaitForArmPosition(STEPPER_3, CLOCKWISE, 70);
-    // this->delay(600);
 
     // Get the current robot position
     std::vector<float> position = this->getRobotPosition();
