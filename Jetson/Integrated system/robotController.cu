@@ -50,7 +50,7 @@ robotController::robotController() : aiHelper(),
 
     this->distanceMeasurements = {0, 0, 0, 0, 0};
 
-    this->poopsPickedUp = 0;
+    this->numPoopsCollected = 0;
 }
 
 robotController::~robotController()
@@ -283,7 +283,7 @@ void robotController::pickup()
         this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
 
         // Increase the number of poops picked up
-        this->poopsPickedUp++;
+        this->numPoopsCollected++;
     }
 }
 
@@ -332,7 +332,7 @@ void robotController::dropOff()
     delay(100);
 
     // Reset the number of poops picked up
-    this->poopsPickedUp = 0;
+    this->numPoopsCollected = 0;
 
     // Set the robot to reverse for 0.4 meters linearly and do a 180 degree rotation
     float new_x = this->robotPosition[0] - 0.4 * std::cos(this->robotPosition[2]);
