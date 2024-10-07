@@ -49,6 +49,8 @@ robotController::robotController() : aiHelper(),
     this->image_counter = 0;
 
     this->distanceMeasurements = {0, 0, 0, 0, 0};
+
+    this->poopsPickedUp = 0;
 }
 
 robotController::~robotController()
@@ -166,6 +168,8 @@ void robotController::idle()
 
 void robotController::moveAndDetect()
 {
+    // TODO! navigate the area while continuously detecting poop
+    // TODO! once poop is detected transition to the detection allignment state
 }
 
 // This function will allign the robot with the poop once it has been detected
@@ -203,7 +207,7 @@ void robotController::detectionAllignment()
         else
         {
             // Go back to search pattern, it seems we have lost the poop
-            // this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
+            this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
         }
         // updtate the robot position
         this->updateRobotPosition();
@@ -277,6 +281,9 @@ void robotController::pickup()
         // Set goal position to the position before pickup
         this->positionController.setGoal(this->robotPositionBeforePickup[0], this->robotPositionBeforePickup[1], this->robotPositionBeforePickup[2]);
         this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
+
+        // Increase the number of poops picked up
+        this->poopsPickedUp++;
     }
 }
 
@@ -305,18 +312,60 @@ void robotController::moveBackToPositionBeforePickup()
 
 void robotController::searchForMarker()
 {
+    // TODO! Implement a search algorithm to find the marker
 }
 
 void robotController::navigateToMarker()
 {
+    // TODO! Once the marker has been detected, navigate towards it
 }
 
 void robotController::allignToMarker()
 {
+    // TODO! Once alligned to the marker, transition to the drop off state
 }
 
 void robotController::dropOff()
 {
+    delay(100);
+    serial.requestAndWaitForDropoff();
+    delay(100);
+
+    // Reset the number of poops picked up
+    this->poopsPickedUp = 0;
+
+    // Set the robot to reverse for 0.4 meters linearly and do a 180 degree rotation
+    float new_x = this->robotPosition[0] - 0.4 * std::cos(this->robotPosition[2]);
+    float new_y = this->robotPosition[1] - 0.4 * std::sin(this->robotPosition[2]);
+    this->positionController.setGoal(new_x, new_y, this->robotPosition[2] + M_PI);
+
+    // enable reverse mode
+    this->positionController.setReverseMode(true);
+
+    // Transition to the rotate away from marker state
+    this->setRobotState(RobotState::ROTATE_AWAY_FROM_MARKER);
+}
+
+void robotController::rotateAwayFromMarker()
+{
+    // If the position controller is in the idle state, transition to the move and detect state
+    if (this->positionController.getState() == State::IDLE)
+    {
+        // disable reverse mode
+        this->positionController.setReverseMode(false);
+
+        // reset the robot position
+        this->serial.resetPosition();
+
+        // Set the robot state to move and detect
+        this->setRobotState(RobotState::MOVE_AND_DETECT);
+    }
+    else
+    {
+        // Update the robot position
+        this->updateRobotPosition();
+        this->delay(DELAY_TIME);
+    }
 }
 
 std::vector<float> robotController::getRobotPosition()
@@ -406,9 +455,9 @@ std::vector<float> robotController::getDistanceMeasurements()
 void robotController::openBucket()
 {
     delay(100);
-    serial.requestAndWaitForArmPosition(STEPPER_3, COUNTERCLOCKWISE, 220);
-    delay(5000);
     serial.requestAndWaitForArmPosition(STEPPER_3, CLOCKWISE, 220);
+    delay(5000);
+    serial.requestAndWaitForArmPosition(STEPPER_3, COUNTERCLOCKWISE, 220);
     delay(100);
 }
 

@@ -11,6 +11,9 @@
 #include "aiHelperUtils.h"
 #include "yolo.cuh"
 
+// Max Poops that the robot can collect
+#define MAX_POOPS 2
+
 // Delay Time (ms)
 #define DELAY_TIME 25
 
@@ -46,7 +49,8 @@ enum class RobotState
     SEARCH_FOR_MARKER,                   // In this state the robot searches for a marker
     NAVIGATE_TO_MARKER,                  // In this state the robot navigates to the marker
     ALLIGN_TO_MARKER,                    // In this state the robot alligns itself to the marker
-    DROP_OFF                             // In this state the robot drops off the poop
+    DROP_OFF,                            // In this state the robot drops off the poop
+    ROTATE_AWAY_FROM_MARKER              // In this state the robot rotates away from the marker
 };
 
 class robotController
@@ -75,6 +79,7 @@ private:
     void navigateToMarker();
     void allignToMarker();
     void dropOff();
+    void rotateAwayFromMarker();
 
     // === Helper Functions ===
     std::vector<float> getRobotPosition(); // Function uses the serial helper to get the robot position
@@ -107,6 +112,8 @@ private:
     std::vector<float> robotPosition;
     std::vector<float> robotPositionBeforePickup;
     std::vector<float> distanceMeasurements;
+
+    int numPoopsCollected;
 
     std::string stateString;
 

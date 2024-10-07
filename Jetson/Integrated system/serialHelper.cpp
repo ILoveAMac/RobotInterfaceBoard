@@ -194,6 +194,21 @@ void serialHelper::requestPickupLift()
     cout << "Poop lift requested" << endl;
 }
 
+void serialHelper::requestDropoff()
+{
+    // Build the data packet
+    vector<uint8_t> data_packet;
+    data_packet.push_back(START_BYTE);
+    data_packet.push_back(0x01);            // Length byte
+    data_packet.push_back(DROPOFF_COMMAND); // Dropoff lift command
+
+    // Send the data packet
+    sendData(data_packet);
+
+    // Print a message to the console
+    cout << "Poop dropoff requested" << endl;
+}
+
 void serialHelper::sendData(const std::vector<uint8_t> &data)
 {
     try
@@ -363,6 +378,25 @@ int serialHelper::requestAndWaitForPickupLift()
     }
 
     cout << "Poop lift failed" << endl;
+    return -1;
+}
+
+int serialHelper::requestAndWaitForDropoff()
+{
+    // Request dropoff
+    requestDropoff();
+
+    // Recieve the data packet
+    vector<uint8_t> data = receiveData(2);
+
+    // Check dat data[1] = 99, 99 is the success code
+    if (data[1] == 99)
+    {
+        cout << "Poop dropoff success" << endl;
+        return 0;
+    }
+
+    cout << "Poop dropoff failed" << endl;
     return -1;
 }
 

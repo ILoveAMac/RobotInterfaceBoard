@@ -20,6 +20,7 @@
 #define HOME_ARM_ONLY_COMMAND 0x09
 #define HOME_ALL_COMMAND 0x0A
 #define PICKUP_LIFT_COMMAND 0x0B
+#define DROPOFF_COMMAND 0x0C
 
 #include <thread>
 #include <chrono>
@@ -69,6 +70,7 @@ public:
     void requestHomeArmOnly();
     void requestHomeAll();
     void requestPickupLift();
+    void requestDropoff();
 
     // Functions to receive specific data
     std::vector<float> receivePosition();
@@ -78,6 +80,7 @@ public:
     int requestAndWaitForHomeArmOnly();
     int requestAndWaitForHomeAll();
     int requestAndWaitForPickupLift();
+    int requestAndWaitForDropoff();
 
 private:
     void floatToBytesBE(float value, uint8_t *bytes);
