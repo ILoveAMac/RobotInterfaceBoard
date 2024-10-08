@@ -301,6 +301,8 @@ Direction navigationSystem::getOppositeDirection(Direction direction)
     case Direction::West:
         return Direction::East;
     }
+
+    return Direction::North; // Default case
 }
 
 bool navigationSystem::isCellInfrontFree(std::vector<float> distSensorData)
