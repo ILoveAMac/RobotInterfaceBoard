@@ -82,7 +82,6 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
     if (this->currentNode == nextNode)
     {
         // Visit the current node
-        std::cout << "Next node: " << nextNode->coordinates.first << ", " << nextNode->coordinates.second << std::endl;
         this->visitCurrentNode();
 
         return worldCoords; // We don't need to move
@@ -112,6 +111,7 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
             }
             else
             {
+                std::cout << "Cell in front not free" << std::endl;
                 // Mark the next node as visited and not free and as an obstacle
                 nextNode->isVisited = true;
                 nextNode->isFree = false;
