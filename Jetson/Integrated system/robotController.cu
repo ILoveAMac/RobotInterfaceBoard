@@ -27,7 +27,7 @@ robotController::robotController() : aiHelper(),
 
     this->robotPosition = {0, 0, 0};
 
-    this->robotPositionBeforePickup = {0, 0, 0}; // TODO! remember to update this on transition to the detection allignment state
+    this->robotPositionBeforePickup = {0, 0, 0};
 
     // Set the goal position
     this->positionController.setGoal(0, 0, 0);
@@ -170,6 +170,47 @@ void robotController::moveAndDetect()
 {
     // TODO! navigate the area while continuously detecting poop
     // TODO! once poop is detected transition to the detection allignment state
+
+    // Check if the navigation system is in the finish state, if so go to idle
+    if (this->navigation.getState() == NavigationState::FINISH)
+    {
+        this->setRobotState(RobotState::IDLE);
+        return;
+    }
+
+    // if the position controller is rotating the robot, dont use the ai, just update the robot position
+    State pcState = positionController.getState();
+    if (pcState == State::ROTATE_TO_GOAL || pcState == State::ROTATE_TO_GOAL_ORIENTATION)
+    {
+        this->updateRobotPosition();
+        this->delay(DELAY_TIME);
+
+        return;
+    }
+
+    // During forward motion or when stationary we can use the ai to detect poop
+    auto bboxes = getBoundingBoxesAndDraw();
+    if (bboxes.size() > 0) // If detected go to the detection allignment state
+    {
+        // Set the robot state to detection allignment
+        this->setRobotState(RobotState::DETECTION_ALLIGNMENT);
+
+        // Store the current robot position before the pickup
+        this->robotPositionBeforePickup = this->robotPosition;
+
+        return;
+    }
+
+    // No poop has been detected so we use the navigation algorithm to move the robot
+
+    // Get the new goal position from the navigation algorithm
+    std::vector<float> goalPosition = this->navigation.exploreArea(this->robotPosition, this->distanceMeasurements);
+
+    // set the goal position for the position controller
+    this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
+
+    // update the robot position
+    this->updateRobotPosition();
 }
 
 // This function will allign the robot with the poop once it has been detected

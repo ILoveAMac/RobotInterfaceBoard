@@ -23,7 +23,7 @@ int main()
     robotController rController;
 
     // Set the controller state
-    rController.setRobotState(RobotState::DETECTION_ALLIGNMENT);
+    rController.setRobotState(RobotState::MOVE_AND_DETECT);
     // Main loop
     while (true)
     {

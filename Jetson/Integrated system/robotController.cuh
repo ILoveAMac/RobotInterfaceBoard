@@ -10,6 +10,7 @@
 #include "positionController.h"
 #include "aiHelperUtils.h"
 #include "yolo.cuh"
+#include "navigationSystem.h"
 
 // Max Poops that the robot can collect
 #define MAX_POOPS 2
@@ -118,6 +119,9 @@ private:
     std::string stateString;
 
     // === Objects ===
+
+    // Navigation algorithm object
+    navigationSystem navigation;
 
     // AI Helper object
     aiHelperUtils aiHelper;
