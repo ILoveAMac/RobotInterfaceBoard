@@ -101,7 +101,7 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
             {
                 // Move the robot to the next node
                 std::pair<int, int> nextCoords = nextNode->coordinates;
-                std::vector<float> nextWorldCoords = this->getRealWorldCoordinates(nextCoords);
+                std::vector<float> nextWorldCoords = this->getRealWorldCoordinates(nextCoords, this->currentDirection);
 
                 // Update the current node
                 std::cout << "Next node: " << nextNode->coordinates.first << ", " << nextNode->coordinates.second << std::endl;
@@ -196,7 +196,7 @@ std::vector<float> navigationSystem::dijkstraExplore(std::vector<float> worldCoo
     if (this->isCellInfrontFree(distSensorData))
     {
         // Move the robot to the next node
-        std::vector<float> nextWorldCoords = this->getRealWorldCoordinates(nextCoords);
+        std::vector<float> nextWorldCoords = this->getRealWorldCoordinates(nextCoords, this->currentDirection);
 
         // Update the current node
         this->currentNode = nextNode;
@@ -397,13 +397,14 @@ std::pair<int, int> navigationSystem::getGridCoordinates(std::vector<float> worl
     return std::pair<int, int>(x, y);
 }
 
-std::vector<float> navigationSystem::getRealWorldCoordinates(std::pair<int, int> coords)
+std::vector<float> navigationSystem::getRealWorldCoordinates(std::pair<int, int> coords, Direction dir)
 {
     // convert the grid coordinates to real world coordinates
     float x = coords.first * MAP_GRID_SIZE;
     float y = coords.second * MAP_GRID_SIZE;
+    float angle = getRealWorldAngle(dir);
 
-    return std::vector<float>{x, y};
+    return std::vector<float>{x, y, angle};
 }
 
 std::pair<int, int> navigationSystem::getNextCoordinates(Direction direction)

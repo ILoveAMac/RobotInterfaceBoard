@@ -132,7 +132,7 @@ private:
     float getRealWorldAngle(Direction direction);
 
     std::pair<int, int> getGridCoordinates(std::vector<float> worldCoords);
-    std::vector<float> getRealWorldCoordinates(std::pair<int, int> coords);
+    std::vector<float> getRealWorldCoordinates(std::pair<int, int> coords, Direction dir);
 
     // Function to get the next coordinates of the robot given the current direction
     std::pair<int, int> getNextCoordinates(Direction direction);
