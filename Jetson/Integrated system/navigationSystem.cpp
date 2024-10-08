@@ -375,13 +375,13 @@ float navigationSystem::getRealWorldAngle(Direction direction)
         angle = 0.0;
         break;
     case Direction::East:
-        angle = M_PI / 2;
+        angle = -M_PI / 2;
         break;
     case Direction::South:
         angle = M_PI;
         break;
     case Direction::West:
-        angle = -M_PI / 2;
+        angle = M_PI / 2;
         break;
     }
 
