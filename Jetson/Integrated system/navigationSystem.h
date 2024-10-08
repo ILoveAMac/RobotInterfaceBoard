@@ -36,22 +36,37 @@ public:
 };
 
 // Graph representing the operational area
+namespace std
+{
+    template <>
+    struct hash<std::pair<int, int>>
+    {
+        size_t operator()(const std::pair<int, int> &p) const
+        {
+            // Combine the hashes of the two integers
+            size_t h1 = std::hash<int>{}(p.first);
+            size_t h2 = std::hash<int>{}(p.second);
+            return h1 ^ (h2 << 1); // Or use any other hash combination method
+        }
+    };
+}
+
 class NavigationGraph
 {
 public:
-    NavigationGraph() {};
-    ~NavigationGraph() {};
+    NavigationGraph() {}
+    ~NavigationGraph() {}
 
     std::unordered_map<std::pair<int, int>, Node *> nodes;
 
     // Get the node at the specified coordinates
-    Node *getNode(std::pair<int, int> coords)
+    Node *getNode(const std::pair<int, int> &coords)
     {
-        if (nodes.find(coords) != nodes.end())
+        auto it = nodes.find(coords);
+        if (it != nodes.end())
         {
-            return nodes[coords];
+            return it->second;
         }
-
         return nullptr;
     }
 
@@ -62,6 +77,7 @@ public:
     }
 
 private:
+    // Private members...
 };
 
 enum class Direction
