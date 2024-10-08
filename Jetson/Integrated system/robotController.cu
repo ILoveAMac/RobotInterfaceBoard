@@ -201,6 +201,8 @@ void robotController::moveAndDetect()
         return;
     }
 
+    std::cout << "No poop detected" << std::endl;
+
     // No poop has been detected so we use the navigation algorithm to move the robot
 
     // Get the new goal position from the navigation algorithm
