@@ -205,6 +205,7 @@ void robotController::moveAndDetect()
 
     // Get the new goal position from the navigation algorithm
     std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
+    std::cout << "goal pos" << goalPosition[0] << " " << goalPosition[1] << " " << goalPosition[2] << std::endl;
 
     // set the goal position for the position controller
     this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
