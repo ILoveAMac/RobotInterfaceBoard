@@ -250,6 +250,8 @@ void navigationSystem::visitCurrentNode()
     // Create the neighbors of the current node
     this->createNeighbors();
 
+    std::cout << "Visited node: " << this->currentNode->coordinates.first << ", " << this->currentNode->coordinates.second << std::endl;
+
     // Add the unexplored neighbors to the exploration stack
     for (Node *neighbor : this->currentNode->neighbors)
     {
