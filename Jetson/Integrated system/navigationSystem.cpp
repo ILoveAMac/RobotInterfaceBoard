@@ -321,7 +321,7 @@ bool navigationSystem::isCellInfrontFree(std::vector<float> distSensorData)
     bool isFree = false;
     for (int i = 0; i < static_cast<int>(distSensorData.size()); i++)
     {
-        if (distSensorData[i] > 0.4 && distSensorData[i] != -1)
+        if (distSensorData[i] > 0.4 && distSensorData[i] != -1 && i != 2 && i != 3)
         {
             isFree = true;
             break;
