@@ -123,6 +123,8 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
         }
         else
         {
+            std::cout << "rotating" << std::endl;
+
             // Rotate the robot to face the correct direction
             float angle = this->getRealWorldAngle(direction);
             this->currentDirection = direction;
@@ -142,6 +144,7 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
 
 std::vector<float> navigationSystem::dijkstraExplore(std::vector<float> worldCoords, std::vector<float> distSensorData)
 {
+    std::cout << "!" << std::endl;
     // Check if we have a path to follow
     if (this->dijkstraPath.empty())
     {
