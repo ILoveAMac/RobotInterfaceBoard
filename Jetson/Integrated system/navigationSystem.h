@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <cmath>
 #include <queue>
+#include <climits>
 
 // Maximum depth for DFS in grid cells
 #define MAX_DFS_DEPTH 100

@@ -306,7 +306,7 @@ Direction navigationSystem::getOppositeDirection(Direction direction)
 bool navigationSystem::isCellInfrontFree(std::vector<float> distSensorData)
 {
     bool isFree = false;
-    for (int i = 0; i < distSensorData.size(); i++)
+    for (int i = 0; i < static_cast<int>(distSensorData.size()); i++)
     {
         if (distSensorData[i] > 0.4 && distSensorData[i] != -1)
         {
@@ -373,6 +373,8 @@ float navigationSystem::getRealWorldAngle(Direction direction)
         angle = -M_PI / 2;
         break;
     }
+
+    return angle;
 }
 
 std::pair<int, int> navigationSystem::getGridCoordinates(std::vector<float> worldCoords)
