@@ -82,6 +82,7 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
     if (this->currentNode == nextNode)
     {
         // Visit the current node
+        std::cout << "Next node: " << nextNode->coordinates.first << ", " << nextNode->coordinates.second << std::endl;
         this->visitCurrentNode();
 
         return worldCoords; // We don't need to move
@@ -249,8 +250,6 @@ void navigationSystem::visitCurrentNode()
 
     // Create the neighbors of the current node
     this->createNeighbors();
-
-    std::cout << "Visited node: " << this->currentNode->coordinates.first << ", " << this->currentNode->coordinates.second << std::endl;
 
     // Add the unexplored neighbors to the exploration stack
     for (Node *neighbor : this->currentNode->neighbors)
