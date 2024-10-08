@@ -50,8 +50,6 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
     Node *nextNode = this->explorationStack.top();
     this->explorationStack.pop();
 
-    std::cout << "TEST" << std::endl;
-
     if (nextNode->isVisited)
     {
         // Node has already been visited
@@ -62,9 +60,12 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
     int visitedNeighbors = 0;
     for (Node *neighbor : nextNode->neighbors)
     {
-        if (neighbor != nullptr && neighbor->isVisited)
+        if (neighbor != nullptr)
         {
-            visitedNeighbors++;
+            if (neighbor->isVisited)
+            {
+                visitedNeighbors++;
+            }
         }
     }
     if (visitedNeighbors >= 2)
@@ -73,6 +74,8 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
         // We skip this node
         return worldCoords;
     }
+
+    std::cout << "TEST" << std::endl;
 
     // ========== Exploration logic ==========
 
