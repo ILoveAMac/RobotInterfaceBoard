@@ -105,6 +105,7 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
                 std::vector<float> nextWorldCoords = this->getRealWorldCoordinates(nextCoords);
 
                 // Update the current node
+                std::cout << "Next node: " << nextNode->coordinates.first << ", " << nextNode->coordinates.second << std::endl;
                 this->currentNode = nextNode;
 
                 return nextWorldCoords;
