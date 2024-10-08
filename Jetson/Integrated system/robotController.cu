@@ -172,7 +172,7 @@ void robotController::moveAndDetect()
     // TODO! once poop is detected transition to the detection allignment state
 
     // Check if the navigation system is in the finish state, if so go to idle
-    if (this->navigation.getState() == NavigationState::FINISH)
+    if (this->navigation.getState() == NavigationState::FINISHED)
     {
         this->setRobotState(RobotState::IDLE);
         return;
@@ -204,7 +204,7 @@ void robotController::moveAndDetect()
     // No poop has been detected so we use the navigation algorithm to move the robot
 
     // Get the new goal position from the navigation algorithm
-    std::vector<float> goalPosition = this->navigation.exploreArea(this->robotPosition, this->distanceMeasurements);
+    std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
 
     // set the goal position for the position controller
     this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
