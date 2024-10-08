@@ -201,6 +201,12 @@ void robotController::moveAndDetect()
         return;
     }
 
+    // if the robot is still moving to a goal do not attempt to explore
+    if (pcState == State::MOVE_TO_GOAL)
+    {
+        this->updateRobotPosition();
+    }
+
     // No poop has been detected so we use the navigation algorithm to move the robot
 
     // Get the new goal position from the navigation algorithm
