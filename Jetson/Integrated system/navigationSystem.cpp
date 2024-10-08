@@ -378,8 +378,8 @@ float navigationSystem::getRealWorldAngle(Direction direction)
 std::pair<int, int> navigationSystem::getGridCoordinates(std::vector<float> worldCoords)
 {
     // Convert the real world coordinates to grid coordinates
-    int x = static_cast<int>(worldCoords[0] / GRID_SIZE);
-    int y = static_cast<int>(worldCoords[1] / GRID_SIZE);
+    int x = static_cast<int>(worldCoords[0] / MAP_GRID_SIZE);
+    int y = static_cast<int>(worldCoords[1] / MAP_GRID_SIZE);
 
     return std::pair<int, int>(x, y);
 }
@@ -387,8 +387,8 @@ std::pair<int, int> navigationSystem::getGridCoordinates(std::vector<float> worl
 std::vector<float> navigationSystem::getRealWorldCoordinates(std::pair<int, int> coords)
 {
     // convert the grid coordinates to real world coordinates
-    float x = coords.first * GRID_SIZE;
-    float y = coords.second * GRID_SIZE;
+    float x = coords.first * MAP_GRID_SIZE;
+    float y = coords.second * MAP_GRID_SIZE;
 
     return std::vector<float>{x, y};
 }

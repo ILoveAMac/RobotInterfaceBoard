@@ -13,7 +13,7 @@
 #define MAX_DFS_DEPTH 100
 
 // Grid size in meters
-#define GRID_SIZE 0.4
+#define MAP_GRID_SIZE 0.4
 
 // Node for the graph representing the operational area
 class Node
