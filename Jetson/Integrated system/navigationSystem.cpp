@@ -50,6 +50,8 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
     Node *nextNode = this->explorationStack.top();
     this->explorationStack.pop();
 
+    std::cout << "TEST" << std::endl;
+
     if (nextNode->isVisited)
     {
         // Node has already been visited
