@@ -7,6 +7,7 @@ navigationSystem::navigationSystem()
     // Create a start node at the origin
     Node *start = new Node(std::pair<int, int>(0, 0));
     this->graph.addNode(start);
+    this->currentNode = start;
 
     this->explorationStack.push(start);
 
@@ -74,8 +75,6 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
         // We skip this node
         return worldCoords;
     }
-
-    std::cout << "TEST" << std::endl;
 
     // ========== Exploration logic ==========
 
