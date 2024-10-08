@@ -107,6 +107,8 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
                 std::cout << "Next node: " << nextNode->coordinates.first << ", " << nextNode->coordinates.second << std::endl;
                 this->currentNode = nextNode;
 
+                this->explorationStack.push(nextNode);
+
                 return nextWorldCoords;
             }
             else
