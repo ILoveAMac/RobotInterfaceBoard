@@ -171,15 +171,6 @@ void robotController::moveAndDetect()
     // TODO! navigate the area while continuously detecting poop
     // TODO! once poop is detected transition to the detection allignment state
 
-    // Print current position
-
-    // Check if the navigation system is in the finish state, if so go to idle
-    if (this->navigation.getState() == NavigationState::FINISHED)
-    {
-        this->setRobotState(RobotState::IDLE);
-        return;
-    }
-
     // if the position controller is rotating the robot, dont use the ai, just update the robot position
     State pcState = positionController.getState();
     if (pcState == State::ROTATE_TO_GOAL || pcState == State::ROTATE_TO_GOAL_ORIENTATION)
@@ -187,6 +178,22 @@ void robotController::moveAndDetect()
         this->updateRobotPosition();
         this->delay(DELAY_TIME);
 
+        return;
+    }
+
+    // If the navigation system is not in the froward motion state, we do not use the ai to detect poop
+    // We still allow the navigation system to move the robot
+    if (this->navigation.getNavigationState() != NavigationState::FORWARD_MOTION)
+    {
+        // Get the new goal position from the navigation algorithm
+        std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
+
+        // set the goal position for the position controller
+        this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
+
+        // update the robot position
+        this->updateRobotPosition();
+        this->delay(DELAY_TIME);
         return;
     }
 
@@ -216,8 +223,7 @@ void robotController::moveAndDetect()
 
     // Get the new goal position from the navigation algorithm
     std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
-    std::cout << "goal pos" << goalPosition[0] << " " << goalPosition[1] << " " << goalPosition[2] << std::endl;
-    std::cout << "x " << this->robotPosition[0] << " y " << this->robotPosition[1] << " theta " << this->robotPosition[2] << std::endl;
+
     // set the goal position for the position controller
     this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
 
