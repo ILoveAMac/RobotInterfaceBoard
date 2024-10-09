@@ -228,7 +228,7 @@ navigationSystem::navigationSystem()
 
     this->state = NavigationState::MAIN_EXPLORE;
 
-    this->currentDirection = Direction::North;
+    this->currentDirection = Direction::West;
 }
 
 navigationSystem::~navigationSystem()
@@ -607,20 +607,20 @@ float navigationSystem::getRealWorldAngle(Direction direction)
 std::pair<int, int> navigationSystem::getGridCoordinates(std::vector<float> worldCoords)
 {
     // Convert the real world coordinates to grid coordinates
-    int y = static_cast<int>(worldCoords[0] / MAP_GRID_SIZE);
-    int x = static_cast<int>(worldCoords[1] / MAP_GRID_SIZE);
+    int x = static_cast<int>(worldCoords[0] / MAP_GRID_SIZE);
+    int y = static_cast<int>(worldCoords[1] / MAP_GRID_SIZE);
 
-    return std::pair<int, int>(x, y);
+    return std::pair<int, int>(y, x);
 }
 
 std::vector<float> navigationSystem::getRealWorldCoordinates(std::pair<int, int> coords, Direction dir)
 {
     // convert the grid coordinates to real world coordinates
-    float y = coords.first * MAP_GRID_SIZE;
-    float x = coords.second * MAP_GRID_SIZE;
+    float x = coords.first * MAP_GRID_SIZE;
+    float y = coords.second * MAP_GRID_SIZE;
     float angle = getRealWorldAngle(dir);
 
-    return std::vector<float>{x, y, angle};
+    return std::vector<float>{y, x, angle};
 }
 
 std::pair<int, int> navigationSystem::getNextCoordinates(Direction direction)
