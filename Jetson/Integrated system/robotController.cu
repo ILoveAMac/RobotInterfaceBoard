@@ -173,7 +173,7 @@ void robotController::moveAndDetect()
 
     // if the position controller is rotating the robot, dont use the ai, just update the robot position
     State pcState = positionController.getState();
-    if (pcState == State::ROTATE_TO_GOAL || pcState == State::ROTATE_TO_GOAL_ORIENTATION)
+    if (pcState == State::ROTATE_TO_GOAL || pcState == State::ROTATE_TO_GOAL_ORIENTATION || pcState == State::MOVE_TO_GOAL)
     {
         this->updateRobotPosition();
         this->delay(DELAY_TIME);
@@ -209,14 +209,6 @@ void robotController::moveAndDetect()
 
         this->updateRobotPosition();
 
-        return;
-    }
-
-    // if the robot is still moving to a goal do not attempt to explore
-    if (pcState == State::MOVE_TO_GOAL)
-    {
-        this->updateRobotPosition();
-        this->delay(DELAY_TIME);
         return;
     }
 
