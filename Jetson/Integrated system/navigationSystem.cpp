@@ -363,6 +363,7 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
 
 std::vector<float> navigationSystem::dijkstraExplore(std::vector<float> worldCoords, std::vector<float> distSensorData)
 {
+    std::cout << "Dijkstra exploring" << std::endl;
     // Check if we have a path to follow
     if (this->dijkstraPath.empty())
     {
