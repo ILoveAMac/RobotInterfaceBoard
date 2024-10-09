@@ -176,7 +176,7 @@ void robotController::moveAndDetect()
 
     // if the position controller is rotating the robot, dont use the ai, just update the robot position
     State pcState = positionController.getState();
-    if (pcState == State::ROTATE_TO_GOAL || pcState == State::ROTATE_TO_GOAL_ORIENTATION || pcState == State::MOVE_TO_GOAL)
+    if (pcState == State::ROTATE_TO_GOAL || pcState == State::ROTATE_TO_GOAL_ORIENTATION)
     {
         this->updateRobotPosition();
         this->delay(DELAY_TIME);
@@ -220,8 +220,13 @@ void robotController::moveAndDetect()
     // Get the new goal position from the navigation algorithm
     std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
 
-    // set the goal position for the position controller
-    this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
+    // Check if goal position should be updated
+    if (goalPosition[0] != -100 && goalPosition[1] != -100 && goalPosition[2] != -100)
+    {
+        // set the goal position for the position controller
+        this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
+    }
+    // Else we do not update the goal position, the robot is still moving to the previous goal position and has free space to move
 
     // update the robot position
     this->updateRobotPosition();
