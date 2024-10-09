@@ -1,6 +1,6 @@
 #include "navigationSystem.h"
 
-navigationSystem::navigationSystem(positionController *positionController)
+navigationSystem::navigationSystem()
 {
     // Set navigation state to forward
     navigationState = NavigationState::FORWARD;
@@ -139,6 +139,11 @@ std::vector<float> navigationSystem::attemptToPassObstacleState(std::vector<floa
 NavigationState navigationSystem::getNavigationState()
 {
     return this->navigationState;
+}
+
+void navigationSystem::setPositionController(positionController *posController)
+{
+    this->posController = posController;
 }
 
 bool navigationSystem::isForwardMotionPossible(std::vector<float> distMeasurements)

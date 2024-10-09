@@ -31,13 +31,16 @@ enum class TurnDirection
 class navigationSystem
 {
 public:
-    navigationSystem(positionController *positionController);
+    navigationSystem();
     ~navigationSystem();
 
     std::vector<float> explore(std::vector<float> robotPosition, std::vector<float> distMeasurements);
 
     // Function to get the navigation state
     NavigationState getNavigationState();
+
+    // Function to set the position controller
+    void setPositionController(positionController *posController);
 
 private:
     // Functions for the state machine
