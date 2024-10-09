@@ -17,21 +17,6 @@ navigationSystem::~navigationSystem()
 
 std::vector<float> navigationSystem::explore(std::vector<float> robotPosition, std::vector<float> distMeasurements)
 {
-    // Check if the position controller is still moving the robot forward
-    if (this->posController->getState() == State::MOVE_TO_GOAL)
-    {
-        // Check if the path infront of the robot is clear
-        if (!isForwardMotionPossible(distMeasurements))
-        {
-            // If the path is not clear we go to the avoid obstacle state
-            navigationState = NavigationState::AVOID_OBSTACLE;
-            return avoidObstacleState(robotPosition, distMeasurements);
-        }
-
-        // Path is clear we continue moving forward
-        return {-100, -100, -100}; // Indicates to caller to not update the goal position
-    }
-
     switch (navigationState)
     {
     case NavigationState::FORWARD:
