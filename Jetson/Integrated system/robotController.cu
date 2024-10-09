@@ -69,7 +69,7 @@ void robotController::update()
     this->robotPosition = getRobotPosition();
 
     // get the distance measurements
-    // this->distanceMeasurements = getDistanceMeasurements();
+    this->distanceMeasurements = getDistanceMeasurements();
 
     // Capture and pre-process an image from the camera
     captureAndPreProcessImage();
