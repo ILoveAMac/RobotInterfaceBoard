@@ -229,6 +229,7 @@ void robotController::moveAndDetect()
 
     // update the robot position
     this->updateRobotPosition();
+    this->delay(DELAY_TIME);
 }
 
 // This function will allign the robot with the poop once it has been detected
