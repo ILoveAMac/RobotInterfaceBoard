@@ -374,8 +374,8 @@ std::vector<float> navigationSystem::dijkstraExplore(std::vector<float> worldCoo
     }
 
     // Get the next coordinates in the path
-    std::pair<int, int> nextCoords = this->dijkstraPath.front();
-    this->dijkstraPath.erase(this->dijkstraPath.begin());
+    std::pair<int, int> nextCoords = this->dijkstraPath.back();
+    this->dijkstraPath.erase(this->dijkstraPath.end() - 1);
 
     // Get the node corresponding to nextCoords
     Node *nextNode = this->graph.getNode(nextCoords);
@@ -390,6 +390,7 @@ std::vector<float> navigationSystem::dijkstraExplore(std::vector<float> worldCoo
     // Check if the next node is adjacent
     if (!this->isAdjacent(this->currentNode, nextNode))
     {
+        std::cout << "Nodes not adjacent" << std::endl;
         // Nodes are not adjacent, re-plan path
         this->dijkstraPath = this->dijkstra(this->currentNode, this->targetNode);
         return worldCoords;
