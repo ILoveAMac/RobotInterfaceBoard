@@ -146,6 +146,7 @@ bool navigationSystem::isForwardMotionPossible(std::vector<float> distMeasuremen
         if (distMeasurements[i] < OBSTACLE_DETECTION_DISTANCE && distMeasurements[i] != -1)
         {
             forwardPossible = false;
+            std::cout << "Obstacle detected at distance: " << distMeasurements[i] << std::endl;
             break;
         }
     }
