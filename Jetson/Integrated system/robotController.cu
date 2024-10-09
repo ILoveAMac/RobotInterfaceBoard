@@ -183,7 +183,7 @@ void robotController::moveAndDetect()
 
     // If the navigation system is not in the froward motion state, we do not use the ai to detect poop
     // We still allow the navigation system to move the robot
-    if (this->navigation.getNavigationState() != NavigationState::FORWARD_MOTION)
+    if (this->navigation.getNavigationState() != NavigationState::FORWARD)
     {
         // Get the new goal position from the navigation algorithm
         std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
