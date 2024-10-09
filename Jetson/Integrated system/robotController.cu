@@ -173,7 +173,7 @@ void robotController::moveAndDetect()
 
     // if the position controller is rotating the robot, dont use the ai, just update the robot position
     State pcState = positionController.getState();
-    if (pcState == State::ROTATE_TO_GOAL || pcState == State::ROTATE_TO_GOAL_ORIENTATION || pcState == State::MOVE_TO_GOAL)
+    if (pcState == State::ROTATE_TO_GOAL || pcState == State::ROTATE_TO_GOAL_ORIENTATION)
     {
         this->updateRobotPosition();
         this->delay(DELAY_TIME);
@@ -216,6 +216,7 @@ void robotController::moveAndDetect()
     if (pcState == State::MOVE_TO_GOAL)
     {
         this->updateRobotPosition();
+        this->delay(DELAY_TIME);
         return;
     }
 
@@ -229,7 +230,6 @@ void robotController::moveAndDetect()
 
     // update the robot position
     this->updateRobotPosition();
-    this->delay(DELAY_TIME);
 }
 
 // This function will allign the robot with the poop once it has been detected
