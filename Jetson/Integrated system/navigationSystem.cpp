@@ -367,6 +367,7 @@ std::vector<float> navigationSystem::dijkstraExplore(std::vector<float> worldCoo
     // Check if we have a path to follow
     if (this->dijkstraPath.empty())
     {
+        std::cout << "No path found" << std::endl;
         // No path available, switch back to main exploration
         this->state = NavigationState::MAIN_EXPLORE;
         return worldCoords;
