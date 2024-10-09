@@ -141,20 +141,14 @@ NavigationState navigationSystem::getNavigationState()
 bool navigationSystem::isForwardMotionPossible(std::vector<float> distMeasurements)
 {
     bool forwardPossible = true;
-    // for (int i = 0; i < distMeasurements.size(); i++)
-    // {
-    //     if (distMeasurements[i] < OBSTACLE_DETECTION_DISTANCE && distMeasurements[i] != -1)
-    //     {
-    //         forwardPossible = false;
-    //         std::cout << "Obstacle detected at distance: " << distMeasurements[i] << std::endl;
-    //         break;
-    //     }
-    // }
-
-    if (distMeasurements[1] < OBSTACLE_DETECTION_DISTANCE && distMeasurements[1] != -1)
+    for (int i = 0; i < distMeasurements.size(); i++)
     {
-        forwardPossible = false;
-        std::cout << "Obstacle detected at distance: " << distMeasurements[1] << std::endl;
+        if (distMeasurements[i] < OBSTACLE_DETECTION_DISTANCE && distMeasurements[i] != -1)
+        {
+            forwardPossible = false;
+            std::cout << "Obstacle detected at distance: " << distMeasurements[i] << std::endl;
+            break;
+        }
     }
 
     return forwardPossible;
