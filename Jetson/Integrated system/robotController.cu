@@ -5,7 +5,7 @@ robotController::robotController() : aiHelper(),
                                      visualServoing(IMAGE_HEIGHT, IMAGE_WIDTH),
                                      positionController(C_KP, C_KA, C_GOAL_TOLERANCE, C_ANGLE_TOLERANCE),
                                      serial(USB_CONNECTION, BAUD_RATE),
-                                     cap(IMAGE_CAPTURE_DEVICE), navigation(this->positionController)
+                                     cap(IMAGE_CAPTURE_DEVICE), navigation(this->& positionController)
 {
     // Set robot to idle state
     this->robotState = RobotState::IDLE;
