@@ -184,21 +184,21 @@ void robotController::moveAndDetect()
         return;
     }
 
-    // If the navigation system is not in the froward motion state, we do not use the ai to detect poop
-    // We still allow the navigation system to move the robot
-    if (this->navigation.getNavigationState() != NavigationState::FORWARD)
-    {
-        // Get the new goal position from the navigation algorithm
-        std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
+    // // If the navigation system is not in the froward motion state, we do not use the ai to detect poop
+    // // We still allow the navigation system to move the robot
+    // if (this->navigation.getNavigationState() != NavigationState::FORWARD)
+    // {
+    //     // Get the new goal position from the navigation algorithm
+    //     std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
 
-        // set the goal position for the position controller
-        this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
+    //     // set the goal position for the position controller
+    //     this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
 
-        // update the robot position
-        this->updateRobotPosition();
-        this->delay(DELAY_TIME);
-        return;
-    }
+    //     // update the robot position
+    //     this->updateRobotPosition();
+    //     this->delay(DELAY_TIME);
+    //     return;
+    // }
 
     // During forward motion or when stationary we can use the ai to detect poop
     auto bboxes = getBoundingBoxesAndDraw();
