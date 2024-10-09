@@ -6,7 +6,7 @@
 #include <iostream>
 
 // in meters
-#define FORWRD_MOVE_DISTANCE 1.0
+#define FORWRD_MOVE_DISTANCE 0.3
 
 #define OBSTACLE_DETECTION_DISTANCE 0.3
 
