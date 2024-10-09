@@ -228,7 +228,7 @@ navigationSystem::navigationSystem()
 
     this->state = NavigationState::MAIN_EXPLORE;
 
-    this->currentDirection = Direction::West;
+    this->currentDirection = Direction::North;
 }
 
 navigationSystem::~navigationSystem()
@@ -588,16 +588,16 @@ float navigationSystem::getRealWorldAngle(Direction direction)
     switch (direction)
     {
     case Direction::North:
-        angle = 0.0;
+        angle = M_PI / 2;
         break;
     case Direction::East:
-        angle = -M_PI / 2;
-        break;
-    case Direction::South:
         angle = M_PI;
         break;
+    case Direction::South:
+        angle = -M_PI / 2;
+        break;
     case Direction::West:
-        angle = M_PI / 2;
+        angle = 0;
         break;
     }
 
