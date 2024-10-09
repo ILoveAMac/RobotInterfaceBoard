@@ -450,9 +450,12 @@ std::vector<float> navigationSystem::dijkstraExplore(std::vector<float> worldCoo
         }
         else
         {
+            std::pair<int, int> nextCoords = this->dijkstraPath.front();
+            this->dijkstraPath.erase(this->dijkstraPath.begin());
+
             std::cout << "Path replanned after obstacle" << std::endl;
             // Continue with the new path
-            return worldCoords;
+            return this->getRealWorldCoordinates(nextCoords, this->currentDirection);
         }
     }
 }
