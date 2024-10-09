@@ -5,6 +5,8 @@
 #include <cmath>
 #include <iostream>
 
+#include "positionController.h"
+
 // in meters
 #define FORWRD_MOVE_DISTANCE 0.3
 
@@ -29,7 +31,7 @@ enum class TurnDirection
 class navigationSystem
 {
 public:
-    navigationSystem();
+    navigationSystem(positionController *positionController);
     ~navigationSystem();
 
     std::vector<float> explore(std::vector<float> robotPosition, std::vector<float> distMeasurements);
@@ -65,5 +67,8 @@ private:
     // Distance traveled since the last obstacle was detected
     // When this exceeds some threshold, the robot turns back
     float distanceSinceLastObstacle;
+
+    // Position controller object
+    positionController *posController;
 };
 #endif // NAVIGATION_SYSTEM_H

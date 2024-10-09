@@ -1,6 +1,6 @@
 #include "navigationSystem.h"
 
-navigationSystem::navigationSystem()
+navigationSystem::navigationSystem(positionController *positionController)
 {
     // Set navigation state to forward
     navigationState = NavigationState::FORWARD;
@@ -9,6 +9,9 @@ navigationSystem::navigationSystem()
     turnDirection = TurnDirection::LEFT;
 
     distanceSinceLastObstacle = 0.0;
+
+    // Set the position controller
+    this->posController = positionController;
 }
 
 navigationSystem::~navigationSystem()
