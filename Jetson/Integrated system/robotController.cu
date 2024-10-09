@@ -52,8 +52,8 @@ robotController::robotController() : aiHelper(),
 
     this->numPoopsCollected = 0;
 
-    // Pass the position controller to the navigation algorithm
-    this->navigation.setPositionController(&this->positionController);
+    // // Pass the position controller to the navigation algorithm
+    // this->navigation.setPositionController(&this->positionController);
 }
 
 robotController::~robotController()
@@ -171,9 +171,6 @@ void robotController::idle()
 
 void robotController::moveAndDetect()
 {
-    // TODO! navigate the area while continuously detecting poop
-    // TODO! once poop is detected transition to the detection allignment state
-
     // if the position controller is rotating the robot, dont use the ai, just update the robot position
     State pcState = positionController.getState();
     if (pcState == State::ROTATE_TO_GOAL || pcState == State::ROTATE_TO_GOAL_ORIENTATION || pcState == State::MOVE_TO_GOAL)
@@ -264,6 +261,15 @@ void robotController::detectionAllignment()
 
 void robotController::pickup()
 {
+    // Check if there is free space for the pickup
+    if (!isThereFreeSpaceForPickup())
+    {
+        // Set the goal position to the position before pickup
+        this->positionController.setGoal(this->robotPositionBeforePickup[0], this->robotPositionBeforePickup[1], this->robotPositionBeforePickup[2]);
+        this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
+        return;
+    }
+
     std::cout << "Picking up poop" << std::endl;
     this->serial.requestAndWaitForPoopPickup();
 
@@ -315,7 +321,7 @@ void robotController::pickup()
 
     // if there are still poop in the frame, go back to detection allignment
     // if space premits only. Dist sense 1 and 2 shoud be -1 or greater than 0.3
-    if (bboxes.size() > 0 && (this->distanceMeasurements[0] > 0.3 || this->distanceMeasurements[0] == -1) && (this->distanceMeasurements[1] > 0.3 || this->distanceMeasurements[1] == -1))
+    if (bboxes.size() > 0 && isThereFreeSpaceForPickup())
     {
         this->setRobotState(RobotState::DETECTION_ALLIGNMENT);
     }
@@ -493,6 +499,39 @@ std::vector<float> robotController::getDistanceMeasurements()
     delay(5);
 
     return distances;
+}
+
+bool robotController::isThereFreeSpaceForPickup()
+{
+    bool freeSpace = true;
+
+    // Sensor 1
+    if (this->distanceMeasurements[0] < 0.3 && this->distanceMeasurements[0] != -1)
+    {
+        freeSpace = false;
+    }
+
+    // Sensor 2
+    if (this->distanceMeasurements[1] < 0.3 && this->distanceMeasurements[1] != -1)
+    {
+        freeSpace = false;
+    }
+
+    // Sensor 3
+    if (this->distanceMeasurements[2] < 0.2 && this->distanceMeasurements[2] != -1)
+    {
+        freeSpace = false;
+    }
+
+    // Sensor 4
+    if (this->distanceMeasurements[3] < 0.2 && this->distanceMeasurements[3] != -1)
+    {
+        freeSpace = false;
+    }
+
+    // Sensor 5 is not used for this check, as the poop may trigger the sensor
+
+    return freeSpace;
 }
 
 void robotController::openBucket()
