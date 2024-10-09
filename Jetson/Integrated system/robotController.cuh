@@ -5,6 +5,12 @@
 #include <chrono>
 #include <opencv2/opencv.hpp>
 
+// Threading related includes
+#include <thread>
+#include <atomic>
+#include <mutex>
+#include <condition_variable>
+
 #include "serialHelper.h"
 #include "visualServoing.h"
 #include "positionController.h"
@@ -45,6 +51,7 @@ enum class RobotState
     MOVE_AND_DETECT,                     // In this state the robot uses a navigation algorithm to cover an area, it also detects poop
     DETECTION_ALLIGNMENT,                // In this state the robot alligns itself to the poop
     PICKUP,                              // In this state the robot preforms the poop pickup procedure
+    WAIT_FOR_PICKUP_VERIFICATION,        // In this state the robot checks again with the AI if the poop is still there
     MOVE_BACK_TO_POSITION_BEFORE_PICKUP, // In this state the robot moves back to the position before the pickup,
                                          // such that the navigation algorithm can continue can resume
     SEARCH_FOR_MARKER,                   // In this state the robot searches for a marker
@@ -75,6 +82,7 @@ private:
     void moveAndDetect();
     void detectionAllignment();
     void pickup();
+    void waitForPickupVerification();
     void moveBackToPositionBeforePickup();
     void searchForMarker();
     void navigateToMarker();
@@ -109,6 +117,19 @@ private:
     cv::Mat frame;
     cv::Mat resized_frame;
     std::vector<cv::Mat> channels;
+
+    // Threading-related members
+    std::thread aiThread;
+    std::atomic<bool> aiThreadRunning;
+    std::atomic<bool> poopDetected;
+    std::atomic<bool> newDetectionAvailable;
+    std::mutex dataMutex;
+    cv::Mat latestFrame;
+    std::vector<std::vector<float>> detectedBboxes;
+
+    // Threading functions
+    void aiProcessingLoop();
+    cv::Mat preprocessFrame(const cv::Mat &frame);
 
     // === Variables ===
     std::vector<float> robotPosition;

@@ -52,8 +52,12 @@ robotController::robotController() : aiHelper(),
 
     this->numPoopsCollected = 0;
 
-    // // Pass the position controller to the navigation algorithm
-    // this->navigation.setPositionController(&this->positionController);
+    // Initialize atomic flags
+    aiThreadRunning = true;
+    poopDetected = false;
+
+    // Start the AI processing thread
+    aiThread = std::thread(&robotController::aiProcessingLoop, this);
 }
 
 robotController::~robotController()
@@ -63,6 +67,15 @@ robotController::~robotController()
 
     // Free host memory
     free(this->host_image);
+
+    // Signal the AI thread to stop
+    aiThreadRunning = false;
+
+    // Wait for the AI thread to finish
+    if (aiThread.joinable())
+    {
+        aiThread.join();
+    }
 }
 
 void robotController::update()
@@ -73,9 +86,6 @@ void robotController::update()
 
     // get the distance measurements
     this->distanceMeasurements = getDistanceMeasurements();
-
-    // Capture and pre-process an image from the camera
-    captureAndPreProcessImage();
     // === END: Area to put code that should run every loop iteration ===
 
     switch (this->robotState)
@@ -91,6 +101,9 @@ void robotController::update()
         break;
     case RobotState::PICKUP:
         pickup();
+        break;
+    case RobotState::WAIT_FOR_PICKUP_VERIFICATION:
+        waitForPickupVerification();
         break;
     case RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP:
         moveBackToPositionBeforePickup();
@@ -112,21 +125,39 @@ void robotController::update()
     }
 
     // START: Area to put code that should run after every loop iteration
-    // Display the captured image
-    cv::cvtColor(this->resized_frame, this->resized_frame, cv::COLOR_RGB2BGR);
-    aiHelperUtils::drawSensorReadingsOnFrame(this->resized_frame, this->distanceMeasurements);
+    // Fetch the latest frame and detection results
+    cv::Mat displayFrame;
+    std::vector<std::vector<float>> bboxes;
+    {
+        std::lock_guard<std::mutex> lock(dataMutex);
+        if (!latestFrame.empty())
+        {
+            displayFrame = latestFrame.clone();
+            bboxes = detectedBboxes;
+        }
+    }
 
-    // Update the system state string
-    updateSystemStateString();
-    aiHelperUtils::drawSystemStateOnFrame(this->resized_frame, this->stateString);
+    // Draw bounding boxes and other info
+    if (!displayFrame.empty())
+    {
+        displayFrame = aiHelper.drawBoundingBoxes(displayFrame, bboxes);
+        aiHelperUtils::drawSensorReadingsOnFrame(displayFrame, this->distanceMeasurements);
 
-    cv::imshow("Detection", this->resized_frame);
-    // Wait key
-    if (cv::waitKey(1) == 'c')
+        // Update the system state string
+        updateSystemStateString();
+        aiHelperUtils::drawSystemStateOnFrame(displayFrame, this->stateString);
+
+        // Display the frame
+        cv::imshow("Detection", displayFrame);
+    }
+
+    // Handle keyboard input or other events
+    char key = cv::waitKey(1);
+    if (key == 'c')
     {
         // Save the current image
         std::string filename = "cal/captured_image_" + std::to_string(this->image_counter) + ".png";
-        if (cv::imwrite(filename, 255 * this->resized_frame))
+        if (cv::imwrite(filename, displayFrame))
         {
             std::cout << "Image saved: " << filename << std::endl;
             image_counter++;
@@ -136,13 +167,17 @@ void robotController::update()
             std::cerr << "Error: Could not save image" << std::endl;
         }
     }
-
-    // Check if the o key is pressed, if so open the bucket
-    if (cv::waitKey(1) == 'o')
+    else if (key == 'o')
     {
+        // Open the bucket
         std::cout << "Bucket opened" << std::endl;
         openBucket(); // opens the bucket, waits for 5 seconds then closes it
         std::cout << "Bucket closed" << std::endl;
+    }
+    else if (key == 's')
+    {
+        // Start the robot
+        this->setRobotState(RobotState::MOVE_AND_DETECT);
     }
 
     // END: Area to put code that should run after every loop iteration
@@ -171,57 +206,19 @@ void robotController::idle()
 
 void robotController::moveAndDetect()
 {
-    // if the position controller is rotating the robot, dont use the ai, just update the robot position
-    State pcState = positionController.getState();
-    if (pcState == State::ROTATE_TO_GOAL || pcState == State::ROTATE_TO_GOAL_ORIENTATION || pcState == State::MOVE_TO_GOAL)
-    {
-        this->updateRobotPosition();
-        this->delay(DELAY_TIME);
-
-        return;
-    }
-
-    // During forward motion or when stationary we can use the ai to detect poop
-    auto bboxes = getBoundingBoxesAndDraw();
-    if (bboxes.size() > 0) // If detected go to the detection allignment state
-    {
-        // Set the robot state to detection allignment
-        this->setRobotState(RobotState::DETECTION_ALLIGNMENT);
-
-        // Store the current robot position before the pickup
-        this->robotPositionBeforePickup = this->robotPosition;
-
-        this->updateRobotPosition();
-
-        return;
-    }
-
-    // No poop has been detected so we use the navigation algorithm to move the robot
-
-    // Get the new goal position from the navigation algorithm
-    std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
-
-    // set the goal position for the position controller
-    this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
-
-    // update the robot position
-    this->updateRobotPosition();
-}
-
-// This function will allign the robot with the poop once it has been detected
-// The function will use the visual servoing algorithm class
-// The function will compute the updated desired robot position and orientation
-// The updated position and orientation will be sent to the position controller
-// The function will continously use the ai to detect the poop, but during rotations the detection will be disabled
-void robotController::detectionAllignment()
-{
     // Check if the position controller is busy with a rotation
-    if (positionController.getState() != State::ROTATE_TO_GOAL && positionController.getState() != State::ROTATE_TO_GOAL_ORIENTATION && positionController.getState() != State::MOVE_TO_GOAL)
+    if (positionController.getState() != State::ROTATE_TO_GOAL &&
+        positionController.getState() != State::ROTATE_TO_GOAL_ORIENTATION &&
+        positionController.getState() != State::MOVE_TO_GOAL)
     {
-        // Detect poop with ai
-        auto bboxes = getBoundingBoxesAndDraw();
+        // Retrieve AI detection results from the AI thread
+        std::vector<std::vector<float>> bboxes;
+        {
+            std::lock_guard<std::mutex> lock(dataMutex);
+            bboxes = detectedBboxes;
+        }
 
-        if (bboxes.size() > 0)
+        if (!bboxes.empty())
         {
             std::vector<float> bbox = aiHelperUtils::getBoindingBoxWithLargestArea(bboxes);
 
@@ -245,11 +242,14 @@ void robotController::detectionAllignment()
             // Go back to search pattern, it seems we have lost the poop
 
             // Set the goal position to the position before pickup
-            this->positionController.setGoal(this->robotPositionBeforePickup[0], this->robotPositionBeforePickup[1], this->robotPositionBeforePickup[2]);
+            this->positionController.setGoal(this->robotPositionBeforePickup[0],
+                                             this->robotPositionBeforePickup[1],
+                                             this->robotPositionBeforePickup[2]);
 
             this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
         }
-        // updtate the robot position
+
+        // Update the robot position
         this->updateRobotPosition();
     }
     else
@@ -314,25 +314,52 @@ void robotController::pickup()
 
     this->serial.requestAndWaitForPickupLift();
 
-    // Detect poop with ai
-    captureAndPreProcessImage();
-    auto bboxes = getBoundingBoxesAndDraw();
-    this->distanceMeasurements = getDistanceMeasurements();
+    this->setRobotState(RobotState::WAIT_FOR_PICKUP_VERIFICATION);
+}
 
-    // if there are still poop in the frame, go back to detection allignment
-    // if space premits only. Dist sense 1 and 2 shoud be -1 or greater than 0.3
-    if (bboxes.size() > 0 && isThereFreeSpaceForPickup())
+void robotController::waitForPickupVerification()
+{
+    // Check if new AI detection results are available
+    bool detectionAvailable = false;
+    std::vector<std::vector<float>> bboxes;
     {
-        this->setRobotState(RobotState::DETECTION_ALLIGNMENT);
+        std::lock_guard<std::mutex> lock(dataMutex);
+        detectionAvailable = newDetectionAvailable; // A flag set by the AI thread
+        if (detectionAvailable)
+        {
+            bboxes = detectedBboxes;
+            newDetectionAvailable = false; // Reset the flag
+        }
+    }
+
+    if (detectionAvailable)
+    {
+        // Update distance measurements
+        this->distanceMeasurements = getDistanceMeasurements();
+
+        // Check if there are still poop in the frame and if space permits
+        if (!bboxes.empty() && isThereFreeSpaceForPickup())
+        {
+            // Transition back to DETECTION_ALLIGNMENT state
+            this->setRobotState(RobotState::DETECTION_ALLIGNMENT);
+        }
+        else
+        {
+            // Set goal position to the position before pickup
+            this->positionController.setGoal(
+                this->robotPositionBeforePickup[0],
+                this->robotPositionBeforePickup[1],
+                this->robotPositionBeforePickup[2]);
+            this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
+
+            // Increase the number of poops picked up
+            this->numPoopsCollected++;
+        }
     }
     else
     {
-        // Set goal position to the position before pickup
-        this->positionController.setGoal(this->robotPositionBeforePickup[0], this->robotPositionBeforePickup[1], this->robotPositionBeforePickup[2]);
-        this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
-
-        // Increase the number of poops picked up
-        this->numPoopsCollected++;
+        // No new detection results yet, wait briefly
+        this->delay(10);
     }
 }
 
@@ -624,4 +651,69 @@ void robotController::updateSystemStateString()
 void robotController::delay(int ms)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+}
+
+// This is a thread function that runs the AI processing loop
+// It runs in a separate thread to prevent blocking the main thread as the AI is slow
+void robotController::aiProcessingLoop()
+{
+    while (aiThreadRunning)
+    {
+        // Capture an image from the camera
+        cv::Mat frame;
+        {
+            std::lock_guard<std::mutex> lock(dataMutex);
+            cap >> frame; // Ensure exclusive access if cap is used in multiple threads
+        }
+
+        if (frame.empty())
+        {
+            std::cerr << "Error: Captured empty frame" << std::endl;
+            continue;
+        }
+
+        // Preprocess the image
+        cv::Mat preprocessedFrame = preprocessFrame(frame);
+
+        // Run AI detection
+        auto bboxes = yolo.getBoxPredictions(this->input_image);
+
+        // Update shared variables safely
+        {
+            std::lock_guard<std::mutex> lock(dataMutex);
+            this->latestFrame = frame.clone(); // Store the original frame
+            this->detectedBboxes = bboxes;
+            this->poopDetected = !bboxes.empty();
+            newDetectionAvailable = true;
+        }
+
+        // Sleep briefly to prevent high CPU usage
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+}
+
+cv::Mat robotController::preprocessFrame(const cv::Mat &frame)
+{
+    cv::Mat resizedFrame;
+    cv::resize(frame, resizedFrame, cv::Size(448, 448));
+    cv::cvtColor(resizedFrame, resizedFrame, cv::COLOR_BGR2RGB);
+    resizedFrame.convertTo(resizedFrame, CV_32F, 1.0 / 255.0);
+    cv::split(resizedFrame, this->channels);
+
+    // Copy the data to the host_image
+    for (int c = 0; c < 3; ++c)
+    {
+        for (int h = 0; h < 448; ++h)
+        {
+            for (int w = 0; w < 448; ++w)
+            {
+                this->host_image[c * 448 * 448 + h * 448 + w] = this->channels[c].at<float>(h, w);
+            }
+        }
+    }
+
+    // Transfer the data from host to device
+    cudaMemcpy(this->input_image, this->host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
+
+    return resizedFrame;
 }
