@@ -363,7 +363,6 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
 
 std::vector<float> navigationSystem::dijkstraExplore(std::vector<float> worldCoords, std::vector<float> distSensorData)
 {
-    std::cout << "!" << std::endl;
     // Check if we have a path to follow
     if (this->dijkstraPath.empty())
     {
@@ -391,7 +390,7 @@ std::vector<float> navigationSystem::dijkstraExplore(std::vector<float> worldCoo
     {
         // Nodes are not adjacent, re-plan path
         this->dijkstraPath = this->dijkstra(this->currentNode, this->targetNode);
-        return this->dijkstraExplore(worldCoords, distSensorData);
+        return worldCoords;
     }
 
     // Get the direction from the current node to the next node
@@ -455,7 +454,7 @@ std::vector<float> navigationSystem::dijkstraExplore(std::vector<float> worldCoo
         else
         {
             // Continue with the new path
-            return this->dijkstraExplore(worldCoords, distSensorData);
+            return worldCoords;
         }
     }
 }
