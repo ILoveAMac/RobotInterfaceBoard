@@ -532,7 +532,7 @@ bool navigationSystem::isCellInfrontFree(std::vector<float> distSensorData)
     bool isFree = true;
     for (int i = 0; i < static_cast<int>(distSensorData.size()); i++)
     {
-        if (distSensorData[i] < 0.2 && distSensorData[i] != -1)
+        if (distSensorData[i] < 0.4 && distSensorData[i] != -1)
         {
             isFree = false;
             break;
@@ -613,8 +613,8 @@ std::pair<int, int> navigationSystem::getGridCoordinates(std::vector<float> worl
 std::vector<float> navigationSystem::getRealWorldCoordinates(std::pair<int, int> coords, Direction dir)
 {
     // convert the grid coordinates to real world coordinates
-    float x = coords.first * MAP_GRID_SIZE + MAP_GRID_SIZE / 2;
-    float y = coords.second * MAP_GRID_SIZE + MAP_GRID_SIZE / 2;
+    float x = coords.first * MAP_GRID_SIZE;
+    float y = coords.second * MAP_GRID_SIZE;
     float angle = getRealWorldAngle(dir);
 
     return std::vector<float>{x, y, angle};
