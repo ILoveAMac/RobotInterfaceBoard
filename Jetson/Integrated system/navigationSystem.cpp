@@ -356,6 +356,8 @@ std::vector<float> navigationSystem::mainExplore(std::vector<float> worldCoords,
     // The node is not adjacent to the current node so we should use dijkstraExplore to attempt to navigate to the node
     this->state = NavigationState::DIJKSTRA;
     this->targetNode = nextNode;
+
+    this->dijkstraPath = this->dijkstra(this->currentNode, this->targetNode);
     return this->dijkstraExplore(worldCoords, distSensorData);
 }
 
