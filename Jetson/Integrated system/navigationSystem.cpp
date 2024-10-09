@@ -27,6 +27,10 @@ std::vector<float> navigationSystem::explore(std::vector<float> robotPosition, s
         return stopState(robotPosition, distMeasurements);
     case NavigationState::AVOID_OBSTACLE:
         return avoidObstacleState(robotPosition, distMeasurements);
+    case NavigationState::MOVE_AWAY_FROM_OBSTACLE:
+        return moveAwayFromObstacleState(robotPosition, distMeasurements);
+    case NavigationState::ATTEMPT_TO_PASS_OBSTACLE:
+        return attemptToPassObstacleState(robotPosition, distMeasurements);
     default:
         std::cout << "Invalid Navigation State" << std::endl;
         return stopState(robotPosition, distMeasurements);
