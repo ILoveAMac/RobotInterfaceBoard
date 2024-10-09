@@ -9,9 +9,6 @@ navigationSystem::navigationSystem()
     turnDirection = TurnDirection::LEFT;
 
     distanceSinceLastObstacle = 0.0;
-
-    // Set the position controller
-    this->posController = positionController;
 }
 
 navigationSystem::~navigationSystem()
