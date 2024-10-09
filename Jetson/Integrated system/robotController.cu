@@ -259,6 +259,61 @@ void robotController::moveAndDetect()
     }
 }
 
+void robotController::detectionAllignment()
+{
+    // Check if the position controller is busy with a rotation
+    if (positionController.getState() != State::ROTATE_TO_GOAL &&
+        positionController.getState() != State::ROTATE_TO_GOAL_ORIENTATION &&
+        positionController.getState() != State::MOVE_TO_GOAL)
+    {
+        // Retrieve AI detection results from the AI thread
+        std::vector<std::vector<float>> bboxes;
+        {
+            std::lock_guard<std::mutex> lock(dataMutex);
+            bboxes = detectedBboxes;
+        }
+
+        if (!bboxes.empty())
+        {
+            std::vector<float> bbox = aiHelperUtils::getBoindingBoxWithLargestArea(bboxes);
+
+            // Use the visual servoing algorithm to compute the updated desired robot position and orientation
+            std::vector<float> updatedPosition = this->visualServoing.calculateControlPosition(bbox, this->robotPosition, this->positionController);
+
+            if (this->visualServoing.getCurrentState() == servoingState::STOP)
+            {
+                this->visualServoing.resetState();
+
+                // Move to the pickup state
+                this->setRobotState(RobotState::PICKUP);
+                return;
+            }
+
+            // Set the setpoint for the position controller
+            this->positionController.setGoal(updatedPosition[0], updatedPosition[1], updatedPosition[2]);
+        }
+        else
+        {
+            // Go back to search pattern, it seems we have lost the poop
+
+            // Set the goal position to the position before pickup
+            this->positionController.setGoal(this->robotPositionBeforePickup[0],
+                                             this->robotPositionBeforePickup[1],
+                                             this->robotPositionBeforePickup[2]);
+
+            this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
+        }
+
+        // Update the robot position
+        this->updateRobotPosition();
+    }
+    else
+    {
+        this->updateRobotPosition();
+        this->delay(DELAY_TIME);
+    }
+}
+
 void robotController::pickup()
 {
     // Check if there is free space for the pickup
