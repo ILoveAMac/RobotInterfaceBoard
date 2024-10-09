@@ -420,6 +420,7 @@ std::vector<float> navigationSystem::dijkstraExplore(std::vector<float> worldCoo
         // Continue along the path if there are more nodes
         if (!this->dijkstraPath.empty())
         {
+            std::cout << "Next node: " << nextNode->coordinates.first << ", " << nextNode->coordinates.second << std::endl;
             // Proceed to the next node in the path
             return nextWorldCoords;
         }
@@ -442,12 +443,14 @@ std::vector<float> navigationSystem::dijkstraExplore(std::vector<float> worldCoo
 
         if (this->dijkstraPath.empty())
         {
+            std::cout << "No path found after obstacle" << std::endl;
             // No path found, switch back to main exploration
             this->state = NavigationState::MAIN_EXPLORE;
             return worldCoords;
         }
         else
         {
+            std::cout << "Path replanned after obstacle" << std::endl;
             // Continue with the new path
             return worldCoords;
         }
