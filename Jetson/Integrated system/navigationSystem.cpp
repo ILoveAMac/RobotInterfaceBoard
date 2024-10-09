@@ -382,19 +382,11 @@ std::vector<float> navigationSystem::dijkstraExplore(std::vector<float> worldCoo
 
     if (nextNode == nullptr)
     {
+        std::cout << "Node does not exist" << std::endl;
         // Node does not exist, switch back to main exploration
         this->state = NavigationState::MAIN_EXPLORE;
         return worldCoords;
     }
-
-    // // Check if the next node is adjacent
-    // if (!this->isAdjacent(this->currentNode, nextNode))
-    // {
-    //     std::cout << "Nodes not adjacent" << std::endl;
-    //     // Nodes are not adjacent, re-plan path
-    //     this->dijkstraPath = this->dijkstra(this->currentNode, this->targetNode);
-    //     return worldCoords;
-    // }
 
     // Get the direction from the current node to the next node
     Direction direction = this->getDirectionFromAToB(this->currentNode, nextNode);
@@ -621,8 +613,8 @@ std::pair<int, int> navigationSystem::getGridCoordinates(std::vector<float> worl
 std::vector<float> navigationSystem::getRealWorldCoordinates(std::pair<int, int> coords, Direction dir)
 {
     // convert the grid coordinates to real world coordinates
-    float x = coords.first * MAP_GRID_SIZE;
-    float y = coords.second * MAP_GRID_SIZE;
+    float x = coords.first * MAP_GRID_SIZE + MAP_GRID_SIZE / 2;
+    float y = coords.second * MAP_GRID_SIZE + MAP_GRID_SIZE / 2;
     float angle = getRealWorldAngle(dir);
 
     return std::vector<float>{x, y, angle};
