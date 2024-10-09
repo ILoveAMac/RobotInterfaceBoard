@@ -266,11 +266,24 @@ void robotController::detectionAllignment()
         positionController.getState() != State::ROTATE_TO_GOAL_ORIENTATION &&
         positionController.getState() != State::MOVE_TO_GOAL)
     {
-        // Retrieve AI detection results from the AI thread
+        // Check if new AI detection results are available
+        bool detectionAvailable = false;
         std::vector<std::vector<float>> bboxes;
         {
             std::lock_guard<std::mutex> lock(dataMutex);
-            bboxes = detectedBboxes;
+            detectionAvailable = newDetectionAvailable; // A flag set by the AI thread
+            if (detectionAvailable)
+            {
+                bboxes = detectedBboxes;
+                newDetectionAvailable = false; // Reset the flag
+            }
+        }
+
+        if (!detectionAvailable)
+        {
+            // No new detection results yet, wait briefly
+            this->delay(10);
+            return;
         }
 
         if (!bboxes.empty())
