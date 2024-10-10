@@ -224,12 +224,6 @@ void robotController::moveAndDetect()
         // Store the current robot position before the pickup
         this->robotPositionBeforePickup = this->robotPosition;
 
-        // Optionally, retrieve the detected bounding boxes
-        {
-            std::lock_guard<std::mutex> lock(bboxesMutex);
-            // Use detectedBboxes as needed
-        }
-
         this->updateRobotPosition();
         return;
     }
