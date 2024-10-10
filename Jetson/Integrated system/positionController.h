@@ -13,7 +13,7 @@
 
 // Angular Velocity PID controller parameters
 #define A_KP 0.5f
-#define A_KI 0.005f
+#define A_KI 0.5f
 #define A_KD 0.1f
 
 #define ALPHA 0.7 // Smoothing factor
