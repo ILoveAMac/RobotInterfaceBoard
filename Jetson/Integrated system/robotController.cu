@@ -816,5 +816,7 @@ cv::Mat robotController::preprocessFrame(const cv::Mat &frame)
     // Transfer the data from host to device
     cudaMemcpy(this->input_image, this->host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
 
+    cv::cvtColor(resizedFrame, resizedFrame, cv::COLOR_RGB2BGR);
+
     return resizedFrame;
 }

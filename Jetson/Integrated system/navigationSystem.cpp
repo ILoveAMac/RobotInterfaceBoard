@@ -42,6 +42,7 @@ std::vector<float> navigationSystem::forwardState(std::vector<float> robotPositi
     // Check if forward motion is possible, if not then change state to avoid obstacle
     if (!isForwardMotionPossible(distMeasurements))
     {
+        std::cout << "Obstacle detected, changing state to avoid obstacle" << std::endl;
         navigationState = NavigationState::AVOID_OBSTACLE;
         return avoidObstacleState(robotPosition, distMeasurements);
     }
