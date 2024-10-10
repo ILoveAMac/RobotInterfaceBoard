@@ -10,7 +10,7 @@
 // in meters
 #define FORWRD_MOVE_DISTANCE 1.0
 
-#define OBSTACLE_DETECTION_DISTANCE 0.4
+#define OBSTACLE_DETECTION_DISTANCE 0.3
 
 enum class NavigationState
 {
