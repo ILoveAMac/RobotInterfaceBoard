@@ -231,7 +231,7 @@ void robotController::moveAndDetect()
     // if the robot is still moving dont get a new goal position
     if (pcState == State::MOVE_TO_GOAL)
     {
-
+        this->updateRobotPosition();
         // Check if an obstacle has been detected, if so we need to call the explore function to get a new setpoint
         if (!canMoveForwards())
         {
@@ -241,7 +241,6 @@ void robotController::moveAndDetect()
             std::cout << "X: " << this->robotPosition[0] << " Y: " << this->robotPosition[1] << " T: " << this->robotPosition[2] << std::endl;
         }
 
-        this->updateRobotPosition();
         this->delay(DELAY_TIME);
         return;
     }
