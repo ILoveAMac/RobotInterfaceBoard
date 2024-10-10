@@ -744,7 +744,7 @@ void robotController::aiProcessingLoop()
         cv::Mat preprocessedFrame = preprocessFrame(frame);
 
         // Run AI detection
-        auto bboxes = yolo.getBoxPredictions(preprocessedFrame);
+        auto bboxes = yolo.getBoxPredictions(this->input_image);
 
         // Update shared variables safely
         {
