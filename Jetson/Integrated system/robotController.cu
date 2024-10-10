@@ -242,6 +242,10 @@ void robotController::moveAndDetect()
         {
             std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
             this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
+            if (this->positionController.getState() == State::ROTATE_TO_GOAL)
+            {
+                std::cout << "NO" << std::endl;
+            }
         }
 
         this->delay(DELAY_TIME);
