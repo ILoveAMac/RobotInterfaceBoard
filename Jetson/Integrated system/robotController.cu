@@ -237,6 +237,7 @@ void robotController::moveAndDetect()
         {
             std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
             this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
+            std::cout << "X: " << goalPosition[0] << " Y: " << goalPosition[1] << " T: " << goalPosition[2] << std::endl;
         }
 
         this->updateRobotPosition();
