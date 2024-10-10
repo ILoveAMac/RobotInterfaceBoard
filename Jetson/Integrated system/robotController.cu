@@ -52,6 +52,8 @@ robotController::robotController() : aiHelper(),
 
     this->numPoopsCollected = 0;
 
+    navigation.setPositionController(this->positionController);
+
     // Initialize atomic flags
     aiThreadRunning = true;
     poopDetected = false;
@@ -237,8 +239,6 @@ void robotController::moveAndDetect()
         {
             std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
             this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
-            std::cout << "X: " << goalPosition[0] << " Y: " << goalPosition[1] << " T: " << goalPosition[2] << std::endl;
-            std::cout << "X: " << this->robotPosition[0] << " Y: " << this->robotPosition[1] << " T: " << this->robotPosition[2] << std::endl;
         }
 
         this->delay(DELAY_TIME);
