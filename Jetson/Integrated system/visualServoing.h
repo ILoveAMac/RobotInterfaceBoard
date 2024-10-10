@@ -29,8 +29,8 @@
 #define CONV_TOLERANCE_DIST 1e-6
 
 // Controller parameters
-#define KP_POOP -0.0040
-#define KI_POOP -0.01
+#define KP_POOP -0.003
+#define KI_POOP -0.001
 #define KD_POOP 0
 #define MIN_POOP -0.15
 #define MAX_POOP 0.15
