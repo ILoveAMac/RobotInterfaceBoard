@@ -240,6 +240,7 @@ void robotController::moveAndDetect()
         // Check if an obstacle has been detected, if so we need to call the explore function to get a new setpoint
         if (!canMoveForwards())
         {
+            std::cout << "!" << std::endl;
             std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
             this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
         }
