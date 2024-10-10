@@ -223,10 +223,10 @@ float navigationSystem::turnDirectionToAngle(TurnDirection turnDirection, std::v
     switch (turnDirection)
     {
     case TurnDirection::LEFT:
-        angle = M_PI / 2;
+        angle = -M_PI / 2;
         break;
     case TurnDirection::RIGHT:
-        angle = -M_PI / 2;
+        angle = M_PI / 2;
         break;
     default:
         std::cout << "Invalid Turn Direction" << std::endl;
