@@ -76,12 +76,12 @@ std::vector<float> navigationSystem::avoidObstacleState(std::vector<float> robot
 {
     std::cout << "Avoiding obstacle" << std::endl;
 
-    // Check if forward motion is possible, if yes then change state to move away from obstacle
-    if (isForwardMotionPossible(distMeasurements))
-    {
-        navigationState = NavigationState::MOVE_AWAY_FROM_OBSTACLE;
-        return forwardState(robotPosition, distMeasurements);
-    }
+    // // Check if forward motion is possible, if yes then change state to move away from obstacle
+    // if (isForwardMotionPossible(distMeasurements))
+    // {
+    //     navigationState = NavigationState::MOVE_AWAY_FROM_OBSTACLE;
+    //     return forwardState(robotPosition, distMeasurements);
+    // }
 
     // Robot position is stored as x, y, theta
     // Turn away from the obstace in the turn direction
