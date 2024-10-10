@@ -86,13 +86,6 @@ void robotController::update()
 
     // get the distance measurements
     this->distanceMeasurements = getDistanceMeasurements();
-
-    // Capture frame
-    {
-        std::lock_guard<std::mutex> lock(dataMutex);
-        cap >> this->latestFrame;
-    }
-
     // === END: Area to put code that should run every loop iteration ===
 
     switch (this->robotState)
@@ -771,6 +764,7 @@ void robotController::aiProcessingLoop()
         cv::Mat frame;
         {
             std::lock_guard<std::mutex> lock(dataMutex);
+            // cap >> frame; // Ensure exclusive access if cap is used in multiple threads
             frame = this->latestFrame.clone();
         }
 
