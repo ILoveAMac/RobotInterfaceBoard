@@ -31,6 +31,8 @@ std::vector<float> navigationSystem::explore(std::vector<float> robotPosition, s
         return moveAwayFromObstacleState(robotPosition, distMeasurements);
     case NavigationState::ATTEMPT_TO_PASS_OBSTACLE:
         return attemptToPassObstacleState(robotPosition, distMeasurements);
+    case NavigationState::CHECK_IF_CLEAR:
+        return checkIfClearState(robotPosition, distMeasurements);
     default:
         std::cout << "Invalid Navigation State" << std::endl;
         return stopState(robotPosition, distMeasurements);
@@ -105,8 +107,8 @@ std::vector<float> navigationSystem::moveAwayFromObstacleState(std::vector<float
         return attemptToPassObstacleState(robotPosition, distMeasurements);
     }
 
-    // Move forwards in increments of 0.3 meters, transition to attempt to pass obstacle state if the distance since last obstacle is greater than 1.0 meters
-    if (this->distanceSinceLastObstacle > 1.0)
+    // Move forwards in increments of 0.3 meters, transition to attempt to pass obstacle state if the distance since last obstacle is greater than 0.5 meters
+    if (this->distanceSinceLastObstacle > 0.5)
     {
         this->distanceSinceLastObstacle = 0.0;
 
@@ -130,8 +132,57 @@ std::vector<float> navigationSystem::attemptToPassObstacleState(std::vector<floa
 {
     std::cout << "Attempting to pass obstacle" << std::endl;
 
-    // TODO! Implement if later
-    return robotPosition;
+    // Turn in the current turn direction
+    float newAngle = turnDirectionToAngle(this->turnDirection, robotPosition);
+
+    // Get new robot position
+    std::vector<float> newPosition = robotPosition;
+    newPosition[2] = newAngle;
+
+    // Change state to move away from obstacle
+    navigationState = NavigationState::CHECK_IF_CLEAR;
+
+    // Return the new position
+    return newPosition;
+}
+
+std::vector<float> navigationSystem::checkIfClearState(std::vector<float> robotPosition, std::vector<float> distMeasurements)
+{
+    std::cout << "Checking if clear" << std::endl;
+
+    // If forward motion is not possible turn 180 degrees and move away from the obstacle
+    if (!isForwardMotionPossible(distMeasurements))
+    {
+        float newAngle = robotPosition[2] + M_PI;
+
+        // Normalize the angle
+        while (newAngle > M_PI)
+        {
+            newAngle -= 2 * M_PI;
+        }
+        while (newAngle < -M_PI)
+        {
+            newAngle += 2 * M_PI;
+        }
+
+        // Get new robot position
+        std::vector<float> newPosition = robotPosition;
+        newPosition[2] = newAngle;
+
+        // Change state to move forward
+        navigationState = NavigationState::FORWARD;
+
+        // Return the new position
+        return newPosition;
+    }
+
+    // Else it is possible, go back to moving forward state
+
+    // Also alternate the turn direction
+    alternateTurnDirection();
+
+    navigationState = NavigationState::FORWARD;
+    return forwardState(robotPosition, distMeasurements);
 }
 
 NavigationState navigationSystem::getNavigationState()

@@ -20,6 +20,7 @@ enum class NavigationState
     AVOID_OBSTACLE,
     MOVE_AWAY_FROM_OBSTACLE,
     ATTEMPT_TO_PASS_OBSTACLE,
+    CHECK_IF_CLEAR
 };
 
 enum class TurnDirection
@@ -50,6 +51,7 @@ private:
     std::vector<float> avoidObstacleState(std::vector<float> robotPosition, std::vector<float> distMeasurements);
     std::vector<float> moveAwayFromObstacleState(std::vector<float> robotPosition, std::vector<float> distMeasurements);
     std::vector<float> attemptToPassObstacleState(std::vector<float> robotPosition, std::vector<float> distMeasurements);
+    std::vector<float> checkIfClearState(std::vector<float> robotPosition, std::vector<float> distMeasurements);
 
     // Function to check if forward motion is possible using distance sensor readings
     bool isForwardMotionPossible(std::vector<float> distMeasurements);
