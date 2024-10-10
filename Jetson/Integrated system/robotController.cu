@@ -52,7 +52,7 @@ robotController::robotController() : aiHelper(),
 
     this->numPoopsCollected = 0;
 
-    navigation.setPositionController(this->positionController);
+    navigation.setPositionController(&this->positionController);
 
     // Initialize atomic flags
     aiThreadRunning = true;
