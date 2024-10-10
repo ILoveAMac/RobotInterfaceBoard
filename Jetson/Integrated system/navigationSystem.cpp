@@ -108,7 +108,7 @@ std::vector<float> navigationSystem::moveAwayFromObstacleState(std::vector<float
     }
 
     // Move forwards in increments of 0.3 meters, transition to attempt to pass obstacle state if the distance since last obstacle is greater than 0.5 meters
-    if (this->distanceSinceLastObstacle > 0.5)
+    if (this->distanceSinceLastObstacle > 1.0)
     {
         this->distanceSinceLastObstacle = 0.0;
 
