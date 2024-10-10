@@ -223,10 +223,10 @@ float navigationSystem::turnDirectionToAngle(TurnDirection turnDirection, std::v
     switch (turnDirection)
     {
     case TurnDirection::LEFT:
-        angle = -M_PI / 2;
+        angle = M_PI / 2;
         break;
     case TurnDirection::RIGHT:
-        angle = M_PI / 2;
+        angle = -M_PI / 2;
         break;
     default:
         std::cout << "Invalid Turn Direction" << std::endl;
@@ -234,7 +234,17 @@ float navigationSystem::turnDirectionToAngle(TurnDirection turnDirection, std::v
     }
 
     // get the new robot angle
-    float newAngle = angle;
+    float newAngle = robotPosition[2] + angle;
+
+    // Normalize the angle
+    while (newAngle > M_PI)
+    {
+        newAngle -= 2 * M_PI;
+    }
+    while (newAngle < -M_PI)
+    {
+        newAngle += 2 * M_PI;
+    }
 
     return newAngle;
 }
