@@ -236,6 +236,7 @@ void robotController::moveAndDetect()
     // if the robot is still moving dont get a new goal position
     if (pcState == State::MOVE_TO_GOAL)
     {
+        this->robotPosition = getRobotPosition();
         this->updateRobotPosition();
         // Check if an obstacle has been detected, if so we need to call the explore function to get a new setpoint
         if (!canMoveForwards())
