@@ -39,6 +39,8 @@ std::vector<float> navigationSystem::explore(std::vector<float> robotPosition, s
 
 std::vector<float> navigationSystem::forwardState(std::vector<float> robotPosition, std::vector<float> distMeasurements)
 {
+    std::cout << "Moving forward" << std::endl;
+
     // Check if forward motion is possible, if not then change state to avoid obstacle
     if (!isForwardMotionPossible(distMeasurements))
     {
@@ -72,6 +74,8 @@ std::vector<float> navigationSystem::stopState(std::vector<float> robotPosition,
 
 std::vector<float> navigationSystem::avoidObstacleState(std::vector<float> robotPosition, std::vector<float> distMeasurements)
 {
+    std::cout << "Avoiding obstacle" << std::endl;
+
     // Check if forward motion is possible, if yes then change state to move away from obstacle
     if (isForwardMotionPossible(distMeasurements))
     {
@@ -99,6 +103,8 @@ std::vector<float> navigationSystem::avoidObstacleState(std::vector<float> robot
 
 std::vector<float> navigationSystem::moveAwayFromObstacleState(std::vector<float> robotPosition, std::vector<float> distMeasurements)
 {
+    std::cout << "Moving away from obstacle" << std::endl;
+
     // Check if forward motion is possible, if not go to attempt to pass obstacle state
     if (!isForwardMotionPossible(distMeasurements))
     {
@@ -129,6 +135,8 @@ std::vector<float> navigationSystem::moveAwayFromObstacleState(std::vector<float
 
 std::vector<float> navigationSystem::attemptToPassObstacleState(std::vector<float> robotPosition, std::vector<float> distMeasurements)
 {
+    std::cout << "Attempting to pass obstacle" << std::endl;
+
     // TODO! Implement if later
     return robotPosition;
 }
