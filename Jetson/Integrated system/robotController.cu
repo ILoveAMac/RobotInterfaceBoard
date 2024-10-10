@@ -228,6 +228,14 @@ void robotController::moveAndDetect()
         return;
     }
 
+    // if the robot is still moving dont get a new goal position
+    if (pcState == State::MOVE_TO_GOAL)
+    {
+        this->updateRobotPosition();
+        this->delay(DELAY_TIME);
+        return;
+    }
+
     // No poop detected, proceed with navigation
     std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
     this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
