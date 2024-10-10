@@ -8,7 +8,7 @@
 #include "pid.h"
 
 #define AXLE_LENGTH 0.307f
-#define MAX_LINEAR_VELOCITY 0.2f
+#define MAX_LINEAR_VELOCITY 0.1f
 #define MAX_ANGULAR_VELOCITY 1.0f
 
 // Angular Velocity PID controller parameters
