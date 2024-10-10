@@ -234,7 +234,7 @@ float navigationSystem::turnDirectionToAngle(TurnDirection turnDirection, std::v
     }
 
     // get the new robot angle
-    float newAngle = robotPosition[2] + angle;
+    float newAngle = angle;
 
     return newAngle;
 }
