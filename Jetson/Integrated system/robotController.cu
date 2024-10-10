@@ -255,7 +255,8 @@ void robotController::moveAndDetect()
     this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
 
     // Update the robot position
-    this->updateRobotPosition();
+    // this->updateRobotPosition();
+    delay(DELAY_TIME);
 }
 
 void robotController::detectionAllignment()
