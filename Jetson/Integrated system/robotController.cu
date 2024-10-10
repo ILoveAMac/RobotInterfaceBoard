@@ -206,57 +206,40 @@ void robotController::idle()
 
 void robotController::moveAndDetect()
 {
-    // Check if the position controller is busy with a rotation
-    if (positionController.getState() != State::ROTATE_TO_GOAL &&
-        positionController.getState() != State::ROTATE_TO_GOAL_ORIENTATION &&
-        positionController.getState() != State::MOVE_TO_GOAL)
-    {
-        // Retrieve AI detection results from the AI thread
-        std::vector<std::vector<float>> bboxes;
-        {
-            std::lock_guard<std::mutex> lock(dataMutex);
-            bboxes = detectedBboxes;
-        }
-
-        if (!bboxes.empty())
-        {
-            std::vector<float> bbox = aiHelperUtils::getBoindingBoxWithLargestArea(bboxes);
-
-            // Use the visual servoing algorithm to compute the updated desired robot position and orientation
-            std::vector<float> updatedPosition = this->visualServoing.calculateControlPosition(bbox, this->robotPosition, this->positionController);
-
-            if (this->visualServoing.getCurrentState() == servoingState::STOP)
-            {
-                this->visualServoing.resetState();
-
-                // Move to the pickup state
-                this->setRobotState(RobotState::PICKUP);
-                return;
-            }
-
-            // Set the setpoint for the position controller
-            this->positionController.setGoal(updatedPosition[0], updatedPosition[1], updatedPosition[2]);
-        }
-        else
-        {
-            // Go back to search pattern, it seems we have lost the poop
-
-            // Set the goal position to the position before pickup
-            this->positionController.setGoal(this->robotPositionBeforePickup[0],
-                                             this->robotPositionBeforePickup[1],
-                                             this->robotPositionBeforePickup[2]);
-
-            this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
-        }
-
-        // Update the robot position
-        this->updateRobotPosition();
-    }
-    else
+    // If the position controller is rotating the robot, skip AI detection
+    State pcState = positionController.getState();
+    if (pcState == State::ROTATE_TO_GOAL || pcState == State::ROTATE_TO_GOAL_ORIENTATION)
     {
         this->updateRobotPosition();
         this->delay(DELAY_TIME);
+        return;
     }
+
+    // Check if poop has been detected by the AI thread
+    if (poopDetected.load())
+    {
+        // Transition to the detection alignment state
+        this->setRobotState(RobotState::DETECTION_ALLIGNMENT);
+
+        // Store the current robot position before the pickup
+        this->robotPositionBeforePickup = this->robotPosition;
+
+        // Optionally, retrieve the detected bounding boxes
+        {
+            std::lock_guard<std::mutex> lock(bboxesMutex);
+            // Use detectedBboxes as needed
+        }
+
+        this->updateRobotPosition();
+        return;
+    }
+
+    // No poop detected, proceed with navigation
+    std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
+    this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
+
+    // Update the robot position
+    this->updateRobotPosition();
 }
 
 void robotController::detectionAllignment()
