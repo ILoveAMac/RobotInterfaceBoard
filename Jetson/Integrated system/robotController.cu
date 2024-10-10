@@ -764,8 +764,7 @@ void robotController::aiProcessingLoop()
         cv::Mat frame;
         {
             std::lock_guard<std::mutex> lock(dataMutex);
-            // cap >> frame; // Ensure exclusive access if cap is used in multiple threads
-            frame = this->latestFrame.clone();
+            cap >> frame; // Ensure exclusive access if cap is used in multiple threads
         }
 
         if (frame.empty())
