@@ -236,16 +236,6 @@ float navigationSystem::turnDirectionToAngle(TurnDirection turnDirection, std::v
     // get the new robot angle
     float newAngle = robotPosition[2] + angle;
 
-    // Normalize the angle
-    while (newAngle > M_PI)
-    {
-        newAngle -= 2 * M_PI;
-    }
-    while (newAngle < -M_PI)
-    {
-        newAngle += 2 * M_PI;
-    }
-
     return newAngle;
 }
 
