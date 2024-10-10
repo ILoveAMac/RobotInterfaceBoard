@@ -86,6 +86,13 @@ void robotController::update()
 
     // get the distance measurements
     this->distanceMeasurements = getDistanceMeasurements();
+
+    // Capture frame
+    {
+        std::lock_guard<std::mutex> lock(dataMutex);
+        cap >> this->latestFrame;
+    }
+
     // === END: Area to put code that should run every loop iteration ===
 
     switch (this->robotState)
@@ -233,7 +240,7 @@ void robotController::moveAndDetect()
     {
 
         // Check if an obstacle has been detected, if so we need to call the explore function to get a new setpoint
-        if (!canMoveForwards() && navigation.getNavigationState() != NavigationState::AVOID_OBSTACLE)
+        if (!canMoveForwards())
         {
             std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
             this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
@@ -764,7 +771,7 @@ void robotController::aiProcessingLoop()
         cv::Mat frame;
         {
             std::lock_guard<std::mutex> lock(dataMutex);
-            cap >> frame; // Ensure exclusive access if cap is used in multiple threads
+            frame = this->latestFrame.clone();
         }
 
         if (frame.empty())
