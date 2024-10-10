@@ -229,8 +229,6 @@ void robotController::moveAndDetect()
         // Set the goal to the current position
         this->updateRobotPosition();
         this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], this->robotPosition[2]);
-        this->updateRobotPosition();
-
         this->positionController.setState(State::IDLE);
         return;
     }
