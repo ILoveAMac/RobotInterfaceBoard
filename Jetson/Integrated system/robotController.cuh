@@ -37,7 +37,7 @@
 // Position Controller Parameters
 #define C_KP 0.5
 #define C_KA 0.5
-#define C_GOAL_TOLERANCE 0.1
+#define C_GOAL_TOLERANCE 0.2
 #define C_ANGLE_TOLERANCE 0.05
 
 // Serial connection parameters
@@ -101,7 +101,7 @@ private:
 
     std::vector<float> getDistanceMeasurements(); // Function gets distance measurements from the onboard sensors
     bool isThereFreeSpaceForPickup();             // Function checks if there is free space for the robot to pickup the poop
-    bool canMoveForwards();                        // Function checks if the robot can move forwards
+    bool canMoveForwards();                       // Function checks if the robot can move forwards
 
     void openBucket(); // Function opens the bucket for 5 seconds then closes it
 
