@@ -44,7 +44,7 @@ std::vector<float> visualServoing::rotateState(std::vector<float> boundingBox, s
     std::cout << "Rotation speed: " << rotation_speed << std::endl;
 
     // check if the rotation speed is sufficently low and transition to the vertical allignment state
-    if (std::fabs(rotation_speed) < 0.048)
+    if (std::fabs(rotation_speed) < 0.055)
     {
         this->currentState = servoingState::MOVE_FORWARD; // State transition
         return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2]};
@@ -70,7 +70,7 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     float rotation_speed = this->pidController.compute(delta_x, 0);
 
     // check if the rotation speed is sufficently low and transition to the vertical allignment state
-    if (!(std::fabs(rotation_speed) < 0.051))
+    if (!(std::fabs(rotation_speed) < 0.06))
     {
         this->currentState = servoingState::ROTATE; // State transition
         return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2]};
@@ -80,7 +80,7 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     float y_b = boundingBox[1]; // y is the vertical center of the box
 
     // Calculate the error in the y direction
-    float delta_y = y_b - (CY + 23); // Error in pixels from the image center vertically
+    float delta_y = y_b - (CY + 28); // Error in pixels from the image center vertically
 
     // Calculate the forward/backward speed based on delta_y
     // Here we will use the pixel difference for now, but eventually, you'll switch to a distance-based control
