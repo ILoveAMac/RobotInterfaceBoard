@@ -101,6 +101,7 @@ private:
 
     std::vector<float> getDistanceMeasurements(); // Function gets distance measurements from the onboard sensors
     bool isThereFreeSpaceForPickup();             // Function checks if there is free space for the robot to pickup the poop
+    bool canMoveForwards();                        // Function checks if the robot can move forwards
 
     void openBucket(); // Function opens the bucket for 5 seconds then closes it
 

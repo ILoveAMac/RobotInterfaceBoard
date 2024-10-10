@@ -231,6 +231,14 @@ void robotController::moveAndDetect()
     // if the robot is still moving dont get a new goal position
     if (pcState == State::MOVE_TO_GOAL)
     {
+
+        // Check if an obstacle has been detected, if so we need to call the explore function to get a new setpoint
+        if (!canMoveForwards())
+        {
+            std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
+            this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
+        }
+
         this->updateRobotPosition();
         this->delay(DELAY_TIME);
         return;
@@ -612,6 +620,46 @@ bool robotController::isThereFreeSpaceForPickup()
     // Sensor 5 is not used for this check, as the poop may trigger the sensor
 
     return freeSpace;
+}
+
+bool robotController::canMoveForwards()
+{
+    // If distance sensor 1, 2 or 5 is below 0.3 it is not possible.
+    // if distance sensor 3 or 4 are below 0.2 it is not possible
+
+    // No detection if measurement is -1
+
+    // Sensor 1
+    if (this->distanceMeasurements[0] < 0.3 && this->distanceMeasurements[0] != -1)
+    {
+        return false;
+    }
+
+    // Sensor 2
+    if (this->distanceMeasurements[1] < 0.3 && this->distanceMeasurements[1] != -1)
+    {
+        return false;
+    }
+
+    // Sensor 3
+    if (this->distanceMeasurements[2] < 0.2 && this->distanceMeasurements[2] != -1)
+    {
+        return false;
+    }
+
+    // Sensor 4
+    if (this->distanceMeasurements[3] < 0.2 && this->distanceMeasurements[3] != -1)
+    {
+        return false;
+    }
+
+    // Sensor 5
+    if (this->distanceMeasurements[4] < 0.3 && this->distanceMeasurements[4] != -1)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 void robotController::openBucket()
