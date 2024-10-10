@@ -226,7 +226,11 @@ void robotController::moveAndDetect()
         // Store the current robot position before the pickup
         this->robotPositionBeforePickup = this->robotPosition;
 
+        // Set the goal to the current position
         this->updateRobotPosition();
+        this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], this->robotPosition[2]);
+        this->updateRobotPosition();
+
         return;
     }
 
@@ -276,7 +280,8 @@ void robotController::detectionAllignment()
         if (!detectionAvailable)
         {
             // No new detection results yet, wait briefly
-            this->delay(10);
+            this->delay(DELAY_TIME);
+            this->updateRobotPosition();
             return;
         }
 
