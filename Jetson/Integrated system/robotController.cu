@@ -744,12 +744,12 @@ void robotController::aiProcessingLoop()
         cv::Mat preprocessedFrame = preprocessFrame(frame);
 
         // Run AI detection
-        auto bboxes = yolo.getBoxPredictions(this->input_image);
+        auto bboxes = yolo.getBoxPredictions(preprocessedFrame);
 
         // Update shared variables safely
         {
             std::lock_guard<std::mutex> lock(dataMutex);
-            this->latestFrame = frame.clone(); // Store the original frame
+            this->latestFrame = preprocessedFrame.clone(); // Store the original frame
             this->detectedBboxes = bboxes;
             this->poopDetected = !bboxes.empty();
             newDetectionAvailable = true;
