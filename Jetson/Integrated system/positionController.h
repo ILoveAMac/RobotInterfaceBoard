@@ -16,7 +16,7 @@
 #define A_KI 0.005f
 #define A_KD 0.1f
 
-#define ALPHA 0.9 // Smoothing factor
+#define ALPHA 0.7 // Smoothing factor
 
 // State machine states
 enum class State
