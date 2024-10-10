@@ -660,10 +660,10 @@ bool robotController::canMoveForwards()
     }
 
     // Sensor 5
-    if (this->distanceMeasurements[4] < 0.3 && this->distanceMeasurements[4] != -1)
-    {
-        return false;
-    }
+    // if (this->distanceMeasurements[4] < 0.3 && this->distanceMeasurements[4] != -1)
+    // {
+    //     return false;
+    // }
 
     return true;
 }
