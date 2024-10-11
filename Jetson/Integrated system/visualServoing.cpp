@@ -44,7 +44,7 @@ std::vector<float> visualServoing::rotateState(std::vector<float> boundingBox, s
     std::cout << "Rotation speed: " << rotation_speed << std::endl;
 
     // check if the rotation speed is sufficently low and transition to the vertical allignment state
-    if (std::fabs(rotation_speed) < 0.1)
+    if (std::fabs(rotation_speed) < 0.05)
     {
         this->currentState = servoingState::MOVE_FORWARD; // State transition
         return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2]};
@@ -71,7 +71,7 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     float rotation_speed = this->pidController.compute(delta_x, 0);
 
     // check if the rotation speed is sufficently low and transition to the vertical allignment state
-    if (!(std::fabs(rotation_speed) > 0.15))
+    if (!(std::fabs(rotation_speed) > 0.06))
     {
         this->currentState = servoingState::ROTATE; // State transition
         return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2]};
