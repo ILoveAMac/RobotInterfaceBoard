@@ -56,6 +56,7 @@ std::vector<float> visualServoing::rotateState(std::vector<float> boundingBox, s
 
 std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, positionController &controller)
 {
+    std::cout << "Moving forward" << std::endl;
     // disable reverse mode
     controller.setReverseMode(false);
 
