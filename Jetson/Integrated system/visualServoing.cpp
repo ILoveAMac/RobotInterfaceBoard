@@ -92,7 +92,7 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     float theta = robotCurrentPosition[2]; // Assume theta is the third element (in radians)
 
     // Check if the error in y direction is small enough to stop
-    if (std::fabs(forward_speed) < 0.1) // Assuming a 10-pixel threshold for being "centered"
+    if (std::fabs(forward_speed) < 0.2) // Assuming a 10-pixel threshold for being "centered"
     {
         std::cout << "stop" << std::endl;
         // If the robot is centered, stop moving and transition to the next state or stop
@@ -109,6 +109,8 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     // Forward movement affects both x and y positions based on the robot's heading (theta)
     float new_x = robotCurrentPosition[0] + forward_speed * std::cos(theta);
     float new_y = robotCurrentPosition[1] + forward_speed * std::sin(theta);
+
+    std::cout << "Forward speed: " << forward_speed << std::endl;
 
     // Return the updated position with the new x, y, and unchanged theta
     return {new_x, new_y, theta};
