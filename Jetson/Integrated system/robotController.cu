@@ -223,11 +223,11 @@ void robotController::moveAndDetect()
         // Transition to the detection alignment state
         this->setRobotState(RobotState::DETECTION_ALLIGNMENT);
 
+        // Set the goal to the current position
+        this->updateRobotPosition();
         // Store the current robot position before the pickup
         this->robotPositionBeforePickup = this->robotPosition;
 
-        // Set the goal to the current position
-        this->updateRobotPosition();
         this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], this->robotPosition[2]);
         this->positionController.setState(State::IDLE);
         return;
@@ -310,7 +310,7 @@ void robotController::detectionAllignment()
         else
         {
             // Go back to search pattern, it seems we have lost the poop
-
+            std::cout << "Lost poop, going back to search pattern" << std::endl;
             // Set the goal position to the position before pickup
             this->positionController.setGoal(this->robotPositionBeforePickup[0],
                                              this->robotPositionBeforePickup[1],
