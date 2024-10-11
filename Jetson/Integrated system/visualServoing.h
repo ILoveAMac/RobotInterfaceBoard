@@ -30,10 +30,10 @@
 
 // Controller parameters
 #define KP_POOP -0.005
-#define KI_POOP -0.02
+#define KI_POOP -0.001
 #define KD_POOP 0
-#define MIN_POOP -0.15
-#define MAX_POOP 0.15
+#define MIN_POOP -0.1
+#define MAX_POOP 0.1
 
 // Controller parameters for linear motion
 #define KP_LINEAR -0.003

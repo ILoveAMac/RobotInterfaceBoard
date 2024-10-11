@@ -63,8 +63,6 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     // Check if the rotation error is small enough to move forward, if not go back to the rotation state
     // Extract bounding box center
     float x_b = boundingBox[0]; // x is the center of the box
-    // We add half the width of the bounding box to the center to get the front of the box
-    x_b += boundingBox[2] / 2.0f;
 
     // Calculate the error in the x direction
     float delta_x = x_b - (CX + 20); // Error in pixels from the image center
@@ -80,7 +78,8 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     }
 
     // Extract bounding box center
-    float y_b = boundingBox[1]; // y is the vertical center of the box
+    float y_b = boundingBox[1];   // y is the vertical center of the box
+    y_b += boundingBox[2] / 2.0f; // We add half the width of the bounding box to the center to get the front of the box
 
     // Calculate the error in the y direction
     float delta_y = y_b - (CY); // Error in pixels from the image center vertically
