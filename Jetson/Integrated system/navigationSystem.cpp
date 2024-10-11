@@ -223,31 +223,34 @@ bool navigationSystem::isForwardMotionPossible(std::vector<float> distMeasuremen
     bool forwardPossible = true;
 
     // Sensor 1
-    if (distMeasurements[0] < OBSTACLE_DETECTION_DISTANCE)
+    if (distMeasurements[0] < OBSTACLE_DETECTION_DISTANCE && distMeasurements[0] != -1)
     {
         forwardPossible = false;
     }
 
     // Sensor 2
-    if (distMeasurements[1] < OBSTACLE_DETECTION_DISTANCE)
+    if (distMeasurements[1] < OBSTACLE_DETECTION_DISTANCE && distMeasurements[1] != -1)
     {
         forwardPossible = false;
     }
 
     // Sensor 3 - Side sensor
-    if (distMeasurements[2] < SIDE_SENSOR_DETECTION_DISTANCE)
+    if (distMeasurements[2] < SIDE_SENSOR_DETECTION_DISTANCE && distMeasurements[2] != -1)
+    {
+        forwardPossible = false;
+    }
     {
         forwardPossible = false;
     }
 
     // Sensor 4 - Side sensor
-    if (distMeasurements[3] < SIDE_SENSOR_DETECTION_DISTANCE)
+    if (distMeasurements[3] < SIDE_SENSOR_DETECTION_DISTANCE && distMeasurements[3] != -1)
     {
         forwardPossible = false;
     }
 
     // Sensor 5 - Middle sensor
-    // if (distMeasurements[4] < OBSTACLE_DETECTION_DISTANCE)
+    // if (distMeasurements[4] < OBSTACLE_DETECTION_DISTANCE && distMeasurements[4] != -1)
     // {
     //     forwardPossible = false;
     // }
