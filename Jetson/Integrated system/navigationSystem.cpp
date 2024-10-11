@@ -103,26 +103,29 @@ std::vector<float> navigationSystem::moveAwayFromObstacleState(std::vector<float
     // Check if forward motion is possible, if not go to attempt to pass obstacle state
     if (!isForwardMotionPossible(distMeasurements))
     {
+        if (this->distanceSinceLastObstacle == 0.0 || this->distanceSinceLastObstacle < OBSTACLE_AVOIDANCE_DISTANCE)
+        {
+            this->distanceSinceLastObstacle = -1.0; // Indicates no movement since last obstacle, or no significant movement
+        }
+
         navigationState = NavigationState::ATTEMPT_TO_PASS_OBSTACLE;
         return attemptToPassObstacleState(robotPosition, distMeasurements);
     }
 
-    // Move forwards in increments of 0.3 meters, transition to attempt to pass obstacle state if the distance since last obstacle is greater than 0.5 meters
-    if (this->distanceSinceLastObstacle > 0.6)
+    // Move forwards in increments, transition to attempt to pass obstacle state if the distance since last obstacle is greater than some threshold
+    if (this->distanceSinceLastObstacle > OBSTACLE_AVOIDANCE_DISTANCE)
     {
-        this->distanceSinceLastObstacle = 0.0;
-
         navigationState = NavigationState::ATTEMPT_TO_PASS_OBSTACLE;
         return attemptToPassObstacleState(robotPosition, distMeasurements);
     }
 
-    this->distanceSinceLastObstacle += 0.3;
+    this->distanceSinceLastObstacle += OBSTACLE_AVOIDANCE_INCREMENT_DISTANCE;
 
     // Robot position is stored as x, y, theta
-    // Move the robot forward by 0.3 meters in the direction of theta
+    // Move the robot forward in the direction of theta
     std::vector<float> newPosition = robotPosition;
-    newPosition[0] += 0.3 * cos(robotPosition[2]);
-    newPosition[1] += 0.3 * sin(robotPosition[2]);
+    newPosition[0] += OBSTACLE_AVOIDANCE_INCREMENT_DISTANCE * cos(robotPosition[2]);
+    newPosition[1] += OBSTACLE_AVOIDANCE_INCREMENT_DISTANCE * sin(robotPosition[2]);
 
     // Return the new position
     return newPosition;
@@ -134,7 +137,7 @@ std::vector<float> navigationSystem::attemptToPassObstacleState(std::vector<floa
 
     // If the last measured distance is non-zero, but less than 0.6 meters, turn 180 degrees and move away from the obstacle
     float newAngle = 0;
-    if (this->distanceSinceLastObstacle > 0.0 && this->distanceSinceLastObstacle < 0.6)
+    if (this->distanceSinceLastObstacle == -1.0)
     {
         newAngle = robotPosition[2] + M_PI; // We have to do a 180 degree turn
     }
@@ -170,10 +173,10 @@ std::vector<float> navigationSystem::checkIfClearState(std::vector<float> robotP
 {
     std::cout << "Checking if clear" << std::endl;
 
-    // If forward motion is not possible turn 180 degrees and move away from the obstacle
+    // If forward motion is not possible turn in the current turn direction
     if (!isForwardMotionPossible(distMeasurements))
     {
-        float newAngle = robotPosition[2] + M_PI;
+        float newAngle = turnDirectionToAngle(this->turnDirection, robotPosition);
 
         // Normalize the angle
         while (newAngle > M_PI)
@@ -218,15 +221,36 @@ void navigationSystem::setPositionController(positionController *posController)
 bool navigationSystem::isForwardMotionPossible(std::vector<float> distMeasurements)
 {
     bool forwardPossible = true;
-    for (int i = 0; i < distMeasurements.size(); i++)
+
+    // Sensor 1
+    if (distMeasurements[0] < OBSTACLE_DETECTION_DISTANCE)
     {
-        if (distMeasurements[i] < OBSTACLE_DETECTION_DISTANCE && distMeasurements[i] != -1)
-        {
-            forwardPossible = false;
-            std::cout << "Obstacle detected at distance: " << distMeasurements[i] << std::endl;
-            break;
-        }
+        forwardPossible = false;
     }
+
+    // Sensor 2
+    if (distMeasurements[1] < OBSTACLE_DETECTION_DISTANCE)
+    {
+        forwardPossible = false;
+    }
+
+    // Sensor 3 - Side sensor
+    if (distMeasurements[2] < SIDE_SENSOR_DETECTION_DISTANCE)
+    {
+        forwardPossible = false;
+    }
+
+    // Sensor 4 - Side sensor
+    if (distMeasurements[3] < SIDE_SENSOR_DETECTION_DISTANCE)
+    {
+        forwardPossible = false;
+    }
+
+    // Sensor 5 - Middle sensor
+    // if (distMeasurements[4] < OBSTACLE_DETECTION_DISTANCE)
+    // {
+    //     forwardPossible = false;
+    // }
 
     return forwardPossible;
 }
@@ -243,10 +267,10 @@ float navigationSystem::turnDirectionToAngle(TurnDirection turnDirection, std::v
     switch (turnDirection)
     {
     case TurnDirection::LEFT:
-        angle = -M_PI / 2;
+        angle = M_PI / 2;
         break;
     case TurnDirection::RIGHT:
-        angle = M_PI / 2;
+        angle = -M_PI / 2;
         break;
     default:
         std::cout << "Invalid Turn Direction" << std::endl;

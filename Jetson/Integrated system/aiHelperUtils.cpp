@@ -126,7 +126,7 @@ void aiHelperUtils::drawSensorReadingsOnFrame(cv::Mat &frame, const std::vector<
 void aiHelperUtils::drawSystemStateOnFrame(cv::Mat &frame, const std::string &stateString)
 {
     // Get frame dimensions
-    int frameHeight = frame.rows;
+    // int frameHeight = frame.rows; // Unused variable
     int frameWidth = frame.cols;
 
     // Draw black box at the top of the frame
