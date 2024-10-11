@@ -239,9 +239,6 @@ bool navigationSystem::isForwardMotionPossible(std::vector<float> distMeasuremen
     {
         forwardPossible = false;
     }
-    {
-        forwardPossible = false;
-    }
 
     // Sensor 4 - Side sensor
     if (distMeasurements[3] < SIDE_SENSOR_DETECTION_DISTANCE && distMeasurements[3] != -1)
