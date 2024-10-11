@@ -20,8 +20,8 @@ std::vector<std::vector<float>> aiHelperUtils::getFinalBoundingBoxes(const float
                 // Extract all of the bounding boxes and store them in the boxes vector
                 float x_offset = detections[index];           // x relative to the grid cell
                 float y_offset = detections[index + 1];       // y relative to the grid cell
-                float w = detections[index + 2] * IMG_HEIGHT; // Width relative to image size
-                float h = detections[index + 3] * IMG_WIDTH;  // Height relative to image size
+                float w = detections[index + 2] * IMG_WIDTH;  // Width relative to image size
+                float h = detections[index + 3] * IMG_HEIGHT; // Height relative to image size
                 float c = detections[index + 4];              // Confidence for the bounding box
 
                 float x_center = (j + x_offset) * (IMG_HEIGHT / GRID_SIZE); // Absolute x-center

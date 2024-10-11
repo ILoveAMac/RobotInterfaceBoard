@@ -108,7 +108,7 @@ std::vector<float> navigationSystem::moveAwayFromObstacleState(std::vector<float
     }
 
     // Move forwards in increments of 0.3 meters, transition to attempt to pass obstacle state if the distance since last obstacle is greater than 0.5 meters
-    if (this->distanceSinceLastObstacle > 1.0)
+    if (this->distanceSinceLastObstacle > 0.6)
     {
         this->distanceSinceLastObstacle = 0.0;
 
@@ -132,8 +132,28 @@ std::vector<float> navigationSystem::attemptToPassObstacleState(std::vector<floa
 {
     std::cout << "Attempting to pass obstacle" << std::endl;
 
-    // Turn in the current turn direction
-    float newAngle = turnDirectionToAngle(this->turnDirection, robotPosition);
+    // If the last measured distance is non-zero, but less than 0.6 meters, turn 180 degrees and move away from the obstacle
+    float newAngle = 0;
+    if (this->distanceSinceLastObstacle > 0.0 && this->distanceSinceLastObstacle < 0.6)
+    {
+        newAngle = robotPosition[2] + M_PI; // We have to do a 180 degree turn
+    }
+    else
+    {
+        // Turn in the current turn direction
+        newAngle = turnDirectionToAngle(this->turnDirection, robotPosition);
+    }
+    this->distanceSinceLastObstacle = 0.0; // Reset the distance since last obstacle
+
+    // Normalize the angle
+    while (newAngle > M_PI)
+    {
+        newAngle -= 2 * M_PI;
+    }
+    while (newAngle < -M_PI)
+    {
+        newAngle += 2 * M_PI;
+    }
 
     // Get new robot position
     std::vector<float> newPosition = robotPosition;
