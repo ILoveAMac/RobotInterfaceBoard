@@ -61,6 +61,7 @@ std::vector<float> navigationSystem::forwardState(std::vector<float> robotPositi
     // Check if we should transition to side sensor correction
     if (shouldTransitionToSideSensorCorrection(distMeasurements))
     {
+        std::cout << "Transitioning to side sensor correction" << std::endl;
         // Save the previous state
         this->previousNavigationState = NavigationState::FORWARD;
 
