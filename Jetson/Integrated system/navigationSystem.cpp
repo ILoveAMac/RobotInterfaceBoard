@@ -341,7 +341,7 @@ std::vector<float> navigationSystem::sideSensorCorrectionRightState(std::vector<
     }
 
     // Check the rotation angle
-    if (this->sideSensorCorrectionTurned <= M_PI / 4.0) // 45 degrees in radians
+    if (this->sideSensorCorrectionTurned <= -M_PI / 4.0) // 45 degrees in radians
     {
         // Reset the turned angle
         this->sideSensorCorrectionTurned = 0.0;

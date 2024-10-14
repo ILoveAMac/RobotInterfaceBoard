@@ -20,7 +20,7 @@
 #define SIDE_SENSOR_AVOIDANCE_DISTANCE 0.5
 
 // in radians, 10 degrees
-#define SIDE_SENSOR_CORRECTION_TURN_ANGLE 0.34
+#define SIDE_SENSOR_CORRECTION_TURN_ANGLE 0.174533
 
 enum class NavigationState
 {
