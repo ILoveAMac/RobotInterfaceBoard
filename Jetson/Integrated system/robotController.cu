@@ -626,7 +626,11 @@ bool robotController::isThereFreeSpaceForPickup()
         freeSpace = false;
     }
 
-    // Sensor 5 is not used for this check, as the poop may trigger the sensor
+    // Sensor 5
+    if (this->distanceMeasurements[4] < 0.3 && this->distanceMeasurements[4] != -1)
+    {
+        return false;
+    }
 
     return freeSpace;
 }
@@ -634,7 +638,6 @@ bool robotController::isThereFreeSpaceForPickup()
 bool robotController::canMoveForwards()
 {
     // If distance sensor 1, 2 or 5 is below 0.3 it is not possible.
-    // if distance sensor 3 or 4 are below 0.2 it is not possible
 
     // No detection if measurement is -1
 
@@ -650,23 +653,23 @@ bool robotController::canMoveForwards()
         return false;
     }
 
-    // Sensor 3
-    if (this->distanceMeasurements[2] < 0.2 && this->distanceMeasurements[2] != -1)
+    // Senor 3
+    if (this->distanceMeasurements[2] < 0.3 && this->distanceMeasurements[2] != -1)
     {
         return false;
     }
 
     // Sensor 4
-    if (this->distanceMeasurements[3] < 0.2 && this->distanceMeasurements[3] != -1)
+    if (this->distanceMeasurements[3] < 0.3 && this->distanceMeasurements[3] != -1)
     {
         return false;
     }
 
     // Sensor 5
-    // if (this->distanceMeasurements[4] < 0.3 && this->distanceMeasurements[4] != -1)
-    // {
-    //     return false;
-    // }
+    if (this->distanceMeasurements[4] < 0.3 && this->distanceMeasurements[4] != -1)
+    {
+        return false;
+    }
 
     return true;
 }
