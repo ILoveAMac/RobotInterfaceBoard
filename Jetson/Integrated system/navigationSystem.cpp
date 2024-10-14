@@ -526,30 +526,14 @@ bool navigationSystem::isObstacleDetected(std::vector<float> distMeasurements, i
 
 bool navigationSystem::shouldTransitionToSideSensorCorrection(std::vector<float> distMeasurements)
 {
-    // Check if sensor 3 or 4 is below the side sensor detection distance
-    bool Sensor3 = false;
-    bool Sensor4 = false;
-
     // Sensor 3
     if (distMeasurements[2] < SIDE_SENSOR_DETECTION_DISTANCE && distMeasurements[2] != -1)
     {
-        Sensor3 = true;
+        return true;
     }
 
     // Sensor 4
     if (distMeasurements[3] < SIDE_SENSOR_DETECTION_DISTANCE && distMeasurements[3] != -1)
-    {
-        Sensor4 = true;
-    }
-
-    // If both sensor 3 and 4 are below the side sensor detection distance, return false
-    if (Sensor3 && Sensor4)
-    {
-        return false;
-    }
-
-    // If either sensor 3 or 4 is below the side sensor detection distance, return true
-    if (Sensor3 || Sensor4)
     {
         return true;
     }
