@@ -246,7 +246,7 @@ std::vector<float> navigationSystem::sideSensorCorrectionLeftState(std::vector<f
     // Or untill another sensor detects an obstacle
 
     // Check the rotation angle
-    if (this->sideSensorCorrectionTurned >= 0.523599) // 30 degrees in radians
+    if (this->sideSensorCorrectionTurned >= M_PI / 4.0) // 45 degrees in radians
     {
         // Reset the turned angle
         this->sideSensorCorrectionTurned = 0.0;
@@ -314,7 +314,7 @@ std::vector<float> navigationSystem::sideSensorCorrectionRightState(std::vector<
     // Or untill another sensor detects an obstacle
 
     // Check the rotation angle
-    if (this->sideSensorCorrectionTurned >= 0.523599) // 30 degrees in radians
+    if (this->sideSensorCorrectionTurned >= M_PI / 4.0) // 45 degrees in radians
     {
         // Reset the turned angle
         this->sideSensorCorrectionTurned = 0.0;
