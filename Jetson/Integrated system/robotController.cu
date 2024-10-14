@@ -654,13 +654,13 @@ bool robotController::canMoveForwards()
     }
 
     // Senor 3
-    if (this->distanceMeasurements[2] < 0.30 && this->distanceMeasurements[2] != -1)
+    if (this->distanceMeasurements[2] < 0.20 && this->distanceMeasurements[2] != -1)
     {
         return false;
     }
 
     // Sensor 4
-    if (this->distanceMeasurements[3] < 0.30 && this->distanceMeasurements[3] != -1)
+    if (this->distanceMeasurements[3] < 0.20 && this->distanceMeasurements[3] != -1)
     {
         return false;
     }
