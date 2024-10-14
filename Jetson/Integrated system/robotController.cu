@@ -642,31 +642,31 @@ bool robotController::canMoveForwards()
     // No detection if measurement is -1
 
     // Sensor 1
-    if (this->distanceMeasurements[0] < 0.3 && this->distanceMeasurements[0] != -1)
+    if (this->distanceMeasurements[0] < 0.30 && this->distanceMeasurements[0] != -1)
     {
         return false;
     }
 
     // Sensor 2
-    if (this->distanceMeasurements[1] < 0.3 && this->distanceMeasurements[1] != -1)
+    if (this->distanceMeasurements[1] < 0.30 && this->distanceMeasurements[1] != -1)
     {
         return false;
     }
 
     // Senor 3
-    if (this->distanceMeasurements[2] < 0.3 && this->distanceMeasurements[2] != -1)
+    if (this->distanceMeasurements[2] < 0.30 && this->distanceMeasurements[2] != -1)
     {
         return false;
     }
 
     // Sensor 4
-    if (this->distanceMeasurements[3] < 0.3 && this->distanceMeasurements[3] != -1)
+    if (this->distanceMeasurements[3] < 0.30 && this->distanceMeasurements[3] != -1)
     {
         return false;
     }
 
     // Sensor 5
-    if (this->distanceMeasurements[4] < 0.3 && this->distanceMeasurements[4] != -1)
+    if (this->distanceMeasurements[4] < 0.30 && this->distanceMeasurements[4] != -1)
     {
         return false;
     }

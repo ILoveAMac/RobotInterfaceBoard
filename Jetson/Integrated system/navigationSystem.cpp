@@ -417,6 +417,7 @@ std::vector<float> navigationSystem::correctOrientationAfterSideSensorCorrection
     // Reset the turned angle
 
     // Get the new robot angle
+    // float newAngle = robotPosition[2] - this->sideSensorCorrectionTurned;
     float newAngle = robotPosition[2];
 
     // Normalize the angle
