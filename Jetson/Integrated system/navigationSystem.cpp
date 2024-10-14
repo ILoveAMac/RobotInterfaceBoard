@@ -61,7 +61,6 @@ std::vector<float> navigationSystem::forwardState(std::vector<float> robotPositi
     // Check if we should transition to side sensor correction
     if (shouldTransitionToSideSensorCorrection(distMeasurements))
     {
-        std::cout << "Transitioning to side sensor correction" << std::endl;
         // Save the previous state
         this->previousNavigationState = NavigationState::FORWARD;
 
@@ -430,6 +429,8 @@ bool navigationSystem::isObstacleDetected(std::vector<float> distMeasurements, i
             }
         }
     }
+
+    return false;
 }
 
 bool navigationSystem::shouldTransitionToSideSensorCorrection(std::vector<float> distMeasurements)
@@ -469,14 +470,14 @@ NavigationState navigationSystem::getSideSensorCorrectionState(std::vector<float
     float dist3 = distMeasurements[2] == -1 ? 100 : distMeasurements[2];
     float dist4 = distMeasurements[3] == -1 ? 100 : distMeasurements[3];
 
-    // If sensor 4 is closer to the obstacle, turn left
+    // If sensor 4 is closer to the obstacle, turn right
     if (dist3 > dist4)
     {
-        return NavigationState::SIDE_SENSOR_CORRECTION_LEFT;
+        return NavigationState::SIDE_SENSOR_CORRECTION_RIGHT;
     }
 
-    // If sensor 3 is closer to the obstacle, turn right
-    return NavigationState::SIDE_SENSOR_CORRECTION_RIGHT;
+    // If sensor 3 is closer to the obstacle, turn left
+    return NavigationState::SIDE_SENSOR_CORRECTION_LEFT;
 }
 
 float navigationSystem::turnDirectionToAngle(TurnDirection turnDirection, std::vector<float> robotPosition)
