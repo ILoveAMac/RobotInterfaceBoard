@@ -41,6 +41,10 @@ std::vector<float> navigationSystem::explore(std::vector<float> robotPosition, s
         return sideSensorCorrectionLeftState(robotPosition, distMeasurements);
     case NavigationState::SIDE_SENSOR_CORRECTION_RIGHT:
         return sideSensorCorrectionRightState(robotPosition, distMeasurements);
+    case NavigationState::MOVE_AWAY_FROM_OBSTACLE_AFTER_SIDE_SENSOR_CORRECTION:
+        return moveAwayFromObstacleAfterSideSensorCorrectionState(robotPosition, distMeasurements);
+    case NavigationState::CORRECT_ORIENTATION_AFTER_SIDE_SENSOR_CORRECTION:
+        return correctOrientationAfterSideSensorCorrectionState(robotPosition, distMeasurements);
     default:
         std::cout << "Invalid Navigation State" << std::endl;
         return stopState(robotPosition, distMeasurements);
@@ -245,19 +249,6 @@ std::vector<float> navigationSystem::sideSensorCorrectionLeftState(std::vector<f
     // Or untill the robot has rotated 30 degrees
     // Or untill another sensor detects an obstacle
 
-    // Check the rotation angle
-    if (this->sideSensorCorrectionTurned >= M_PI / 4.0) // 45 degrees in radians
-    {
-        // Reset the turned angle
-        this->sideSensorCorrectionTurned = 0.0;
-
-        // Change state to the previous state
-        navigationState = this->previousNavigationState;
-
-        // Return the robot position
-        return robotPosition;
-    }
-
     // Check if another sensor detects an obstacle, we ignore sensor 3
     if (isObstacleDetected(distMeasurements, 2))
     {
@@ -273,6 +264,16 @@ std::vector<float> navigationSystem::sideSensorCorrectionLeftState(std::vector<f
 
     // Check if sensor 3 has a distance above the side sensor detection distance or is -1
     if (distMeasurements[2] >= SIDE_SENSOR_DETECTION_DISTANCE || distMeasurements[2] == -1)
+    {
+        // Move away from the obstacle
+        navigationState = NavigationState::MOVE_AWAY_FROM_OBSTACLE_AFTER_SIDE_SENSOR_CORRECTION;
+
+        // Return the robot position
+        return moveAwayFromObstacleAfterSideSensorCorrectionState(robotPosition, distMeasurements);
+    }
+
+    // Check the rotation angle
+    if (this->sideSensorCorrectionTurned >= M_PI / 4.0) // 45 degrees in radians
     {
         // Reset the turned angle
         this->sideSensorCorrectionTurned = 0.0;
@@ -313,19 +314,6 @@ std::vector<float> navigationSystem::sideSensorCorrectionRightState(std::vector<
     // Or untill the robot has rotated 30 degrees
     // Or untill another sensor detects an obstacle
 
-    // Check the rotation angle
-    if (this->sideSensorCorrectionTurned >= M_PI / 4.0) // 45 degrees in radians
-    {
-        // Reset the turned angle
-        this->sideSensorCorrectionTurned = 0.0;
-
-        // Change state to the previous state
-        navigationState = this->previousNavigationState;
-
-        // Return the robot position
-        return robotPosition;
-    }
-
     // Check if another sensor detects an obstacle, we ignore sensor 4
     if (isObstacleDetected(distMeasurements, 3))
     {
@@ -342,6 +330,19 @@ std::vector<float> navigationSystem::sideSensorCorrectionRightState(std::vector<
     // Check if sensor 4 has a distance above the side sensor detection distance or is -1
     if (distMeasurements[3] >= SIDE_SENSOR_DETECTION_DISTANCE || distMeasurements[3] == -1)
     {
+        // Move away from the obstacle
+        navigationState = NavigationState::MOVE_AWAY_FROM_OBSTACLE_AFTER_SIDE_SENSOR_CORRECTION;
+
+        // Return the robot position
+        return moveAwayFromObstacleAfterSideSensorCorrectionState(robotPosition, distMeasurements);
+
+        // Return the robot position
+        return robotPosition;
+    }
+
+    // Check the rotation angle
+    if (this->sideSensorCorrectionTurned <= M_PI / 4.0) // 45 degrees in radians
+    {
         // Reset the turned angle
         this->sideSensorCorrectionTurned = 0.0;
 
@@ -354,7 +355,7 @@ std::vector<float> navigationSystem::sideSensorCorrectionRightState(std::vector<
 
     // Rotate the robot right in increments of the side sensor correction angle
     float newAngle = robotPosition[2] - SIDE_SENSOR_CORRECTION_TURN_ANGLE;
-    this->sideSensorCorrectionTurned += SIDE_SENSOR_CORRECTION_TURN_ANGLE;
+    this->sideSensorCorrectionTurned -= SIDE_SENSOR_CORRECTION_TURN_ANGLE;
 
     // Normalize the angle
     while (newAngle > M_PI)
@@ -371,6 +372,73 @@ std::vector<float> navigationSystem::sideSensorCorrectionRightState(std::vector<
     newPosition[2] = newAngle;
 
     // Return the new position
+    return newPosition;
+}
+
+std::vector<float> navigationSystem::moveAwayFromObstacleAfterSideSensorCorrectionState(std::vector<float> robotPosition, std::vector<float> distMeasurements)
+{
+    // Check if forward motion is possible, if not go back to previous state
+    if (!isForwardMotionPossible(distMeasurements))
+    {
+        // Reset the turned angle
+        this->sideSensorCorrectionTurned = 0.0;
+
+        // Change state to the previous state
+        navigationState = this->previousNavigationState;
+
+        // Return the robot position
+        return robotPosition;
+    }
+
+    // Move forwards in increments, transition to correct orientation after side sensor correction state if the distance since last obstacle is greater than some threshold
+    if (this->distanceSinceLastObstacle > SIDE_SENSOR_AVOIDANCE_DISTANCE)
+    {
+        navigationState = NavigationState::CORRECT_ORIENTATION_AFTER_SIDE_SENSOR_CORRECTION;
+
+        return correctOrientationAfterSideSensorCorrectionState(robotPosition, distMeasurements);
+    }
+
+    this->distanceSinceLastObstacle += 0.3;
+
+    // Robot position is stored as x, y, theta
+    // Move the robot forward in the direction of theta
+    std::vector<float> newPosition = robotPosition;
+    newPosition[0] += 0.3 * cos(robotPosition[2]);
+    newPosition[1] += 0.3 * sin(robotPosition[2]);
+
+    // Return the new position
+    return newPosition;
+}
+
+std::vector<float> navigationSystem::correctOrientationAfterSideSensorCorrectionState(std::vector<float> robotPosition, std::vector<float> distMeasurements)
+{
+    // Correct robot rotation using the side sensor correction angle
+    // Go back to the previous state after the rotation is done
+    // Reset the turned angle
+
+    // Get the new robot angle
+    float newAngle = robotPosition[2] - this->sideSensorCorrectionTurned;
+
+    // Normalize the angle
+    while (newAngle > M_PI)
+    {
+        newAngle -= 2 * M_PI;
+    }
+    while (newAngle < -M_PI)
+    {
+        newAngle += 2 * M_PI;
+    }
+
+    // Reset the turned angle
+    this->sideSensorCorrectionTurned = 0.0;
+
+    // Go back to the previous state
+    navigationState = this->previousNavigationState;
+
+    // Return the new robot position
+    std::vector<float> newPosition = robotPosition;
+    newPosition[2] = newAngle;
+
     return newPosition;
 }
 

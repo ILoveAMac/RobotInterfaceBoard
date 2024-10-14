@@ -16,10 +16,11 @@
 #define OBSTACLE_AVOIDANCE_DISTANCE 1.0
 #define OBSTACLE_AVOIDANCE_INCREMENT_DISTANCE 0.5
 
-#define SIDE_SENSOR_CORRECTION_DISTANCE 0.3
+#define SIDE_SENSOR_CORRECTION_DISTANCE 0.35
+#define SIDE_SENSOR_AVOIDANCE_DISTANCE 0.5
 
 // in radians, 10 degrees
-#define SIDE_SENSOR_CORRECTION_TURN_ANGLE 0.34
+#define SIDE_SENSOR_CORRECTION_TURN_ANGLE 0.174533
 
 enum class NavigationState
 {
@@ -31,7 +32,9 @@ enum class NavigationState
     ATTEMPT_TO_PASS_OBSTACLE,
     CHECK_IF_CLEAR,
     SIDE_SENSOR_CORRECTION_LEFT,
-    SIDE_SENSOR_CORRECTION_RIGHT
+    SIDE_SENSOR_CORRECTION_RIGHT,
+    MOVE_AWAY_FROM_OBSTACLE_AFTER_SIDE_SENSOR_CORRECTION,
+    CORRECT_ORIENTATION_AFTER_SIDE_SENSOR_CORRECTION
 };
 
 enum class TurnDirection
@@ -66,6 +69,9 @@ private:
 
     std::vector<float> sideSensorCorrectionLeftState(std::vector<float> robotPosition, std::vector<float> distMeasurements);
     std::vector<float> sideSensorCorrectionRightState(std::vector<float> robotPosition, std::vector<float> distMeasurements);
+
+    std::vector<float> moveAwayFromObstacleAfterSideSensorCorrectionState(std::vector<float> robotPosition, std::vector<float> distMeasurements);
+    std::vector<float> correctOrientationAfterSideSensorCorrectionState(std::vector<float> robotPosition, std::vector<float> distMeasurements);
 
     // Function to check if forward motion is possible using distance sensor readings
     bool isForwardMotionPossible(std::vector<float> distMeasurements);
