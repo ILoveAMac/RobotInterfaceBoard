@@ -178,6 +178,7 @@ std::vector<float> navigationSystem::attemptToPassObstacleState(std::vector<floa
     else
     {
         // Turn in the current turn direction
+        alternateTurnDirection();
         newAngle = turnDirectionToAngle(this->turnDirection, robotPosition);
     }
     this->distanceSinceLastObstacle = 0.0; // Reset the distance since last obstacle
