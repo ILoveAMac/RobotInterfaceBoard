@@ -128,7 +128,7 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
                 imagePoints);
 
             // Draw the axes on the image
-            cv::Mat img_with_axes = colorOutput.clone();
+            cv::Mat img_with_axes = colorOutput;
             cv::line(img_with_axes, imagePoints[0], imagePoints[1], cv::Scalar(0, 0, 255), 2); // X-axis in RED
             cv::line(img_with_axes, imagePoints[0], imagePoints[2], cv::Scalar(0, 255, 0), 2); // Y-axis in GREEN
             cv::line(img_with_axes, imagePoints[0], imagePoints[3], cv::Scalar(255, 0, 0), 2); // Z-axis in BLUE
