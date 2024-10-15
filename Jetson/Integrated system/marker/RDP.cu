@@ -24,7 +24,7 @@ std::vector<std::tuple<int, int>> RDP::ramerDouglasPeucker(const std::vector<std
     float maxDistance = 0;
     int index = -1;
 
-    for (int i = 1; i < contour.size() - 1; i++)
+    for (int i = 1; i < static_cast<int>(contour.size()) - 1; i++)
     {
         auto point = contour[i];
 
