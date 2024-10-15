@@ -18,8 +18,8 @@ std::vector<std::tuple<int, int>> RDP::ramerDouglasPeucker(const std::vector<std
                                                            const float epsilon)
 {
     // Find the point with the maximum distance
-    std::tuple<int, int> startPoint = contour[0];
-    std::tuple<int, int> endPoint = contour[contour.size() - 1];
+    auto startPoint = contour[0];
+    auto endPoint = contour[contour.size() - 1];
 
     float maxDistance = 0;
     int index = -1;
@@ -42,8 +42,8 @@ std::vector<std::tuple<int, int>> RDP::ramerDouglasPeucker(const std::vector<std
     if (maxDistance > epsilon)
     {
         // Recursive call for the two segments
-        const std::vector firstHalf(contour.begin(), contour.begin() + index + 1);
-        const std::vector secondHalf(contour.begin() + index, contour.end());
+        const std::vector<std::tuple<int, int>> firstHalf(contour.begin(), contour.begin() + index + 1);
+        const std::vector<std::tuple<int, int>> secondHalf(contour.begin() + index, contour.end());
 
         // Recursively apply RDP on both halves
         auto result1 = ramerDouglasPeucker(firstHalf, epsilon);
