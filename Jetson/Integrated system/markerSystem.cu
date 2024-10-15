@@ -11,8 +11,11 @@ markerSystem::~markerSystem()
 
 std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers(float *image)
 {
+    imageResizer resizer(IMG_WIDTH, IMG_HEIGHT);
+    float *d_resizedImg = resizer.Resize(IMG_WIDTH, IMG_WIDTH, image, 3);
+
     // First we convert the image to grey
-    float *greyImage = greyConverter.imageToGrey(image);
+    float *greyImage = greyConverter.imageToGrey(d_resizedImg);
 
     int width = 448;
     int height = 448;
@@ -21,7 +24,7 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
     float *hostImage = new float[width * height]; // Allocate space for 448x448 grayscale image on the CPU
 
     // Step 2: Copy image from GPU to CPU
-    cudaMemcpy(hostImage, image, width * height * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(hostImage, d_resizedImg, width * height * sizeof(float), cudaMemcpyDeviceToHost);
 
     // Step 3: Convert the float array to an OpenCV Mat object
     // OpenCV expects 8-bit or 32-bit image types, so if your image is a float,
