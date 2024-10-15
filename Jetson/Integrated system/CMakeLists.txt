@@ -23,6 +23,7 @@ add_executable(YOLO_CUDA
     FullyConnected.cu
     yolo.cu
     robotController.cu
+    markerSystem.cu
     serialHelper.cpp        # C++ source files
     positionController.cpp
     aiHelperUtils.cpp
