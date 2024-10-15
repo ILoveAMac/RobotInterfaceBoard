@@ -133,6 +133,7 @@ private:
     std::mutex dataMutex;
     cv::Mat latestFrame;
     std::vector<std::vector<float>> detectedBboxes;
+    std::tuple<std::vector<double>, std::vector<double>> detectedMarker;
 
     // Threading functions
     void aiProcessingLoop();

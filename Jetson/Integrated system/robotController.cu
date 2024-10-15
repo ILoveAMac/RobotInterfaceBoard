@@ -133,12 +133,14 @@ void robotController::update()
     // Fetch the latest frame and detection results
     cv::Mat displayFrame;
     std::vector<std::vector<float>> bboxes;
+    std::tuple<std::vector<double>, std::vector<double>> markerVectors;
     {
         std::lock_guard<std::mutex> lock(dataMutex);
         if (!latestFrame.empty())
         {
             displayFrame = latestFrame.clone();
             bboxes = detectedBboxes;
+            markerVectors = detectedMarker;
         }
     }
 
@@ -154,6 +156,13 @@ void robotController::update()
 
         // Display the frame
         cv::imshow("Detection", displayFrame);
+    }
+
+    // Print the detected marker vectors
+    if (!std::get<0>(markerVectors).empty())
+    {
+        std::cout << "Translation: " << std::get<0>(markerVectors) << std::endl;
+        std::cout << "Euler Angles: " << std::get<1>(markerVectors) << std::endl;
     }
 
     // Handle keyboard input or other events
@@ -870,7 +879,8 @@ void robotController::markerLoop()
                 std::lock_guard<std::mutex> lock(dataMutex);
                 this->latestFrame = preprocessedFrame.clone(); // Store the original frame
                 this->markerDetected = true;
-                newMarkerAvailable = true;
+                this->newMarkerAvailable = true;
+                this->detectedMarker = result;
             }
         }
         else
@@ -880,7 +890,6 @@ void robotController::markerLoop()
                 std::lock_guard<std::mutex> lock(dataMutex);
                 this->latestFrame = preprocessedFrame.clone(); // Store the original frame
                 this->markerDetected = false;
-                newMarkerAvailable = false;
             }
         }
 
