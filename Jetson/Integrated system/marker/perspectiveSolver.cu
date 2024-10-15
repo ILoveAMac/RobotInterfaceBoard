@@ -37,7 +37,7 @@ GrunertSolution perspectiveSolver::solveP4P(const std::vector<std::vector<double
 
     std::vector<GrunertSolution> solutionSets[4];
 
-    for (int i = 0; i < combinations.size(); ++i)
+    for (int i = 0; i < static_cast<int>(combinations.size()); ++i)
     {
         std::vector<std::vector<double>> subsetWorldPoints;
         std::vector<std::vector<double>> subsetDirectionVectors;
