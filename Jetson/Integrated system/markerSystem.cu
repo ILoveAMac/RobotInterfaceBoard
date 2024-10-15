@@ -76,23 +76,29 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
         cv::Mat rotationMatrix = solution.rotationMatrix;
         cv::Mat translationVector = solution.translationVector;
 
-        // Draw the parent quad in blue
-        cv::polylines(cannyOutput, parentQuad, true, cv::Scalar(255, 0, 0), 2);
+        // Step 1: Convert the grayscale cannyOutput (CV_8UC1) to BGR
+        cv::Mat colorOutput;
+        cv::cvtColor(cannyOutput, colorOutput, cv::COLOR_GRAY2BGR); // Convert 8-bit grayscale to 3-channel BGR
 
-        // Draw the child quad in green
-        cv::polylines(cannyOutput, childQuad, true, cv::Scalar(0, 255, 0), 2);
+        // Step 2: Draw the parent quad in blue
+        cv::polylines(colorOutput, parentQuad, true, cv::Scalar(255, 0, 0), 2); // Blue color
 
-        // Draw red dots at each corner of the parent quad
+        // Step 3: Draw the child quad in green
+        cv::polylines(colorOutput, childQuad, true, cv::Scalar(0, 255, 0), 2); // Green color
+
+        // Step 4: Draw red dots at each corner of the parent quad and label them
         for (size_t i = 0; i < parentQuad.size(); ++i)
         {
-            cv::circle(cannyOutput, parentQuad[i], 5, cv::Scalar(0, 0, 255), -1);
+            cv::circle(colorOutput, parentQuad[i], 5, cv::Scalar(0, 0, 255), -1); // Red color
 
             // Label each point with its index
             std::string label = std::to_string(i);
-            cv::putText(cannyOutput, label, parentQuad[i] + cv::Point(5, -5), cv::FONT_HERSHEY_SIMPLEX, 0.5,
-                        cv::Scalar(0, 255, 255), 1); // Yellow text with size 0.5
+            cv::putText(colorOutput, label, parentQuad[i] + cv::Point(5, -5), cv::FONT_HERSHEY_SIMPLEX, 0.5,
+                        cv::Scalar(0, 255, 255), 1); // Yellow text
         }
-        cv::imshow("Marker Detection - Webcam", cannyOutput);
+
+        // Step 5: Display the result in a window
+        cv::imshow("Marker Detection - Webcam", colorOutput);
 
         if (translationVector.size().height == 3)
         {
