@@ -161,7 +161,7 @@ float *canny::hysteresis(const float *input) const
                 // Recursively check all potential edges until the stack is empty
                 while (!potentialEdges.empty())
                 {
-                    auto [px, py] = potentialEdges.top();
+                    auto &[px, py] = potentialEdges.top();
                     potentialEdges.pop();
 
                     for (int i = -1; i <= 1; ++i)
