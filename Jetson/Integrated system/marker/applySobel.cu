@@ -105,8 +105,8 @@ std::vector<float *> applySobel::apply(const float *inputImg) const
     cudaFree(d_gradientAngle);
 
     // Create a std::pmr::vector to store the pointers to gradientMagnitude and gradientAngle
-    std::vector<float *> results{std::pmr::get_default_resource()}; // Use default memory resource
-    results.reserve(2);                                             // Reserve space for two elements
+    std::vector<float *> results; // Use default memory resource
+    results.reserve(2);           // Reserve space for two elements
 
     // Add the pointers to the vector
     results.push_back(gradientMagnitude);
