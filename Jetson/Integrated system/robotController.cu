@@ -56,10 +56,13 @@ robotController::robotController() : aiHelper(),
 
     // Initialize atomic flags
     aiThreadRunning = true;
+    markerThreadRunning = false;
     poopDetected = false;
 
     // Start the AI processing thread
     aiThread = std::thread(&robotController::aiProcessingLoop, this);
+    // Start the marker processing thread
+    markerThread = std::thread(&robotController::markerLoop, this);
 }
 
 robotController::~robotController()
@@ -458,7 +461,9 @@ void robotController::moveBackToPositionBeforePickup()
 
 void robotController::searchForMarker()
 {
-    // TODO! Implement a search algorithm to find the marker
+    // Set the atomic flags such that the marker thread can run and the AI thread stops
+    markerThreadRunning = true;
+    aiThreadRunning = false;
 }
 
 void robotController::navigateToMarker()
@@ -770,7 +775,7 @@ void robotController::delay(int ms)
 // It runs in a separate thread to prevent blocking the main thread as the AI is slow
 void robotController::aiProcessingLoop()
 {
-    while (aiThreadRunning)
+    while (aiThreadRunning && !markerThreadRunning)
     {
         // Capture an image from the camera
         cv::Mat frame;
@@ -791,9 +796,6 @@ void robotController::aiProcessingLoop()
         // Run AI detection
         auto bboxes = yolo.getBoxPredictions(this->input_image);
 
-        // Run marker detection
-        std::tuple<std::vector<double>, std::vector<double>> temp = markerSystem.detectMarkers(this->input_image);
-
         // Update shared variables safely
         {
             std::lock_guard<std::mutex> lock(dataMutex);
@@ -806,6 +808,8 @@ void robotController::aiProcessingLoop()
         // Sleep briefly to prevent high CPU usage
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
+    // Sleep briefly to prevent high CPU usage
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
 
 cv::Mat robotController::preprocessFrame(const cv::Mat &frame)
@@ -834,4 +838,55 @@ cv::Mat robotController::preprocessFrame(const cv::Mat &frame)
     cv::cvtColor(resizedFrame, resizedFrame, cv::COLOR_RGB2BGR);
 
     return resizedFrame;
+}
+
+void robotController::markerLoop()
+{
+    while (markerThreadRunning && !aiThreadRunning)
+    {
+        // Capture an image from the camera
+        cv::Mat frame;
+        {
+            std::lock_guard<std::mutex> lock(dataMutex);
+            cap >> frame; // Ensure exclusive access if cap is used in multiple threads
+        }
+
+        if (frame.empty())
+        {
+            std::cerr << "Error: Captured empty frame" << std::endl;
+            continue;
+        }
+
+        // Preprocess the image
+        cv::Mat preprocessedFrame = preprocessFrame(frame);
+
+        // Preform marker detection
+        std::tuple<std::vector<double>, std::vector<double>> result = this->markerSystem.detectMarkers(this->input_image);
+        // Check if the marker was detected, do this by checking if the vectors are empty
+        if (!std::get<0>(result).empty() && !std::get<1>(result).empty())
+        {
+            // Update shared variables safely
+            {
+                std::lock_guard<std::mutex> lock(dataMutex);
+                this->latestFrame = preprocessedFrame.clone(); // Store the original frame
+                this->markerDetected = true;
+                newMarkerAvailable = true;
+            }
+        }
+        else
+        {
+            // Update shared variables safely
+            {
+                std::lock_guard<std::mutex> lock(dataMutex);
+                this->latestFrame = preprocessedFrame.clone(); // Store the original frame
+                this->markerDetected = false;
+                newMarkerAvailable = false;
+            }
+        }
+
+        // Sleep briefly to prevent high CPU usage
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+    // Sleep briefly to prevent high CPU usage
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }

@@ -69,8 +69,6 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
         cv::Mat rotationMatrix = solution.rotationMatrix;
         cv::Mat translationVector = solution.translationVector;
 
-        std::cout << "Translation: " << translationVector << std::endl;
-
         if (translationVector.size().height == 3)
         {
             std::vector<double> eulerAngles = perspectiveSolver::getEulerAngles(rotationMatrix);

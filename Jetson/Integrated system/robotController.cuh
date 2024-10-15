@@ -10,6 +10,7 @@
 #include <atomic>
 #include <mutex>
 #include <condition_variable>
+#include <tuple>
 
 #include "serialHelper.h"
 #include "visualServoing.h"
@@ -122,15 +123,20 @@ private:
 
     // Threading-related members
     std::thread aiThread;
+    std::thread markerThread;
     std::atomic<bool> aiThreadRunning;
+    std::atomic<bool> markerThreadRunning;
     std::atomic<bool> poopDetected;
+    std::atomic<bool> markerDetected;
     std::atomic<bool> newDetectionAvailable;
+    std::atomic<bool> newMarkerAvailable;
     std::mutex dataMutex;
     cv::Mat latestFrame;
     std::vector<std::vector<float>> detectedBboxes;
 
     // Threading functions
     void aiProcessingLoop();
+    void markerLoop();
     cv::Mat preprocessFrame(const cv::Mat &frame);
 
     // === Variables ===

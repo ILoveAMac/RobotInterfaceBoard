@@ -37,7 +37,7 @@ std::vector<float> visualServoing::rotateState(std::vector<float> boundingBox, s
     float x_b = boundingBox[0]; // x is the center of the box
 
     // Calculate the error in the x direction
-    float delta_x = x_b - (CX + 20); // Error in pixels from the image center
+    float delta_x = x_b - (CX_VS + 20); // Error in pixels from the image center
 
     // float rotation_speed = -0.0025 * delta_x;
     float rotation_speed = this->pidController.compute(delta_x, 0);
@@ -65,7 +65,7 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     float x_b = boundingBox[0]; // x is the center of the box
 
     // Calculate the error in the x direction
-    float delta_x = x_b - (CX + 20); // Error in pixels from the image center
+    float delta_x = x_b - (CX_VS + 20); // Error in pixels from the image center
 
     // float rotation_speed = -0.0025 * delta_x;
     float rotation_speed = this->pidController.compute(delta_x, 0);
@@ -82,7 +82,7 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     y_b += boundingBox[2] / 2.0f; // We add half the width of the bounding box to the center to get the front of the box
 
     // Calculate the error in the y direction
-    float delta_y = y_b - (CY + 5); // Error in pixels from the image center vertically
+    float delta_y = y_b - (CY_VS + 5); // Error in pixels from the image center vertically
 
     // Calculate the forward/backward speed based on delta_y
     // Here we will use the pixel difference for now, but eventually, you'll switch to a distance-based control
@@ -114,41 +114,4 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
 
     // Return the updated position with the new x, y, and unchanged theta
     return {new_x, new_y, theta};
-}
-
-std::vector<float> visualServoing::removeDistortion(std::vector<float> point)
-{
-    std::vector<float> undistortedPoint;
-
-    // Step 1: Normalize the distorted pixel coordinates
-    const double x_d = (point[0] - CX) / FX;
-    const double y_d = (point[1] - CY) / FY;
-
-    // Step 2: Initiate the undistorted pixel coordinates
-    double x_u = x_d;
-    double y_u = y_d;
-
-    // Step 3: Iteratively remove distortion
-    for (int iter = 0; iter < MAX_ITER_DIST; iter++)
-    {
-        const double x_u_prev = x_u;
-        const double y_u_prev = y_u;
-
-        const double r_u2 = x_u * x_u + y_u * y_u;
-        const double D = 1 + K1_DIST * r_u2 + K2_DIST * r_u2 * r_u2;
-
-        // Corrected update using x_d and y_d
-        x_u = x_d / D;
-        y_u = y_d / D;
-
-        const double dx = x_u - x_u_prev;
-        const double dy = y_u - y_u_prev;
-
-        if ((dx * dx + dy * dy) < CONV_TOLERANCE_DIST * CONV_TOLERANCE_DIST)
-        {
-            break; // Converged
-        }
-    }
-    // return and cast to float
-    return {static_cast<float>(x_u), static_cast<float>(y_u)};
 }

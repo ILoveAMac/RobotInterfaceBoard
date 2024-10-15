@@ -221,7 +221,6 @@ std::vector<std::vector<std::vector<int>>> markerIsolator::removeInvalidMarkers(
 
         // Check that the area of Quad1 is large enough
         auto areaQ1 = calculateArea(quadA);
-        printf("areaQ1: %f\n", areaQ1);
         if (areaQ1 < minArea)
         {
             continue;

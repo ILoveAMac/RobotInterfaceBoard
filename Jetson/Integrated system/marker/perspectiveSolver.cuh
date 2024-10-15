@@ -5,8 +5,6 @@
 #ifndef PERSPECTIVESOLVER_CUH
 #define PERSPECTIVESOLVER_CUH
 
-
-
 // using openCV for matrix operations
 #include <opencv2/opencv.hpp>
 #include <cmath>
@@ -29,27 +27,29 @@
 
 // Camera parameters
 
+// Camera Intrinsics and Distortion Coefficients
 // K matrix
-#define FX 658.596215580897
-#define FY 658.301628353110
-#define CX 313.811167083958
-#define CY 245.354670424866
+#define FX 330.582565765307
+#define FY 587.847666790967
+#define CX 223.296633717336
+#define CY 235.301280343201
 
 // Distortion coefficients
-#define K1 0.106606071597603
-#define K2 -0.505400337387861
+#define K1 0.033724646482670
+#define K2 -0.117593449553171
 
 #define P_PI 3.141592653589793238462643383279502884197
 
-
-struct GrunertSolution {
+struct GrunertSolution
+{
     std::vector<double> sideLengths;
     std::vector<double> angles;
     cv::Mat rotationMatrix;
     cv::Mat translationVector;
 };
 
-class perspectiveSolver {
+class perspectiveSolver
+{
 public:
     perspectiveSolver();
 
@@ -59,14 +59,14 @@ public:
     // and a second time with one of the original 3 points replaced with the unused 4th point
     // The algorithm then finds the overlapping solution from the two solution sets and returns it
     static GrunertSolution solveP4P(
-        const std::vector<std::vector<double> > &worldPoints, // 3D coordinates of the reference points
-        const std::vector<std::vector<double> > &imagePoints // 2D coordinates of the points in the image
+        const std::vector<std::vector<double>> &worldPoints, // 3D coordinates of the reference points
+        const std::vector<std::vector<double>> &imagePoints  // 2D coordinates of the points in the image
     );
 
     // Function to get euler angles from rotation matrix
     static std::vector<double> getEulerAngles(cv::Mat R);
 
-    static std::tuple<std::vector<double>, std::vector<std::vector<double>>> QR_Algorithm(cv::Mat A, double tol = 1e-8, int maxItr=1000);
+    static std::tuple<std::vector<double>, std::vector<std::vector<double>>> QR_Algorithm(cv::Mat A, double tol = 1e-8, int maxItr = 1000);
 
 private:
     // Grunert's Method
@@ -74,8 +74,8 @@ private:
     // formed by a camera center and three known 3D world points, given their corresponding 2D projections.
     // Assumes the camera is calibrated, meaning the image points are in normalized coordinates.
     static std::vector<GrunertSolution> grunertsMethod(
-        const std::vector<std::vector<double> > &worldPoints, // 3D coordinates of the reference points
-        const std::vector<std::vector<double> > &imagePoints // 2D coordinates of the points in the image
+        const std::vector<std::vector<double>> &worldPoints, // 3D coordinates of the reference points
+        const std::vector<std::vector<double>> &imagePoints  // 2D coordinates of the points in the image
     );
 
     // Helper function for Grunert's method
@@ -96,12 +96,11 @@ private:
     static bool areSolutionsSimilar(const GrunertSolution &a, const GrunertSolution &b);
 
     // Function to compute undistorted pixel coordinates
-    static std::vector<std::vector<double>> removeDistortion(const std::vector<std::vector<double> > &points);
+    static std::vector<std::vector<double>> removeDistortion(const std::vector<std::vector<double>> &points);
 
     // Function to reorder the image points such that they are always in the following order
     // top left, bottom left, bottom right, top right
-    static std::vector<std::vector<double>> reorderPoints(const std::vector<std::vector<double> > &points);
+    static std::vector<std::vector<double>> reorderPoints(const std::vector<std::vector<double>> &points);
 };
 
-
-#endif //PERSPECTIVESOLVER_CUH
+#endif // PERSPECTIVESOLVER_CUH

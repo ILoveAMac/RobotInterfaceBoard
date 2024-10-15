@@ -4,6 +4,14 @@
 
 #include "perspectiveSolver.cuh"
 
+perspectiveSolver::perspectiveSolver()
+{
+}
+
+perspectiveSolver::~perspectiveSolver()
+{
+}
+
 GrunertSolution perspectiveSolver::solveP4P(const std::vector<std::vector<double>> &worldPoints,
                                             const std::vector<std::vector<double>> &imagePoints)
 {
