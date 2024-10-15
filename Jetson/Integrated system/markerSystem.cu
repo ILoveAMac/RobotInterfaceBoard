@@ -34,7 +34,6 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
 
     // Step 4: Display the image in an OpenCV window
     cv::imshow("Grayscale Image", greyMat8U);
-    cv::waitKey(0); // Wait for a key press before closing the window
 
     // Step 5: Clean up
     delete[] hostImage; // Free the CPU memory
