@@ -4,38 +4,48 @@
 
 #include "markerIsolator.cuh"
 
-markerIsolator::markerIsolator() {
+markerIsolator::markerIsolator()
+{
 }
 
-markerIsolator::~markerIsolator() {
+markerIsolator::~markerIsolator()
+{
 }
 
-std::vector<std::vector<std::vector<int> > > markerIsolator::isolateMarkersFromContours(
-    const std::vector<std::vector<int> > &contours) {
-    std::vector<std::vector<std::tuple<int, int> > > quads;
+std::vector<std::vector<std::vector<int>>> markerIsolator::isolateMarkersFromContours(
+    const std::vector<std::vector<int>> &contours)
+{
+    std::vector<std::vector<std::tuple<int, int>>> quads;
 
     // Step 1: Simplify all contours into quads
-    for (const auto &contour: contours) {
+    for (const auto &contour : contours)
+    {
         auto polygon = getSimplifiedPolygonFromContour(contour);
-        if (isQuad(polygon)) {
+        if (isQuad(polygon))
+        {
             quads.push_back(polygon);
         }
     }
 
     // Step 2: Find and store nested quad pairs
-    std::vector<std::vector<std::vector<int> > > markers;
+    std::vector<std::vector<std::vector<int>>> markers;
 
-    for (size_t i = 0; i < quads.size(); ++i) {
-        for (size_t j = 0; j < quads.size(); ++j) {
-            if (i != j) {
+    for (size_t i = 0; i < quads.size(); ++i)
+    {
+        for (size_t j = 0; j < quads.size(); ++j)
+        {
+            if (i != j)
+            {
                 // Check if quad j is inside quad i
-                if (isQuadAInsideQuadB(quads[j], quads[i])) {
+                if (isQuadAInsideQuadB(quads[j], quads[i]))
+                {
                     // Convert the nested quads into integer coordinates and store them
-                    std::vector<std::vector<int> > nestedPair;
+                    std::vector<std::vector<int>> nestedPair;
 
                     // Parent quad
                     std::vector<int> parentQuad;
-                    for (const auto &point: quads[i]) {
+                    for (const auto &point : quads[i])
+                    {
                         parentQuad.push_back(std::get<0>(point)); // x-coordinate
                         parentQuad.push_back(std::get<1>(point)); // y-coordinate
                     }
@@ -43,7 +53,8 @@ std::vector<std::vector<std::vector<int> > > markerIsolator::isolateMarkersFromC
 
                     // Child quad
                     std::vector<int> childQuad;
-                    for (const auto &point: quads[j]) {
+                    for (const auto &point : quads[j])
+                    {
                         childQuad.push_back(std::get<0>(point)); // x-coordinate
                         childQuad.push_back(std::get<1>(point)); // y-coordinate
                     }
@@ -59,30 +70,35 @@ std::vector<std::vector<std::vector<int> > > markerIsolator::isolateMarkersFromC
     return removeInvalidMarkers(markers);
 }
 
-std::vector<std::tuple<int, int> > markerIsolator::getSimplifiedPolygonFromContour(
-    std::vector<int> contour) {
+std::vector<std::tuple<int, int>> markerIsolator::getSimplifiedPolygonFromContour(
+    std::vector<int> contour)
+{
     RDP rdp;
 
-    std::vector<std::tuple<int, int> > contourPoints;
-    for (size_t i = 0; i < contour.size(); i += 2) {
+    std::vector<std::tuple<int, int>> contourPoints;
+    for (size_t i = 0; i < contour.size(); i += 2)
+    {
         contourPoints.emplace_back(contour[i], contour[i + 1]);
     }
     contourPoints = ensureClosedContour(contourPoints);
 
     const float epsilon = 0.05 * rdp.arcLength(contourPoints);
     // Adjust this value to control the level of simplification
-    std::vector<std::tuple<int, int> > simplifiedPolygon = rdp.ramerDouglasPeucker(contourPoints, epsilon);
+    std::vector<std::tuple<int, int>> simplifiedPolygon = rdp.ramerDouglasPeucker(contourPoints, epsilon);
     simplifiedPolygon.pop_back();
 
     return simplifiedPolygon;
 }
 
-bool markerIsolator::isQuad(const std::vector<std::tuple<int, int> > &quad) {
+bool markerIsolator::isQuad(const std::vector<std::tuple<int, int>> &quad)
+{
     return quad.size() == 4;
 }
 
-float markerIsolator::calculateArea(const std::vector<std::tuple<int, int> > &quad) {
-    if (quad.size() != 4) {
+float markerIsolator::calculateArea(const std::vector<std::tuple<int, int>> &quad)
+{
+    if (quad.size() != 4)
+    {
         return 0;
     }
 
@@ -92,44 +108,51 @@ float markerIsolator::calculateArea(const std::vector<std::tuple<int, int> > &qu
     return length * width;
 }
 
-std::vector<std::tuple<int, int> > markerIsolator::
-ensureClosedContour(const std::vector<std::tuple<int, int> > &contour) {
-    if (contour.size() < 2) {
+std::vector<std::tuple<int, int>> markerIsolator::
+    ensureClosedContour(const std::vector<std::tuple<int, int>> &contour)
+{
+    if (contour.size() < 2)
+    {
         return contour; // A contour with fewer than 2 points cannot be closed
     }
 
     // Check if the start and end points are the same
-    if (contour.front() == contour.back()) {
+    if (contour.front() == contour.back())
+    {
         return contour; // Already closed
     }
 
     // Otherwise, close the contour by appending the first point to the end
-    std::vector<std::tuple<int, int> > closedContour = contour;
+    std::vector<std::tuple<int, int>> closedContour = contour;
     closedContour.push_back(contour.front());
     return closedContour;
 }
 
-float markerIsolator::euclideanDistance(const std::tuple<int, int> &start, const std::tuple<int, int> &end) {
+float markerIsolator::euclideanDistance(const std::tuple<int, int> &start, const std::tuple<int, int> &end)
+{
     const int x1 = std::get<0>(start);
     const int y1 = std::get<1>(start);
 
     const int x2 = std::get<0>(end);
     const int y2 = std::get<1>(end);
 
-
     return sqrt(pow((x2 - x1), 2) + pow((y2 - y1), 2));
 }
 
-bool markerIsolator::isQuadAInsideQuadB(const std::vector<std::tuple<int, int> > &quadA,
-                                        const std::vector<std::tuple<int, int> > &quadB) {
+bool markerIsolator::isQuadAInsideQuadB(const std::vector<std::tuple<int, int>> &quadA,
+                                        const std::vector<std::tuple<int, int>> &quadB)
+{
     // QuadA must have an area less than quadB
-    if (calculateArea(quadA) >= calculateArea(quadB)) {
+    if (calculateArea(quadA) >= calculateArea(quadB))
+    {
         return false;
     }
 
     // Check if all points of Quad A are inside Quad B
-    for (auto pointA: quadA) {
-        if (!isPointInsidePolygon(pointA, quadB)) {
+    for (auto pointA : quadA)
+    {
+        if (!isPointInsidePolygon(pointA, quadB))
+        {
             return false;
         }
     }
@@ -138,14 +161,16 @@ bool markerIsolator::isQuadAInsideQuadB(const std::vector<std::tuple<int, int> >
 }
 
 bool markerIsolator::isPointInsidePolygon(const std::tuple<int, int> &point,
-                                          const std::vector<std::tuple<int, int> > &polygon) {
+                                          const std::vector<std::tuple<int, int>> &polygon)
+{
     const int x = std::get<0>(point);
     const int y = std::get<1>(point);
 
     bool inside = false;
     const int n = polygon.size();
 
-    for (int i = 0, j = n - 1; i < n; j = i++) {
+    for (int i = 0, j = n - 1; i < n; j = i++)
+    {
         const int xi = std::get<0>(polygon[i]);
         const int yi = std::get<1>(polygon[i]);
         const int xj = std::get<0>(polygon[j]);
@@ -154,7 +179,8 @@ bool markerIsolator::isPointInsidePolygon(const std::tuple<int, int> &point,
         // Check if point is inside by using the ray-casting algorithm
         const bool intersect = ((yi > y) != (yj > y)) &&
                                (x < (xj - xi) * (y - yi) / static_cast<float>(yj - yi) + xi);
-        if (intersect) {
+        if (intersect)
+        {
             inside = !inside;
         }
     }
@@ -162,36 +188,42 @@ bool markerIsolator::isPointInsidePolygon(const std::tuple<int, int> &point,
     return inside;
 }
 
-std::vector<std::vector<std::vector<int> > > markerIsolator::removeInvalidMarkers(
-    const std::vector<std::vector<std::vector<int> > > &potentialMarkers) {
+std::vector<std::vector<std::vector<int>>> markerIsolator::removeInvalidMarkers(
+    const std::vector<std::vector<std::vector<int>>> &potentialMarkers)
+{
     // Define a threshold for how close the centroids should be
     constexpr float centroidDistanceThreshold = 10.0f; // Adjust this threshold as needed
     // To Define a threshold for how similar the aspect ratios should be
     constexpr float aspectRatioSimilarityThreshold = 0.05f; // Allowable percentage difference
 
-    constexpr float minArea = 3000.0;
+    constexpr float minArea = 1000.0;
 
-    std::vector<std::vector<std::vector<int> > > validMarkers;
+    std::vector<std::vector<std::vector<int>>> validMarkers;
 
     // Iterate through each pair of potential markers
-    for (const auto &marker: potentialMarkers) {
-        if (marker.size() != 2) {
+    for (const auto &marker : potentialMarkers)
+    {
+        if (marker.size() != 2)
+        {
             continue; // Skip if it doesn't consist of exactly two quads
         }
 
         // Convert the quads into tuples
-        std::vector<std::tuple<int, int> > quadA, quadB;
-        for (size_t i = 0; i < marker[0].size(); i += 2) {
+        std::vector<std::tuple<int, int>> quadA, quadB;
+        for (size_t i = 0; i < marker[0].size(); i += 2)
+        {
             quadA.emplace_back(marker[0][i], marker[0][i + 1]);
         }
-        for (size_t i = 0; i < marker[1].size(); i += 2) {
+        for (size_t i = 0; i < marker[1].size(); i += 2)
+        {
             quadB.emplace_back(marker[1][i], marker[1][i + 1]);
         }
 
         // Check that the area of Quad1 is large enough
         auto areaQ1 = calculateArea(quadA);
         printf("areaQ1: %f\n", areaQ1);
-        if (areaQ1 < minArea) {
+        if (areaQ1 < minArea)
+        {
             continue;
         }
 
@@ -200,7 +232,8 @@ std::vector<std::vector<std::vector<int> > > markerIsolator::removeInvalidMarker
         auto centroidB = getQuadCentroid(quadB);
 
         const float distance = euclideanDistance(centroidA, centroidB);
-        if (distance > centroidDistanceThreshold) {
+        if (distance > centroidDistanceThreshold)
+        {
             continue; // Skip this pair since the centroids are too far apart
         }
 
@@ -210,7 +243,8 @@ std::vector<std::vector<std::vector<int> > > markerIsolator::removeInvalidMarker
 
         // Calculate the absolute difference ratio
         float ratioDifference = fabs(aspectRatioA - aspectRatioB) / std::min(aspectRatioA, aspectRatioB);
-        if (ratioDifference > aspectRatioSimilarityThreshold) {
+        if (ratioDifference > aspectRatioSimilarityThreshold)
+        {
             continue; // Skip this pair since the aspect ratios differ significantly
         }
 
@@ -221,12 +255,14 @@ std::vector<std::vector<std::vector<int> > > markerIsolator::removeInvalidMarker
     return validMarkers;
 }
 
-std::tuple<int, int> markerIsolator::getQuadCentroid(const std::vector<std::tuple<int, int> > &quad) {
+std::tuple<int, int> markerIsolator::getQuadCentroid(const std::vector<std::tuple<int, int>> &quad)
+{
     int sumX = 0;
     int sumY = 0;
 
     // Iterate over the quad's vertices
-    for (const auto &point: quad) {
+    for (const auto &point : quad)
+    {
         sumX += std::get<0>(point);
         sumY += std::get<1>(point);
     }
@@ -239,8 +275,10 @@ std::tuple<int, int> markerIsolator::getQuadCentroid(const std::vector<std::tupl
     return std::make_tuple(centroidX, centroidY);
 }
 
-float markerIsolator::getQuadAspectRatio(const std::vector<std::tuple<int, int> > &quad) {
-    if (quad.size() != 4) {
+float markerIsolator::getQuadAspectRatio(const std::vector<std::tuple<int, int>> &quad)
+{
+    if (quad.size() != 4)
+    {
         // Invalid, not a quad
         return -1.0f;
     }
