@@ -18,7 +18,7 @@ std::vector<std::vector<int>> contourDetector::detect(const float *image, const 
     std::vector<std::vector<int>> contours;
 
     // Create a 2D vector to track visited pixels
-    std::vector visited(height, std::vector(width, false));
+    std::vector<std::vector<bool>> visited(height, std::vector(width, false));
 
     // Define the directions for 8-connectivity (clockwise starting from left)
     const std::vector<std::pair<int, int>> directions = {
