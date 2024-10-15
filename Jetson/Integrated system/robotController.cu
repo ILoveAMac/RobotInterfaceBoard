@@ -69,8 +69,8 @@ robotController::robotController() : aiHelper(),
     navigation.setPositionController(&this->positionController);
 
     // Initialize atomic flags
-    aiThreadRunning = false;
-    markerThreadRunning = true;
+    aiThreadRunning = true;
+    markerThreadRunning = false;
     poopDetected = false;
 
     // Start the AI processing thread
