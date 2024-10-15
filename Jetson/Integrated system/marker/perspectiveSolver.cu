@@ -256,8 +256,12 @@ std::vector<GrunertSolution> perspectiveSolver::grunertsMethod(const std::vector
             P_world.at<double>(2, k) = worldPoints[k][2];
         }
 
-        // Apply Arun's method to find the rotation matrix R and translation vector t
-        auto [R, t] = horn(P_world, P_cam);
+        // Apply Horn's method to find the rotation matrix R and translation vector t
+        std::pair<cv::Mat, cv::Mat> result = horn(P_world, P_cam);
+
+        // Explicitly extract R and t
+        cv::Mat R = result.first;
+        cv::Mat t = result.second;
 
         // Create a new GrunertSolution and populate it
         GrunertSolution solution;
