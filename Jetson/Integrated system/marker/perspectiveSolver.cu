@@ -4,21 +4,23 @@
 
 #include "perspectiveSolver.cuh"
 
-GrunertSolution perspectiveSolver::solveP4P(const std::vector<std::vector<double> > &worldPoints,
-                                            const std::vector<std::vector<double> > &imagePoints) {
+GrunertSolution perspectiveSolver::solveP4P(const std::vector<std::vector<double>> &worldPoints,
+                                            const std::vector<std::vector<double>> &imagePoints)
+{
     // Check if there are exactly 4 world points and 4 image points
-    if (worldPoints.size() != 4 || imagePoints.size() != 4) {
+    if (worldPoints.size() != 4 || imagePoints.size() != 4)
+    {
         throw std::invalid_argument("A unique solution requires exactly 4 points.");
     }
 
-    std::vector<std::vector<double> > reorderedPoints = reorderPoints(imagePoints);
+    std::vector<std::vector<double>> reorderedPoints = reorderPoints(imagePoints);
 
-    std::vector<std::vector<double> > undistortedNormalizedPoints = removeDistortion(reorderedPoints);
-
+    std::vector<std::vector<double>> undistortedNormalizedPoints = removeDistortion(reorderedPoints);
 
     // Compute unit direction vectors from undistorted normalized coordinates
-    std::vector<std::vector<double> > directionVectors;
-    for (const auto &point: undistortedNormalizedPoints) {
+    std::vector<std::vector<double>> directionVectors;
+    for (const auto &point : undistortedNormalizedPoints)
+    {
         double x_u = point.at(0);
         double y_u = point.at(1);
         double z_u = 1.0;
@@ -30,17 +32,18 @@ GrunertSolution perspectiveSolver::solveP4P(const std::vector<std::vector<double
     }
 
     // Generate all combinations of three points out of four
-    std::vector<std::array<int, 3> > combinations = {
-        {0, 1, 2}, {0, 1, 3}, {0, 2, 3}, {1, 2, 3}
-    };
+    std::vector<std::array<int, 3>> combinations = {
+        {0, 1, 2}, {0, 1, 3}, {0, 2, 3}, {1, 2, 3}};
 
     std::vector<GrunertSolution> solutionSets[4];
 
-    for (int i = 0; i < combinations.size(); ++i) {
-        std::vector<std::vector<double> > subsetWorldPoints;
-        std::vector<std::vector<double> > subsetDirectionVectors;
+    for (int i = 0; i < combinations.size(); ++i)
+    {
+        std::vector<std::vector<double>> subsetWorldPoints;
+        std::vector<std::vector<double>> subsetDirectionVectors;
 
-        for (int idx: combinations[i]) {
+        for (int idx : combinations[i])
+        {
             subsetWorldPoints.push_back(worldPoints[idx]);
             subsetDirectionVectors.push_back(directionVectors[idx]);
         }
@@ -52,11 +55,16 @@ GrunertSolution perspectiveSolver::solveP4P(const std::vector<std::vector<double
     GrunertSolution overlappingSolution;
     bool foundOverlap = false;
 
-    for (int i = 0; i < 4 && !foundOverlap; ++i) {
-        for (int j = i + 1; j < 4 && !foundOverlap; ++j) {
-            for (const auto &sol1: solutionSets[i]) {
-                for (const auto &sol2: solutionSets[j]) {
-                    if (areSolutionsSimilar(sol1, sol2)) {
+    for (int i = 0; i < 4 && !foundOverlap; ++i)
+    {
+        for (int j = i + 1; j < 4 && !foundOverlap; ++j)
+        {
+            for (const auto &sol1 : solutionSets[i])
+            {
+                for (const auto &sol2 : solutionSets[j])
+                {
+                    if (areSolutionsSimilar(sol1, sol2))
+                    {
                         overlappingSolution = sol1;
                         foundOverlap = true;
                         break;
@@ -66,21 +74,24 @@ GrunertSolution perspectiveSolver::solveP4P(const std::vector<std::vector<double
         }
     }
 
-    if (!foundOverlap) {
+    if (!foundOverlap)
+    {
         // throw std::runtime_error("No overlapping solution found.");
     }
 
     return overlappingSolution;
 }
 
-std::vector<double> perspectiveSolver::getEulerAngles(cv::Mat R) {
-    std::vector eulerAngles(3, 0.0); // Output: [phi, theta, psi]
+std::vector<double> perspectiveSolver::getEulerAngles(cv::Mat R)
+{
+    std::vector<double> eulerAngles(3, 0.0); // Output: [phi, theta, psi]
 
     // Check if gimbal lock condition (R(2, 0) != ±1)
-    if (fabs(R.at<double>(2, 0)) != 1) {
+    if (fabs(R.at<double>(2, 0)) != 1)
+    {
         // General case
         const double theta1 = -asin(R.at<double>(2, 0)); // theta1 = -asin(R31)
-        const double theta2 = P_PI - theta1; // theta2 = pi - theta1
+        const double theta2 = P_PI - theta1;             // theta2 = pi - theta1
 
         // Compute corresponding phi1 and psi1
         const double psi1 = atan2(R.at<double>(2, 1) / cos(theta1), R.at<double>(2, 2) / cos(theta1));
@@ -91,18 +102,23 @@ std::vector<double> perspectiveSolver::getEulerAngles(cv::Mat R) {
         double phi2 = atan2(R.at<double>(1, 0) / cos(theta2), R.at<double>(0, 0) / cos(theta2));
 
         // Select the first set of angles (you could choose to return both solutions if needed)
-        eulerAngles[0] = phi2; // phi
+        eulerAngles[0] = phi2;   // phi
         eulerAngles[1] = theta2; // theta
-        eulerAngles[2] = psi2; // psi
-    } else {
+        eulerAngles[2] = psi2;   // psi
+    }
+    else
+    {
         // Gimbal lock condition: R31 = ±1
         eulerAngles[0] = 0; // Set phi to 0 as it's arbitrary in this case
 
-        if (R.at<double>(2, 0) == -1) {
-            eulerAngles[1] = P_PI / 2; // theta = pi/2
+        if (R.at<double>(2, 0) == -1)
+        {
+            eulerAngles[1] = P_PI / 2;                                      // theta = pi/2
             eulerAngles[2] = atan2(R.at<double>(0, 1), R.at<double>(0, 2)); // psi = atan2(R12, R13)
-        } else {
-            eulerAngles[1] = -P_PI / 2; // theta = -pi/2
+        }
+        else
+        {
+            eulerAngles[1] = -P_PI / 2;                                       // theta = -pi/2
             eulerAngles[2] = atan2(-R.at<double>(0, 1), -R.at<double>(0, 2)); // psi = atan2(-R12, -R13)
         }
     }
@@ -110,25 +126,30 @@ std::vector<double> perspectiveSolver::getEulerAngles(cv::Mat R) {
     return eulerAngles;
 }
 
-
-std::vector<GrunertSolution> perspectiveSolver::grunertsMethod(const std::vector<std::vector<double> > &worldPoints,
-                                                               const std::vector<std::vector<double> > &imagePoints) {
+std::vector<GrunertSolution> perspectiveSolver::grunertsMethod(const std::vector<std::vector<double>> &worldPoints,
+                                                               const std::vector<std::vector<double>> &imagePoints)
+{
     // Check if there are exactly 3 world points and 3 image points
-    if (worldPoints.size() != 3 || imagePoints.size() != 3) {
+    if (worldPoints.size() != 3 || imagePoints.size() != 3)
+    {
         throw std::invalid_argument("Grunert's method requires exactly 3 world points and 3 image points.");
     }
 
     // Check if each world point has exactly 3 coordinates (X, Y, Z)
-    for (const auto &point: worldPoints) {
-        if (point.size() != 3) {
+    for (const auto &point : worldPoints)
+    {
+        if (point.size() != 3)
+        {
             throw std::invalid_argument("Each world point must have exactly 3 coordinates.");
         }
     }
 
     // Check if each image point has exactly 3 values
     // Each point in a 3D unit vector
-    for (const auto &point: imagePoints) {
-        if (point.size() != 3) {
+    for (const auto &point : imagePoints)
+    {
+        if (point.size() != 3)
+        {
             throw std::invalid_argument("Each image point must have exactly 3 values.");
         }
     }
@@ -139,7 +160,7 @@ std::vector<GrunertSolution> perspectiveSolver::grunertsMethod(const std::vector
     const double b = euclideanDistance(worldPoints[0], worldPoints[2]); // Distance between P1 and P3
     const double c = euclideanDistance(worldPoints[0], worldPoints[1]); // Distance between P1 and P2
 
-    std::vector<std::vector<double> > j = imagePoints;
+    std::vector<std::vector<double>> j = imagePoints;
 
     // Calculate the dot products to get cos(alpha), cos(beta), cos(gamma)
     const double cosAlpha = j[1][0] * j[2][0] + j[1][1] * j[2][1] + j[1][2] * j[2][2];
@@ -158,22 +179,13 @@ std::vector<GrunertSolution> perspectiveSolver::grunertsMethod(const std::vector
     // 2. ===== Setup the 4th order polynomial coefficients =====
     const double A4 = std::pow((a2 - c2) / b2 - 1, 2) - (4 * c2 / b2) * cosAlpha2;
 
-    const double A3 = 4 * ((a2 - c2) / b2 * (1 - (a2 - c2) / b2) * cosBeta
-                           - (1 - (a2 + c2) / b2) * cosAlpha * cosGamma
-                           + 2 * (c2 / b2) * cosAlpha2 * cosBeta);
+    const double A3 = 4 * ((a2 - c2) / b2 * (1 - (a2 - c2) / b2) * cosBeta - (1 - (a2 + c2) / b2) * cosAlpha * cosGamma + 2 * (c2 / b2) * cosAlpha2 * cosBeta);
 
-    const double A2 = 2 * (std::pow((a2 - c2) / b2, 2) - 1
-                           + 2 * std::pow((a2 - c2) / b2, 2) * cosBeta2
-                           + 2 * ((b2 - c2) / b2) * cosAlpha2
-                           - 4 * ((a2 + c2) / b2) * cosAlpha * cosBeta * cosGamma
-                           + 2 * ((b2 - a2) / b2) * cosGamma2);
+    const double A2 = 2 * (std::pow((a2 - c2) / b2, 2) - 1 + 2 * std::pow((a2 - c2) / b2, 2) * cosBeta2 + 2 * ((b2 - c2) / b2) * cosAlpha2 - 4 * ((a2 + c2) / b2) * cosAlpha * cosBeta * cosGamma + 2 * ((b2 - a2) / b2) * cosGamma2);
 
-    const double A1 = 4 * (-(a2 - c2) / b2 * (1 + (a2 - c2) / b2) * cosBeta
-                           + 2 * (a2 / b2) * cosGamma2 * cosBeta
-                           - (1 - (a2 + c2) / b2) * cosAlpha * cosGamma);
+    const double A1 = 4 * (-(a2 - c2) / b2 * (1 + (a2 - c2) / b2) * cosBeta + 2 * (a2 / b2) * cosGamma2 * cosBeta - (1 - (a2 + c2) / b2) * cosAlpha * cosGamma);
 
     const double A0 = std::pow(1 + (a2 - c2) / b2, 2) - (4 * a2 / b2) * cosGamma2;
-
 
     // 3. ===== Solve for the roots of the polynomial =====
     const std::vector<double> realRoots = quartic(A3 / A4, A2 / A4, A1 / A4, A0 / A4);
@@ -182,7 +194,8 @@ std::vector<GrunertSolution> perspectiveSolver::grunertsMethod(const std::vector
     // There will be up to 4 roots for the polygon
 
     // Check if there are any valid roots left
-    if (realRoots.empty()) {
+    if (realRoots.empty())
+    {
         // No roots were found, we return an empty solution vector
         std::vector<GrunertSolution> empty_solution;
         return empty_solution;
@@ -198,16 +211,17 @@ std::vector<GrunertSolution> perspectiveSolver::grunertsMethod(const std::vector
     const double gamma = std::acos(cosGamma);
 
     // Loop over the real roots
-    for (size_t i = 0; i < realRoots.size(); ++i) {
+    for (size_t i = 0; i < realRoots.size(); ++i)
+    {
         const double v = realRoots[i];
 
         // Calculate u using the given formula
-        const double numerator = ((-1 + (a2 - c2) / b2) * v * v) - (2 * ((a2 - c2) / b2) * cosBeta * v) + (
-                                     1 + (a2 - c2) / b2);
+        const double numerator = ((-1 + (a2 - c2) / b2) * v * v) - (2 * ((a2 - c2) / b2) * cosBeta * v) + (1 + (a2 - c2) / b2);
         const double denominator = 2 * (cosGamma - v * cosAlpha);
 
         // Check for division by zero
-        if (std::abs(denominator) < REAL_TOLERANCE) {
+        if (std::abs(denominator) < REAL_TOLERANCE)
+        {
             // Skip invalid roots
             continue;
         }
@@ -235,7 +249,8 @@ std::vector<GrunertSolution> perspectiveSolver::grunertsMethod(const std::vector
 
         // Convert worldPoints into a cv::Mat format for Arun's method
         cv::Mat P_world(3, 3, CV_64F);
-        for (int k = 0; k < 3; k++) {
+        for (int k = 0; k < 3; k++)
+        {
             P_world.at<double>(0, k) = worldPoints[k][0];
             P_world.at<double>(1, k) = worldPoints[k][1];
             P_world.at<double>(2, k) = worldPoints[k][2];
@@ -258,23 +273,27 @@ std::vector<GrunertSolution> perspectiveSolver::grunertsMethod(const std::vector
     return solutions;
 }
 
-double perspectiveSolver::euclideanDistance(const std::vector<double> &point1, const std::vector<double> &point2) {
+double perspectiveSolver::euclideanDistance(const std::vector<double> &point1, const std::vector<double> &point2)
+{
     return std::sqrt(std::pow(point2[0] - point1[0], 2) +
                      std::pow(point2[1] - point1[1], 2) +
                      std::pow(point2[2] - point1[2], 2));
 }
 
-std::vector<double> perspectiveSolver::cubic(const double b, const double c, const double d) {
+std::vector<double> perspectiveSolver::cubic(const double b, const double c, const double d)
+{
     const double p = c - b * b / 3.0;
     const double q = 2.0 * b * b * b / 27.0 - b * c / 3.0 + d;
 
     std::vector<double> roots;
 
-    if (p == 0.0) {
+    if (p == 0.0)
+    {
         roots.push_back(pow(q, 1.0 / 3.0));
         return roots;
     }
-    if (q == 0.0) {
+    if (q == 0.0)
+    {
         roots.push_back(0.0);
         return roots;
     }
@@ -282,17 +301,20 @@ std::vector<double> perspectiveSolver::cubic(const double b, const double c, con
     const double t = sqrt(fabs(p) / 3.0);
     const double g = 1.5 * q / (p * t);
 
-    if (p > 0.0) {
+    if (p > 0.0)
+    {
         roots.push_back(-2.0 * t * sinh(asinh(g) / 3.0) - b / 3.0);
         return roots;
     }
 
-    if (4.0 * p * p * p + 27.0 * q * q < 0.0) {
+    if (4.0 * p * p * p + 27.0 * q * q < 0.0)
+    {
         roots.push_back(2.0 * t * cos(acos(g) / 3.0) - b / 3.0);
         return roots;
     }
 
-    if (q > 0.0) {
+    if (q > 0.0)
+    {
         roots.push_back(-2.0 * t * cosh(acosh(-g) / 3.0) - b / 3.0);
         return roots;
     }
@@ -301,10 +323,12 @@ std::vector<double> perspectiveSolver::cubic(const double b, const double c, con
     return roots;
 }
 
-std::pair<cv::Mat, cv::Mat> perspectiveSolver::arun(const cv::Mat &A, const cv::Mat &B) {
+std::pair<cv::Mat, cv::Mat> perspectiveSolver::arun(const cv::Mat &A, const cv::Mat &B)
+{
     // Ensure that A and B have the correct dimensions
     int N = A.cols;
-    if (B.cols != N || A.rows != 3 || B.rows != 3) {
+    if (B.cols != N || A.rows != 3 || B.rows != 3)
+    {
         throw std::invalid_argument("Input matrices must be 3xN.");
     }
 
@@ -312,7 +336,8 @@ std::pair<cv::Mat, cv::Mat> perspectiveSolver::arun(const cv::Mat &A, const cv::
     cv::Mat A_centroid = cv::Mat::zeros(3, 1, CV_64F);
     cv::Mat B_centroid = cv::Mat::zeros(3, 1, CV_64F);
 
-    for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < N; ++i)
+    {
         A_centroid += A.col(i);
         B_centroid += B.col(i);
     }
@@ -324,14 +349,16 @@ std::pair<cv::Mat, cv::Mat> perspectiveSolver::arun(const cv::Mat &A, const cv::
     cv::Mat A_prime = cv::Mat::zeros(A.size(), A.type()); // Initialize A_prime with the same size as A
     cv::Mat B_prime = cv::Mat::zeros(B.size(), B.type()); // Initialize B_prime with the same size as B
 
-    for (int i = 0; i < A.cols; ++i) {
+    for (int i = 0; i < A.cols; ++i)
+    {
         A_prime.col(i) = A.col(i) - A_centroid;
         B_prime.col(i) = B.col(i) - B_centroid;
     }
 
     // Calculate the H matrix
     cv::Mat H = cv::Mat::zeros(3, 3, CV_64F);
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < N; i++)
+    {
         H += A_prime.col(i) * B_prime.col(i).t();
     }
 
@@ -354,17 +381,20 @@ std::pair<cv::Mat, cv::Mat> perspectiveSolver::arun(const cv::Mat &A, const cv::
     return {R, t};
 }
 
-std::pair<cv::Mat, cv::Mat> perspectiveSolver::horn(const cv::Mat &A, const cv::Mat &B) {
+std::pair<cv::Mat, cv::Mat> perspectiveSolver::horn(const cv::Mat &A, const cv::Mat &B)
+{
     // Ensure that A and B have the correct dimensions
     int N = A.cols;
-    if (B.cols != N || A.rows != 3 || B.rows != 3) {
+    if (B.cols != N || A.rows != 3 || B.rows != 3)
+    {
         throw std::invalid_argument("Input matrices must be 3xN.");
     }
 
     // 1. First compute the centroids of both sets of points A and B
     cv::Mat A_centroid = cv::Mat::zeros(3, 1, CV_64F);
     cv::Mat B_centroid = cv::Mat::zeros(3, 1, CV_64F);
-    for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < N; ++i)
+    {
         A_centroid += A.col(i);
         B_centroid += B.col(i);
     }
@@ -374,14 +404,16 @@ std::pair<cv::Mat, cv::Mat> perspectiveSolver::horn(const cv::Mat &A, const cv::
     // 2. Translate the points such that their centroids are at the origin
     cv::Mat A_prime = cv::Mat::zeros(A.size(), A.type());
     cv::Mat B_prime = cv::Mat::zeros(B.size(), B.type());
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < N; i++)
+    {
         A_prime.col(i) = A.col(i) - A_centroid;
         B_prime.col(i) = B.col(i) - B_centroid;
     }
 
     // Step 3: Compute the cross-covariance matrix H
     cv::Mat H = cv::Mat::zeros(3, 3, CV_64F);
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < N; i++)
+    {
         H += A_prime.col(i) * B_prime.col(i).t();
     }
 
@@ -420,8 +452,7 @@ std::pair<cv::Mat, cv::Mat> perspectiveSolver::horn(const cv::Mat &A, const cv::
     double qy = q.at<double>(2, 0);
     double qz = q.at<double>(3, 0);
 
-    cv::Mat R = (cv::Mat_<double>(3, 3) <<
-                 1 - 2 * (qy * qy + qz * qz), 2 * (qx * qy - qw * qz), 2 * (qx * qz + qw * qy),
+    cv::Mat R = (cv::Mat_<double>(3, 3) << 1 - 2 * (qy * qy + qz * qz), 2 * (qx * qy - qw * qz), 2 * (qx * qz + qw * qy),
                  2 * (qx * qy + qw * qz), 1 - 2 * (qx * qx + qz * qz), 2 * (qy * qz - qw * qx),
                  2 * (qx * qz - qw * qy), 2 * (qy * qz + qw * qx), 1 - 2 * (qx * qx + qy * qy));
 
@@ -432,24 +463,29 @@ std::pair<cv::Mat, cv::Mat> perspectiveSolver::horn(const cv::Mat &A, const cv::
     return {R, t};
 }
 
-bool perspectiveSolver::areSolutionsSimilar(const GrunertSolution &a, const GrunertSolution &b) {
+bool perspectiveSolver::areSolutionsSimilar(const GrunertSolution &a, const GrunertSolution &b)
+{
     // Look for overlapping euler angle solutions
     const std::vector<double> eulerAnglesA = getEulerAngles(a.rotationMatrix);
     const std::vector<double> eulerAnglesB = getEulerAngles(b.rotationMatrix);
-    if (fabs(eulerAnglesA[0] - eulerAnglesB[0]) > EQUAL_TOLERANCE) {
+    if (fabs(eulerAnglesA[0] - eulerAnglesB[0]) > EQUAL_TOLERANCE)
+    {
         return false;
     }
 
-    if (fabs(eulerAnglesA[1] - eulerAnglesB[1]) > EQUAL_TOLERANCE) {
+    if (fabs(eulerAnglesA[1] - eulerAnglesB[1]) > EQUAL_TOLERANCE)
+    {
         return false;
     }
 
-    if (fabs(eulerAnglesA[2] - eulerAnglesB[2]) > EQUAL_TOLERANCE) {
+    if (fabs(eulerAnglesA[2] - eulerAnglesB[2]) > EQUAL_TOLERANCE)
+    {
         return false;
     }
 
     // Compare translation vectors
-    if (cv::norm(a.translationVector - b.translationVector) > EQUAL_TOLERANCE) {
+    if (cv::norm(a.translationVector - b.translationVector) > EQUAL_TOLERANCE)
+    {
         return false;
     }
 
@@ -457,9 +493,11 @@ bool perspectiveSolver::areSolutionsSimilar(const GrunertSolution &a, const Grun
     return true;
 }
 
-std::vector<std::vector<double> > perspectiveSolver::removeDistortion(const std::vector<std::vector<double> > &points) {
-    std::vector<std::vector<double> > uPoints;
-    for (const auto &point: points) {
+std::vector<std::vector<double>> perspectiveSolver::removeDistortion(const std::vector<std::vector<double>> &points)
+{
+    std::vector<std::vector<double>> uPoints;
+    for (const auto &point : points)
+    {
         // Step 1: Normalize the distorted pixel coordinates
         const double x_d = (point.at(0) - CX) / FX;
         const double y_d = (point.at(1) - CY) / FY;
@@ -469,7 +507,8 @@ std::vector<std::vector<double> > perspectiveSolver::removeDistortion(const std:
         double y_u = y_d;
 
         // Iteratively solve for undistorted coordinates
-        for (int iter = 0; iter < MAX_ITER_DIST; iter++) {
+        for (int iter = 0; iter < MAX_ITER_DIST; iter++)
+        {
             const double x_u_prev = x_u;
             const double y_u_prev = y_u;
 
@@ -483,7 +522,8 @@ std::vector<std::vector<double> > perspectiveSolver::removeDistortion(const std:
             const double dx = x_u - x_u_prev;
             const double dy = y_u - y_u_prev;
 
-            if ((dx * dx + dy * dy) < CONV_TOLERANCE_DIST * CONV_TOLERANCE_DIST) {
+            if ((dx * dx + dy * dy) < CONV_TOLERANCE_DIST * CONV_TOLERANCE_DIST)
+            {
                 break; // Converged
             }
         }
@@ -494,8 +534,8 @@ std::vector<std::vector<double> > perspectiveSolver::removeDistortion(const std:
     return uPoints;
 }
 
-
-std::vector<double> perspectiveSolver::quartic(const double b, const double c, const double d, const double e) {
+std::vector<double> perspectiveSolver::quartic(const double b, const double c, const double d, const double e)
+{
     std::vector<double> roots;
 
     const double p = c - 0.375 * b * b;
@@ -503,19 +543,24 @@ std::vector<double> perspectiveSolver::quartic(const double b, const double c, c
     const double m = cubic(p, 0.25 * p * p + 0.01171875 * b * b * b * b - e + 0.25 * b * d - 0.0625 * b * b * c,
                            -0.125 * q * q)[0];
 
-    if (q == 0.0) {
-        if (m < 0.0) {
+    if (q == 0.0)
+    {
+        if (m < 0.0)
+        {
             return roots;
         }
 
         const double sqrt_2m = sqrt(2.0 * m);
-        if (-m - p > 0.0) {
+        if (-m - p > 0.0)
+        {
             const double delta = sqrt(2.0 * (-m - p));
             roots.push_back(-0.25 * b + 0.5 * (sqrt_2m - delta));
             roots.push_back(-0.25 * b - 0.5 * (sqrt_2m - delta));
             roots.push_back(-0.25 * b + 0.5 * (sqrt_2m + delta));
             roots.push_back(-0.25 * b - 0.5 * (sqrt_2m + delta));
-        } else if (-m - p == 0.0) {
+        }
+        else if (-m - p == 0.0)
+        {
             roots.push_back(-0.25 * b - 0.5 * sqrt_2m);
             roots.push_back(-0.25 * b + 0.5 * sqrt_2m);
         }
@@ -523,19 +568,22 @@ std::vector<double> perspectiveSolver::quartic(const double b, const double c, c
         return roots;
     }
 
-    if (m < 0.0) {
+    if (m < 0.0)
+    {
         return roots;
     }
 
     const double sqrt_2m = sqrt(2.0 * m);
 
-    if (-m - p + q / sqrt_2m >= 0.0) {
+    if (-m - p + q / sqrt_2m >= 0.0)
+    {
         const double delta = sqrt(2.0 * (-m - p + q / sqrt_2m));
         roots.push_back(0.5 * (-sqrt_2m + delta) - 0.25 * b);
         roots.push_back(0.5 * (-sqrt_2m - delta) - 0.25 * b);
     }
 
-    if (-m - p - q / sqrt_2m >= 0.0) {
+    if (-m - p - q / sqrt_2m >= 0.0)
+    {
         const double delta = sqrt(2.0 * (-m - p - q / sqrt_2m));
         roots.push_back(0.5 * (sqrt_2m + delta) - 0.25 * b);
         roots.push_back(0.5 * (sqrt_2m - delta) - 0.25 * b);
@@ -545,9 +593,11 @@ std::vector<double> perspectiveSolver::quartic(const double b, const double c, c
 }
 
 // Helper function to compute the centroid of the quadrilateral
-std::vector<double> computeCentroid(const std::vector<std::vector<double> > &points) {
+std::vector<double> computeCentroid(const std::vector<std::vector<double>> &points)
+{
     double cx = 0, cy = 0;
-    for (const auto &point: points) {
+    for (const auto &point : points)
+    {
         cx += point[0];
         cy += point[1];
     }
@@ -557,19 +607,22 @@ std::vector<double> computeCentroid(const std::vector<std::vector<double> > &poi
 }
 
 // Helper function to compute the angle relative to the centroid
-double computeAngle(const std::vector<double> &point, const std::vector<double> &centroid) {
+double computeAngle(const std::vector<double> &point, const std::vector<double> &centroid)
+{
     return std::atan2(point[1] - centroid[1], point[0] - centroid[0]);
 }
 
-std::vector<std::vector<double> > perspectiveSolver::reorderPoints(const std::vector<std::vector<double> > &points) {
+std::vector<std::vector<double>> perspectiveSolver::reorderPoints(const std::vector<std::vector<double>> &points)
+{
     // Calculate the centroid of the points
     std::vector<double> centroid = computeCentroid(points);
 
     // Sort points based on the angle relative to the centroid
-    std::vector<std::vector<double> > sortedPoints = points;
+    std::vector<std::vector<double>> sortedPoints = points;
 
     std::sort(sortedPoints.begin(), sortedPoints.end(),
-              [&centroid](const std::vector<double> &a, const std::vector<double> &b) {
+              [&centroid](const std::vector<double> &a, const std::vector<double> &b)
+              {
                   return computeAngle(a, centroid) < computeAngle(b, centroid);
               });
 
