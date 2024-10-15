@@ -18,7 +18,7 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
     float *edges = cannyDetector.applyCanny(greyImage);
 
     // Convert the Canny result back to an OpenCV Mat
-    cv::Mat cannyOutput(IMG_WIDTH, IMG_WIDTH, CV_32FC1, edges);
+    cv::Mat cannyOutput(IMG_WIDTH, IMG_HEIGHT, CV_32FC1, edges);
     cannyOutput.convertTo(cannyOutput, CV_8UC1, 255.0);
 
     // Display the Canny edge detection result in a separate window
