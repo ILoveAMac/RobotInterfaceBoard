@@ -1,6 +1,7 @@
 #ifndef MARKERSYSTEM_CUH
 #define MARKERSYSTEM_CUH
 
+#include <iostream>
 #include <vector>
 #include <tuple>
 

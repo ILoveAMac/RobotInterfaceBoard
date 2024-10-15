@@ -73,6 +73,8 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
         {
             std::vector<double> eulerAngles = perspectiveSolver::getEulerAngles(rotationMatrix);
 
+            std::cout << "Translation: " << translationVector << std::endl;
+
             // Store the translationvector in a c++ vector
             std::vector<double> translation;
             for (int i = 0; i < 3; i++)
