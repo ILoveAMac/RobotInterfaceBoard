@@ -175,9 +175,9 @@ void robotController::update()
     // Print the detected marker vectors
     if (!std::get<0>(markerVectors).empty())
     {
-        // std::cout << "Translation: ";
-        // printVector(std::get<0>(markerVectors));
-        // std::cout << std::endl;
+        std::cout << "Translation: ";
+        printVector(std::get<0>(markerVectors));
+        std::cout << std::endl;
 
         // Printing Euler Angles Vector
         std::cout << "Euler Angles: ";
