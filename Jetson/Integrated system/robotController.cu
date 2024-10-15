@@ -69,8 +69,8 @@ robotController::robotController() : aiHelper(),
     navigation.setPositionController(&this->positionController);
 
     // Initialize atomic flags
-    aiThreadRunning = true;
-    markerThreadRunning = false;
+    aiThreadRunning = false;
+    markerThreadRunning = true;
     poopDetected = false;
 
     // Start the AI processing thread
@@ -843,30 +843,34 @@ void robotController::aiProcessingLoop()
 
 cv::Mat robotController::preprocessFrame(const cv::Mat &frame)
 {
-    // cv::Mat resizedFrame;
-    // cv::resize(frame, resizedFrame, cv::Size(448, 448));
-    // cv::cvtColor(resizedFrame, resizedFrame, cv::COLOR_BGR2RGB);
-    // resizedFrame.convertTo(resizedFrame, CV_32F, 1.0 / 255.0);
-    // cv::split(resizedFrame, this->channels);
+    cv::Mat resizedFrame;
+    cv::resize(frame, resizedFrame, cv::Size(448, 448));
+    cv::cvtColor(resizedFrame, resizedFrame, cv::COLOR_BGR2RGB);
+    resizedFrame.convertTo(resizedFrame, CV_32F, 1.0 / 255.0);
+    cv::split(resizedFrame, this->channels);
 
-    // // Copy the data to the host_image
-    // for (int c = 0; c < 3; ++c)
-    // {
-    //     for (int h = 0; h < 448; ++h)
-    //     {
-    //         for (int w = 0; w < 448; ++w)
-    //         {
-    //             this->host_image[c * 448 * 448 + h * 448 + w] = this->channels[c].at<float>(h, w);
-    //         }
-    //     }
-    // }
+    // Copy the data to the host_image
+    for (int c = 0; c < 3; ++c)
+    {
+        for (int h = 0; h < 448; ++h)
+        {
+            for (int w = 0; w < 448; ++w)
+            {
+                this->host_image[c * 448 * 448 + h * 448 + w] = this->channels[c].at<float>(h, w);
+            }
+        }
+    }
 
-    // // Transfer the data from host to device
-    // cudaMemcpy(this->input_image, this->host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
+    // Transfer the data from host to device
+    cudaMemcpy(this->input_image, this->host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
 
-    // cv::cvtColor(resizedFrame, resizedFrame, cv::COLOR_RGB2BGR);
+    cv::cvtColor(resizedFrame, resizedFrame, cv::COLOR_RGB2BGR);
 
-    // return resizedFrame;
+    return resizedFrame;
+}
+
+cv::Mat robotController::preprocessFrameForMarker(const cv::Mat &frame)
+{
     cv::Mat resizedFrame;
 
     // Step 1: Resize the frame to 448x448
@@ -909,7 +913,7 @@ void robotController::markerLoop()
         }
 
         // Preprocess the image
-        cv::Mat preprocessedFrame = preprocessFrame(frame);
+        cv::Mat preprocessedFrame = preprocessFrameForMarker(frame);
 
         // Preform marker detection
         std::tuple<std::vector<double>, std::vector<double>> result = this->markerSystem.detectMarkers(this->input_image);

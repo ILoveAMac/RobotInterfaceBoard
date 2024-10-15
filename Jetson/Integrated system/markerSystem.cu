@@ -76,6 +76,24 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
         cv::Mat rotationMatrix = solution.rotationMatrix;
         cv::Mat translationVector = solution.translationVector;
 
+        // Draw the parent quad in blue
+        cv::polylines(cannyOutput, parentQuad, true, cv::Scalar(255, 0, 0), 2);
+
+        // Draw the child quad in green
+        cv::polylines(cannyOutput, childQuad, true, cv::Scalar(0, 255, 0), 2);
+
+        // Draw red dots at each corner of the parent quad
+        for (size_t i = 0; i < parentQuad.size(); ++i)
+        {
+            cv::circle(cannyOutput, parentQuad[i], 5, cv::Scalar(0, 0, 255), -1);
+
+            // Label each point with its index
+            std::string label = std::to_string(i);
+            cv::putText(cannyOutput, label, parentQuad[i] + cv::Point(5, -5), cv::FONT_HERSHEY_SIMPLEX, 0.5,
+                        cv::Scalar(0, 255, 255), 1); // Yellow text with size 0.5
+        }
+        cv::imshow("Marker Detection - Webcam", cannyOutput);
+
         if (translationVector.size().height == 3)
         {
             std::vector<double> eulerAngles = perspectiveSolver::getEulerAngles(rotationMatrix);

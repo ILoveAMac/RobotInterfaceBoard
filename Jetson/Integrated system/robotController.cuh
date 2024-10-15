@@ -139,6 +139,7 @@ private:
     void aiProcessingLoop();
     void markerLoop();
     cv::Mat preprocessFrame(const cv::Mat &frame);
+    cv::Mat preprocessFrameForMarker(const cv::Mat &frame);
 
     // === Variables ===
     std::vector<float> robotPosition;
