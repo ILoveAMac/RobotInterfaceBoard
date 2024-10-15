@@ -791,6 +791,9 @@ void robotController::aiProcessingLoop()
         // Run AI detection
         auto bboxes = yolo.getBoxPredictions(this->input_image);
 
+        // Run marker detection
+        std::tuple<std::vector<double>, std::vector<double>> temp = markerSystem.detectMarkers(this->input_image);
+
         // Update shared variables safely
         {
             std::lock_guard<std::mutex> lock(dataMutex);
