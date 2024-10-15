@@ -12,16 +12,16 @@ markerSystem::~markerSystem()
 std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers(float *image)
 {
     // First we convert the image to grey
-    float *greyImage = greyConverter.convertToGrey(image);
+    float *greyImage = greyConverter.imageToGrey(image);
 
     // Apply canny edge detection
-    float *edges = cannyDetector.detectEdges(greyImage);
+    float *edges = cannyDetector.applyCanny(greyImage);
 
     // Find contours
     std::vector<std::vector<int>> contours = contourDetector.findContours(edges, IMG_WIDTH, IMG_HEIGHT);
 
     // Use the marker isolator to find the nested pair of quads (markers)
-    std::vector<std::vector<std::vector<int>>> markers = markerIsolator.isolateMarkers(contours);
+    std::vector<std::vector<std::vector<int>>> markers = markerIsolator.isolateMarkersFromContours(contours);
 
     for (const auto &marker : markers)
     {
@@ -30,15 +30,15 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
         std::vector<cv::Point> childQuad;
 
         // Extract the parent quad points
-        for (size_t i = 0; i < nestedPair[0].size(); i += 2)
+        for (size_t i = 0; i < marker[0].size(); i += 2)
         {
-            parentQuad.emplace_back(nestedPair[0][i], nestedPair[0][i + 1]);
+            parentQuad.emplace_back(marker[0][i], marker[0][i + 1]);
         }
 
         // Extract the child quad points
-        for (size_t i = 0; i < nestedPair[1].size(); i += 2)
+        for (size_t i = 0; i < marker[1].size(); i += 2)
         {
-            childQuad.emplace_back(nestedPair[1][i], nestedPair[1][i + 1]);
+            childQuad.emplace_back(marker[1][i], marker[1][i + 1]);
         }
 
         // Solve p4p
@@ -63,8 +63,11 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
         ImagePoints.push_back({static_cast<double>(parentQuad[2].x), static_cast<double>(parentQuad[2].y)});
         ImagePoints.push_back({static_cast<double>(parentQuad[3].x), static_cast<double>(parentQuad[3].y)});
 
-        auto [sideLengths, angles, rotationMatrix, translationVector] = perspectiveSolver::solveP4P(
-            worldPointsVec, ImagePoints);
+        GrunertSolution solution = perspectiveSolver::solveP4P(worldPointsVec, ImagePoints);
+        std::vector<double> sideLengths = solution.sideLengths;
+        std::vector<double> angles = solution.angles;
+        cv::Mat rotationMatrix = solution.rotationMatrix;
+        cv::Mat translationVector = solution.translationVector;
 
         if (translationVector.size().height == 3)
         {
