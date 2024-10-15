@@ -100,6 +100,54 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
         // Step 5: Display the result in a window
         cv::imshow("Marker Detection - Webcam", colorOutput);
 
+        if (!rotationMatrix.empty() && !translationVector.empty())
+        {
+            // Define camera intrinsic parameters and distortion coefficients
+            cv::Mat cameraMatrix = (cv::Mat_<double>(3, 3) << FX, 0, CX,
+                                    0, FY, CY,
+                                    0, 0, 1);
+
+            cv::Mat distCoeffs = (cv::Mat_<double>(1, 5) << K1, K2, 0, 0, 0); // Adjust if you have more coefficients
+
+            // Convert rotation matrix to rotation vector
+            cv::Mat rvec;
+            cv::Rodrigues(rotationMatrix, rvec);
+
+            // Define 3D points of the coordinate axes in the object's coordinate system
+            std::vector<cv::Point3f> axisPoints;
+            axisPoints.push_back(cv::Point3f(0, 0, 0));           // Origin
+            axisPoints.push_back(cv::Point3f(0.0, 0.130, 0.0));   // X-axis (5 cm)
+            axisPoints.push_back(cv::Point3f(0.130, 0.130, 0.0)); // Y-axis (5 cm)
+            axisPoints.push_back(cv::Point3f(0.130, 0.0, 0.0));   // Z-axis (5 cm)
+
+            // Project the 3D points onto the image plane
+            std::vector<cv::Point2f> imagePoints;
+            cv::projectPoints(
+                axisPoints,
+                rvec,
+                translationVector,
+                cameraMatrix,
+                distCoeffs,
+                imagePoints);
+
+            // Draw the axes on the image
+            cv::Mat img_with_axes = colorOutput.clone();
+            cv::line(img_with_axes, imagePoints[0], imagePoints[1], cv::Scalar(0, 0, 255), 2); // X-axis in RED
+            cv::line(img_with_axes, imagePoints[0], imagePoints[2], cv::Scalar(0, 255, 0), 2); // Y-axis in GREEN
+            cv::line(img_with_axes, imagePoints[0], imagePoints[3], cv::Scalar(255, 0, 0), 2); // Z-axis in BLUE
+
+            // Optionally, label the axes
+            cv::putText(img_with_axes, "X", imagePoints[1], cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255),
+                        2);
+            cv::putText(img_with_axes, "Y", imagePoints[2], cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 255, 0),
+                        2);
+            cv::putText(img_with_axes, "Z", imagePoints[3], cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 0, 0),
+                        2);
+
+            // Display the image
+            cv::imshow("Pose Visualization", img_with_axes);
+        }
+
         if (translationVector.size().height == 3)
         {
             std::vector<double> eulerAngles = perspectiveSolver::getEulerAngles(rotationMatrix);
