@@ -5,7 +5,7 @@ void printVector(const std::vector<double> &vec)
     std::cout << "[";
     for (size_t i = 0; i < vec.size(); ++i)
     {
-        std::cout << vec[i];
+        std::cout << vec[i] * 180 / M_PI; // Convert to degrees
         if (i < vec.size() - 1)
         {
             std::cout << ", "; // Add comma for all elements except the last one
@@ -175,9 +175,9 @@ void robotController::update()
     // Print the detected marker vectors
     if (!std::get<0>(markerVectors).empty())
     {
-        std::cout << "Translation: ";
-        printVector(std::get<0>(markerVectors));
-        std::cout << std::endl;
+        // std::cout << "Translation: ";
+        // printVector(std::get<0>(markerVectors));
+        // std::cout << std::endl;
 
         // Printing Euler Angles Vector
         std::cout << "Euler Angles: ";

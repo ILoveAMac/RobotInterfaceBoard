@@ -196,7 +196,7 @@ std::vector<std::vector<std::vector<int>>> markerIsolator::removeInvalidMarkers(
     // To Define a threshold for how similar the aspect ratios should be
     constexpr float aspectRatioSimilarityThreshold = 0.05f; // Allowable percentage difference
 
-    constexpr float minArea = 1000.0;
+    constexpr float minArea = 500.0;
 
     std::vector<std::vector<std::vector<int>>> validMarkers;
 
