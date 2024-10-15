@@ -5,6 +5,7 @@
 #ifndef CONTOURDETECTOR_CUH
 #define CONTOURDETECTOR_CUH
 #include <vector>
+#include <tuple>
 
 #define DISTANCE_THRESHOLD 30
 
