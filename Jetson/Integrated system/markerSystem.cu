@@ -18,7 +18,7 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
     float *edges = cannyDetector.applyCanny(greyImage);
 
     // Find contours
-    std::vector<std::vector<int>> contours = contourDetector.findContours(edges, IMG_WIDTH, IMG_HEIGHT);
+    std::vector<std::vector<int>> contours = contourDetector.detect(edges, IMG_WIDTH, IMG_HEIGHT);
 
     // Use the marker isolator to find the nested pair of quads (markers)
     std::vector<std::vector<std::vector<int>>> markers = markerIsolator.isolateMarkersFromContours(contours);
