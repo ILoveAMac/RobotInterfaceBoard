@@ -843,29 +843,51 @@ void robotController::aiProcessingLoop()
 
 cv::Mat robotController::preprocessFrame(const cv::Mat &frame)
 {
+    // cv::Mat resizedFrame;
+    // cv::resize(frame, resizedFrame, cv::Size(448, 448));
+    // cv::cvtColor(resizedFrame, resizedFrame, cv::COLOR_BGR2RGB);
+    // resizedFrame.convertTo(resizedFrame, CV_32F, 1.0 / 255.0);
+    // cv::split(resizedFrame, this->channels);
+
+    // // Copy the data to the host_image
+    // for (int c = 0; c < 3; ++c)
+    // {
+    //     for (int h = 0; h < 448; ++h)
+    //     {
+    //         for (int w = 0; w < 448; ++w)
+    //         {
+    //             this->host_image[c * 448 * 448 + h * 448 + w] = this->channels[c].at<float>(h, w);
+    //         }
+    //     }
+    // }
+
+    // // Transfer the data from host to device
+    // cudaMemcpy(this->input_image, this->host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
+
+    // cv::cvtColor(resizedFrame, resizedFrame, cv::COLOR_RGB2BGR);
+
+    // return resizedFrame;
     cv::Mat resizedFrame;
+
+    // Step 1: Resize the frame to 448x448
     cv::resize(frame, resizedFrame, cv::Size(448, 448));
+
+    // Step 2: Convert the frame from BGR to RGB
     cv::cvtColor(resizedFrame, resizedFrame, cv::COLOR_BGR2RGB);
+
+    // Step 3: Convert to float and normalize to [0, 1]
     resizedFrame.convertTo(resizedFrame, CV_32F, 1.0 / 255.0);
-    cv::split(resizedFrame, this->channels);
 
-    // Copy the data to the host_image
-    for (int c = 0; c < 3; ++c)
-    {
-        for (int h = 0; h < 448; ++h)
-        {
-            for (int w = 0; w < 448; ++w)
-            {
-                this->host_image[c * 448 * 448 + h * 448 + w] = this->channels[c].at<float>(h, w);
-            }
-        }
-    }
+    // Step 4: Copy the data to the host_image array in row-major order
+    std::memcpy(this->host_image, resizedFrame.ptr<float>(), 3 * 448 * 448 * sizeof(float));
 
-    // Transfer the data from host to device
+    // Step 5: Transfer the data from host to device (GPU)
     cudaMemcpy(this->input_image, this->host_image, 3 * 448 * 448 * sizeof(float), cudaMemcpyHostToDevice);
 
+    // Step 6: Convert back to BGR for display if needed
     cv::cvtColor(resizedFrame, resizedFrame, cv::COLOR_RGB2BGR);
 
+    // Return the preprocessed frame for potential display
     return resizedFrame;
 }
 
