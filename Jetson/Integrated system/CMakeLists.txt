@@ -8,6 +8,12 @@ set(CMAKE_CXX_STANDARD 11)
 # Header files (if any)
 set(Headers ModelLoadingHelper.h)
 
+# Collect all .cu and .cuh files in the marker directory
+file(GLOB MARKER_SOURCES
+    "${PROJECT_SOURCE_DIR}/marker/*.cu"
+    "${PROJECT_SOURCE_DIR}/marker/*.cuh"
+)
+
 # Add the executable, combining CUDA and C++ files
 add_executable(YOLO_CUDA 
     ${PROJECT_SOURCE_DIR}/main.cu
@@ -23,6 +29,7 @@ add_executable(YOLO_CUDA
     pid.cpp
     visualServoing.cpp
     navigationSystem.cpp
+    ${MARKER_SOURCES}  # Add the collected marker sources here
 )
 
 # Enable separable compilation for CUDA
