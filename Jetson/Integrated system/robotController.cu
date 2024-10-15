@@ -1,5 +1,19 @@
 #include "robotController.cuh"
 
+void printVector(const std::vector<float> &vec)
+{
+    std::cout << "[";
+    for (size_t i = 0; i < vec.size(); ++i)
+    {
+        std::cout << vec[i];
+        if (i < vec.size() - 1)
+        {
+            std::cout << ", "; // Add comma for all elements except the last one
+        }
+    }
+    std::cout << "]";
+}
+
 robotController::robotController() : aiHelper(),
                                      yolo(MODEL_PATH),
                                      visualServoing(IMAGE_HEIGHT, IMAGE_WIDTH),
@@ -161,8 +175,14 @@ void robotController::update()
     // Print the detected marker vectors
     if (!std::get<0>(markerVectors).empty())
     {
-        std::cout << "Translation: " << std::get<0>(markerVectors) << std::endl;
-        std::cout << "Euler Angles: " << std::get<1>(markerVectors) << std::endl;
+        std::cout << "Translation: ";
+        printVector(std::get<0>(markerVectors));
+        std::cout << std::endl;
+
+        // Printing Euler Angles Vector
+        std::cout << "Euler Angles: ";
+        printVector(std::get<1>(markerVectors));
+        std::cout << std::endl;
     }
 
     // Handle keyboard input or other events
