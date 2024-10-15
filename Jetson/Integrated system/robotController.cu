@@ -909,7 +909,8 @@ void robotController::markerLoop()
             {
                 std::lock_guard<std::mutex> lock(dataMutex);
                 this->latestFrame = preprocessedFrame.clone(); // Store the original frame
-                this->markerDetected = false;
+                // Set empty vectors to indicate no marker was detected
+                this->detectedMarker = std::make_tuple(std::vector<double>(), std::vector<double>());
             }
         }
 
