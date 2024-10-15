@@ -1,6 +1,9 @@
 #ifndef MARKERSYSTEM_CUH
 #define MARKERSYSTEM_CUH
 
+#include <vector>
+#include <tuple>
+
 // Includes for the marker system
 #include <opencv2/opencv.hpp>
 
