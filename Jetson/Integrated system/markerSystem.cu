@@ -97,9 +97,6 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
                         cv::Scalar(0, 255, 255), 1); // Yellow text
         }
 
-        // Step 5: Display the result in a window
-        cv::imshow("Marker Detection - Webcam", colorOutput);
-
         if (!rotationMatrix.empty() && !translationVector.empty())
         {
             // Define camera intrinsic parameters and distortion coefficients
@@ -143,10 +140,10 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
                         2);
             cv::putText(img_with_axes, "Z", imagePoints[3], cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 0, 0),
                         2);
-
-            // Display the image
-            cv::imshow("Pose Visualization", img_with_axes);
         }
+
+        // Step 5: Display the result in a window
+        cv::imshow("Marker Detection - Webcam", colorOutput);
 
         if (translationVector.size().height == 3)
         {
