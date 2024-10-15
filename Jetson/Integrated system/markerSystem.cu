@@ -14,6 +14,31 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
     // First we convert the image to grey
     float *greyImage = greyConverter.imageToGrey(image);
 
+    int width = 448;
+    int height = 448;
+
+    // Step 1: Allocate memory on the CPU (host)
+    float *hostImage = new float[width * height]; // Allocate space for 448x448 grayscale image on the CPU
+
+    // Step 2: Copy image from GPU to CPU
+    cudaMemcpy(hostImage, greyImage, width * height * sizeof(float), cudaMemcpyDeviceToHost);
+
+    // Step 3: Convert the float array to an OpenCV Mat object
+    // OpenCV expects 8-bit or 32-bit image types, so if your image is a float,
+    // you may need to normalize it first or convert it to an 8-bit format.
+    cv::Mat greyMat(height, width, CV_32FC1, hostImage); // Create an OpenCV Mat from the float array
+
+    // Optionally convert to 8-bit for display purposes (since OpenCV displays grayscale images in 8-bit)
+    cv::Mat greyMat8U;
+    greyMat.convertTo(greyMat8U, CV_8UC1, 255.0); // Scale the float values to 0-255 for display
+
+    // Step 4: Display the image in an OpenCV window
+    cv::imshow("Grayscale Image", greyMat8U);
+    cv::waitKey(0); // Wait for a key press before closing the window
+
+    // Step 5: Clean up
+    delete[] hostImage; // Free the CPU memory
+
     // Apply canny edge detection
     float *edges = cannyDetector.applyCanny(greyImage);
 
