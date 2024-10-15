@@ -1,6 +1,6 @@
 #include "robotController.cuh"
 
-void printVector(const std::vector<float> &vec)
+void printVector(const std::vector<double> &vec)
 {
     std::cout << "[";
     for (size_t i = 0; i < vec.size(); ++i)
