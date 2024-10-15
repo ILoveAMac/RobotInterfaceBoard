@@ -21,7 +21,7 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
     float *hostImage = new float[width * height]; // Allocate space for 448x448 grayscale image on the CPU
 
     // Step 2: Copy image from GPU to CPU
-    cudaMemcpy(hostImage, greyImage, width * height * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(hostImage, image, width * height * sizeof(float), cudaMemcpyDeviceToHost);
 
     // Step 3: Convert the float array to an OpenCV Mat object
     // OpenCV expects 8-bit or 32-bit image types, so if your image is a float,
