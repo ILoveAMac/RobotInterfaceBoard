@@ -587,6 +587,7 @@ void robotController::navigateToMarker()
             // Get the distance from the marker, if the distance is greater than 1 meter, continue moving forwards
 
             float distance = std::get<0>(markerVectors)[2];
+            std::cout << "Distance to marker: " << distance << std::endl;
             if (distance > 1.0f)
             {
                 // Move the robot forwards in it current orientation
