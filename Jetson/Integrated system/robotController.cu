@@ -581,6 +581,7 @@ void robotController::navigateToMarker()
             this->updateRobotPosition();
             return;
         }
+        std::cout << "=====================" << std::endl;
 
         if (!std::get<0>(markerVectors).empty())
         {
