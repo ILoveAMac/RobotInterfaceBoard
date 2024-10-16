@@ -177,17 +177,17 @@ void robotController::update()
     }
 
     // Print the detected marker vectors
-    if (!std::get<0>(markerVectors).empty())
-    {
-        std::cout << "Translation: ";
-        printVector(std::get<0>(markerVectors));
-        std::cout << std::endl;
+    // if (!std::get<0>(markerVectors).empty())
+    // {
+    //     std::cout << "Translation: ";
+    //     printVector(std::get<0>(markerVectors));
+    //     std::cout << std::endl;
 
-        // Printing Euler Angles Vector
-        std::cout << "Euler Angles: ";
-        printVector(std::get<1>(markerVectors));
-        std::cout << std::endl;
-    }
+    //     // Printing Euler Angles Vector
+    //     std::cout << "Euler Angles: ";
+    //     printVector(std::get<1>(markerVectors));
+    //     std::cout << std::endl;
+    // }
 
     // Handle keyboard input or other events
     char key = cv::waitKey(1);
@@ -528,26 +528,26 @@ void robotController::searchForMarker()
     }
 
     // if the robot is still moving dont get a new goal position
-    if (pcState == State::MOVE_TO_GOAL)
-    {
-        this->updateRobotPosition();
-        // Check if an obstacle has been detected, if so we need to call the explore function to get a new setpoint
-        if (!canMoveForwards())
-        {
-            std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
-            this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
-            this->positionController.setState(State::ROTATE_TO_GOAL_ORIENTATION);
-        }
+    // if (pcState == State::MOVE_TO_GOAL)
+    // {
+    //     this->updateRobotPosition();
+    //     // Check if an obstacle has been detected, if so we need to call the explore function to get a new setpoint
+    //     if (!canMoveForwards())
+    //     {
+    //         std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
+    //         this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
+    //         this->positionController.setState(State::ROTATE_TO_GOAL_ORIENTATION);
+    //     }
 
-        this->delay(DELAY_TIME);
-        return;
-    }
+    //     this->delay(DELAY_TIME);
+    //     return;
+    // }
 
-    this->updateRobotPosition();
+    // this->updateRobotPosition();
 
-    // No marker detected, proceed with navigation
-    std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
-    this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
+    // // No marker detected, proceed with navigation
+    // std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
+    // this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
 
     delay(DELAY_TIME);
 }

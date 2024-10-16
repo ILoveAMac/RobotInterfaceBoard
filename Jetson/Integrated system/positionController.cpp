@@ -119,7 +119,6 @@ void positionController::setGoal(float x, float y, float theta)
     {
 
         this->state = State::ROTATE_TO_GOAL;
-        std::cout << "P " << calculateP(x, y) << std::endl;
     }
 
     this->goalX = x;
