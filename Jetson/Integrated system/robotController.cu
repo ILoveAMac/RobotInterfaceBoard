@@ -584,20 +584,30 @@ void robotController::navigateToMarker()
 
         if (!std::get<0>(markerVectors).empty())
         {
-            // Use the visual servoing algorithm to compute the updated desired robot position and orientation
-            std::vector<float> updatedPosition = this->visualServoing.calculateControlPositionMarker(markerVectors, this->robotPosition, this->positionController);
+            // Get the distance from the marker, if the distance is greater than 1 meter, continue moving forwards
 
-            if (this->visualServoing.getCurrentState() == servoingState::STOP)
+            float distance = std::get<0>(markerVectors)[2];
+            if (distance > 1.0f)
             {
-                this->visualServoing.resetState();
-
-                // Move to the drop off state
-                // this->setRobotState(RobotState::DROP_OFF);
+                // Move the robot forwards in it current orientation
+                this->updateRobotPosition();
+                std::vector<float> newRobotPosition = this->robotPosition;
+                newRobotPosition[0] += 0.3 * std::cos(newRobotPosition[2]);
+                newRobotPosition[1] += 0.3 * std::sin(newRobotPosition[2]);
+                this->positionController.setGoal(newRobotPosition[0], newRobotPosition[1], newRobotPosition[2]);
+                this->delay(DELAY_TIME);
+                this->updateRobotPosition();
                 return;
             }
-
-            // Set the setpoint for the position controller
-            this->positionController.setGoal(updatedPosition[0], updatedPosition[1], updatedPosition[2]);
+            else
+            {
+                // We are close to the marker, transition to the allign to marker state
+                this->setRobotState(RobotState::ALLIGN_TO_MARKER);
+                this->updateRobotPosition();
+                this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], this->robotPosition[2]);
+                this->updateRobotPosition();
+                return;
+            }
         }
         else
         {
