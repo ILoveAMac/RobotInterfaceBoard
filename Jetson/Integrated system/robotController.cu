@@ -576,7 +576,6 @@ void robotController::navigateToMarker()
 
         if (!detectionAvailable)
         {
-            std::cout << "No new marker detection results yet, waiting" << std::endl;
             // No new detection results yet, wait briefly
             this->delay(DELAY_TIME);
             this->updateRobotPosition();
@@ -587,6 +586,7 @@ void robotController::navigateToMarker()
         {
             // Use the visual servoing algorithm to compute the updated desired robot position and orientation
             std::vector<float> updatedPosition = this->visualServoing.calculateControlPositionMarker(markerVectors, this->robotPosition, this->positionController);
+            std::cout << "!!!!!!!!!" << std::endl;
 
             if (this->visualServoing.getCurrentState() == servoingState::STOP)
             {
