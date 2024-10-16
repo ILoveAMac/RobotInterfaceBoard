@@ -72,11 +72,6 @@ robotController::robotController() : aiHelper(),
     aiThreadRunning.store(false);
     markerThreadRunning.store(false);
     poopDetected.store(false);
-
-    // // Start the AI processing thread
-    // aiThread = std::thread(&robotController::aiProcessingLoop, this);
-    // // Start the marker processing thread
-    // markerThread = std::thread(&robotController::markerLoop, this);
 }
 
 robotController::~robotController()

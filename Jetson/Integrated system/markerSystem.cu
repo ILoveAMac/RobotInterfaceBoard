@@ -22,7 +22,7 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
     cannyOutput.convertTo(cannyOutput, CV_8UC1, 255.0);
 
     // Display the Canny edge detection result in a separate window
-    cv::imshow("Canny Edge Detection Output", cannyOutput);
+    // cv::imshow("Canny Edge Detection Output", cannyOutput);
 
     // Find contours
     std::vector<std::vector<int>> contours = contourDetector.detect(edges, IMG_WIDTH, IMG_HEIGHT);
