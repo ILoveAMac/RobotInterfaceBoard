@@ -552,9 +552,65 @@ void robotController::searchForMarker()
     delay(DELAY_TIME);
 }
 
+// This state will be similar to the detection allignment state for the AI
+// The robot will allign itself to the marker
 void robotController::navigateToMarker()
 {
-    // TODO! Once the marker has been detected, navigate towards it
+    // Check if the position controller is busy with a rotation
+    if (positionController.getState() != State::ROTATE_TO_GOAL &&
+        positionController.getState() != State::ROTATE_TO_GOAL_ORIENTATION &&
+        positionController.getState() != State::MOVE_TO_GOAL)
+    {
+        // Check if new marker detection results are available
+        bool detectionAvailable = false;
+        std::tuple<std::vector<double>, std::vector<double>> markerVectors;
+        {
+            std::lock_guard<std::mutex> lock(dataMutex);
+            detectionAvailable = newMarkerDetectionAvailable; // A flag set by the marker thread
+            if (detectionAvailable)
+            {
+                markerVectors = detectedMarker;
+                newMarkerDetectionAvailable = false; // Reset the flag
+            }
+        }
+
+        if (!detectionAvailable)
+        {
+            // No new detection results yet, wait briefly
+            this->delay(DELAY_TIME);
+            this->updateRobotPosition();
+            return;
+        }
+
+        if (!std::get<0>(markerVectors).empty())
+        {
+            // Use the visual servoing algorithm to compute the updated desired robot position and orientation
+            std::vector<float> updatedPosition = this->visualServoing.calculateControlPositionMarker(markerVectors, this->robotPosition, this->positionController);
+
+            if (this->visualServoing.getCurrentState() == servoingState::STOP)
+            {
+                this->visualServoing.resetState();
+
+                // Move to the drop off state
+                this->setRobotState(RobotState::DROP_OFF);
+                return;
+            }
+
+            // Set the setpoint for the position controller
+            this->positionController.setGoal(updatedPosition[0], updatedPosition[1], updatedPosition[2]);
+        }
+        else
+        {
+            // Go back to search pattern, it seems we have lost the marker
+            std::cout << "Lost marker, going back to search pattern" << std::endl;
+            // Set the goal position to the position before pickup
+            this->positionController.setGoal(this->robotPositionBeforePickup[0],
+                                             this->robotPositionBeforePickup[1],
+                                             this->robotPositionBeforePickup[2]);
+
+            this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
+        }
+    }
 }
 
 void robotController::allignToMarker()

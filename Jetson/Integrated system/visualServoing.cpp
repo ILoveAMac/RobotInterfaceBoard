@@ -31,6 +31,25 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     }
 }
 
+std::vector<float> visualServoing::calculateControlPositionMarker(std::tuple<std::vector<double>, std::vector<double>> markerVectors, std::vector<float> robotCurrentPosition, positionController &controller)
+{
+    switch (this->currentState)
+    {
+    case servoingState::ROTATE:
+        return this->markerRotateState(markerVectors, robotCurrentPosition);
+        break;
+    case servoingState::MOVE_FORWARD:
+        return this->markerMoveForwardState(markerVectors, robotCurrentPosition, controller);
+        break;
+    case servoingState::STOP:
+        return robotCurrentPosition;
+        break;
+    default:
+        return robotCurrentPosition;
+        break;
+    }
+}
+
 std::vector<float> visualServoing::rotateState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition)
 {
     // Extract bounding box center
@@ -114,4 +133,38 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
 
     // Return the updated position with the new x, y, and unchanged theta
     return {new_x, new_y, theta};
+}
+
+std::vector<float> visualServoing::markerRotateState(std::tuple<std::vector<double>, std::vector<double>> markerVectors, std::vector<float> robotCurrentPosition)
+{
+    // We must rotate the robot to align with the marker
+    // The second item in the tuple contains the marker's estimated roll, pitch, and yaw
+    // We'll use the yaw to rotate the robot
+
+    // Extract the yaw from the marker's estimated roll, pitch, and yaw
+    float yaw = std::get<1>(markerVectors[2]);
+
+    // Calculate the error in the yaw direction
+    float delta_yaw = yaw - robotCurrentPosition[2]; // Error in radians from the robot's current heading
+    // Print the error in yaw
+    std::cout << "Error in yaw: " << delta_yaw << std::endl;
+
+    // Calculate the rotation speed based on the error in yaw
+    float rotation_speed = this->pidController.compute(delta_yaw, 0);
+
+    // Check if the rotation speed is small enough to move forward
+    if (std::fabs(rotation_speed) < 0.05)
+    {
+        this->currentState = servoingState::MOVE_FORWARD; // State transition
+        return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2]};
+    }
+
+    // Update only the robot's theta (rotation), keep x and y the same
+    return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2] + rotation_speed};
+}
+
+std::vector<float> visualServoing::markerMoveForwardState(std::tuple<std::vector<double>, std::vector<double>> markerVectors, std::vector<float> robotCurrentPosition, positionController &controller)
+{
+    // just return the current position for now
+    return robotCurrentPosition;
 }

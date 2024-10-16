@@ -56,6 +56,7 @@ public:
     // Returns the updated robot position in [x, y, theta]
     // Return values are in meters and radians
     std::vector<float> calculateControlPosition(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, positionController &controller);
+    std::vector<float> calculateControlPositionMarker(std::tuple<std::vector<double>, std::vector<double>> markerVectors, std::vector<float> robotCurrentPosition, positionController &controller);
 
     // Function to get the current state machine state
     servoingState getCurrentState() { return this->currentState; }
@@ -69,6 +70,12 @@ private:
 
     // function for linear allignment
     std::vector<float> moveForwardState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, positionController &controller);
+
+    // function for marker angular allignment
+    std::vector<float> markerRotateState(std::tuple<std::vector<double>, std::vector<double>> markerVectors, std::vector<float> robotCurrentPosition);
+
+    // function for marker linear allignment
+    std::vector<float> markerMoveForwardState(std::tuple<std::vector<double>, std::vector<double>> markerVectors, std::vector<float> robotCurrentPosition, positionController &controller);
 
     float imageHeight;
     float imageWidth;
