@@ -576,12 +576,12 @@ void robotController::navigateToMarker()
 
         if (!detectionAvailable)
         {
+            std::cout << "=====================" << std::endl;
             // No new detection results yet, wait briefly
             this->delay(DELAY_TIME);
             this->updateRobotPosition();
             return;
         }
-        std::cout << "=====================" << std::endl;
 
         if (!std::get<0>(markerVectors).empty())
         {

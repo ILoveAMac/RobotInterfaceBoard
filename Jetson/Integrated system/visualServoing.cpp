@@ -166,5 +166,6 @@ std::vector<float> visualServoing::markerRotateState(std::tuple<std::vector<doub
 std::vector<float> visualServoing::markerMoveForwardState(std::tuple<std::vector<double>, std::vector<double>> markerVectors, std::vector<float> robotCurrentPosition, positionController &controller)
 {
     // just return the current position for now
+    this->currentState = servoingState::STOP;
     return robotCurrentPosition;
 }
