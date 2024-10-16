@@ -566,11 +566,11 @@ void robotController::navigateToMarker()
         std::tuple<std::vector<double>, std::vector<double>> markerVectors;
         {
             std::lock_guard<std::mutex> lock(dataMutex);
-            detectionAvailable = newMarkerDetectionAvailable; // A flag set by the marker thread
+            detectionAvailable = newMarkerAvailable; // A flag set by the marker thread
             if (detectionAvailable)
             {
                 markerVectors = detectedMarker;
-                newMarkerDetectionAvailable = false; // Reset the flag
+                newMarkerAvailable = false; // Reset the flag
             }
         }
 
@@ -1100,7 +1100,7 @@ void robotController::markerLoop()
                 this->latestFrame = preprocessedFrame.clone(); // Store the original frame
                 // Set empty vectors to indicate no marker was detected
                 this->detectedMarker = std::make_tuple(std::vector<double>(), std::vector<double>());
-                markerDetected = false;
+                this->markerDetected = false;
             }
         }
 
