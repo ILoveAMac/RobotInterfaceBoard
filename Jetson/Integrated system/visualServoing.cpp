@@ -159,7 +159,7 @@ std::vector<float> visualServoing::markerRotateState(std::tuple<std::vector<doub
     }
 
     // Calculate the correction, we dont use a pid here, we use the error directly
-    float corrected_yaw = robotCurrentPosition[2] + yaw * 1.0f;
+    float corrected_yaw = robotCurrentPosition[2] + yaw * -1.0f;
 
     // Update only the robot's theta (rotation), keep x and y the same
     return {robotCurrentPosition[0], robotCurrentPosition[1], corrected_yaw};
