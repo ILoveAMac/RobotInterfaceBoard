@@ -603,7 +603,7 @@ void robotController::navigateToMarker()
             else
             {
                 // We are close to the marker, transition to the allign to marker state
-                this->setRobotState(RobotState::ALLIGN_TO_MARKER);
+                // this->setRobotState(RobotState::ALLIGN_TO_MARKER);
                 this->updateRobotPosition();
                 this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], this->robotPosition[2]);
                 this->updateRobotPosition();
@@ -615,9 +615,9 @@ void robotController::navigateToMarker()
             // Go back to search pattern, it seems we have lost the marker
             std::cout << "Lost marker, going back to search pattern" << std::endl;
             // Set the goal position to the position before pickup
-            this->positionController.setGoal(this->robotPositionBeforePickup[0],
-                                             this->robotPositionBeforePickup[1],
-                                             this->robotPositionBeforePickup[2]);
+            this->updateRobotPosition();
+            this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], this->robotPosition[2]);
+            this->updateRobotPosition();
 
             this->setRobotState(RobotState::SEARCH_FOR_MARKER);
         }
