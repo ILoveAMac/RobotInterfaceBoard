@@ -609,7 +609,7 @@ void robotController::navigateToMarker()
                                              this->robotPositionBeforePickup[1],
                                              this->robotPositionBeforePickup[2]);
 
-            this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
+            this->setRobotState(RobotState::SEARCH_FOR_MARKER);
         }
     }
 }
