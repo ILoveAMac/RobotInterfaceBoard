@@ -590,11 +590,13 @@ void robotController::navigateToMarker()
             std::cout << "Distance to marker: " << distance << std::endl;
             if (distance > 1.0f)
             {
+                // calculate the distance to move forwards
+                float distanceToMove = distance - 1.0f;
                 // Move the robot forwards in it current orientation
                 this->updateRobotPosition();
                 std::vector<float> newRobotPosition = this->robotPosition;
-                newRobotPosition[0] += 0.3 * std::cos(newRobotPosition[2]);
-                newRobotPosition[1] += 0.3 * std::sin(newRobotPosition[2]);
+                newRobotPosition[0] += distanceToMove * std::cos(newRobotPosition[2]);
+                newRobotPosition[1] += distanceToMove * std::sin(newRobotPosition[2]);
                 this->positionController.setGoal(newRobotPosition[0], newRobotPosition[1], newRobotPosition[2]);
                 this->delay(DELAY_TIME);
                 this->updateRobotPosition();
