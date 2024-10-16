@@ -590,7 +590,7 @@ void robotController::navigateToMarker()
             std::cout << "Distance to marker: " << distance << std::endl;
             // calculate the distance to move forwards
             float distanceToMove = distance - 1.0f;
-            if (distance > 1.0f || distanceToMove < 0.3)
+            if (distance > 1.0f && distanceToMove > 0.3)
             {
                 // Move the robot forwards in it current orientation
                 this->updateRobotPosition();
@@ -604,6 +604,7 @@ void robotController::navigateToMarker()
             }
             else
             {
+                std::cout << "!" << std::endl;
                 // We are close to the marker, transition to the allign to marker state
                 this->setRobotState(RobotState::ALLIGN_TO_MARKER);
                 this->updateRobotPosition();
@@ -634,7 +635,6 @@ void robotController::navigateToMarker()
 void robotController::allignToMarker()
 {
     // TODO! Once alligned to the marker, transition to the drop off state
-    std::cout << "!" << std::endl;
 }
 
 void robotController::dropOff()
