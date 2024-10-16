@@ -69,9 +69,9 @@ robotController::robotController() : aiHelper(),
     navigation.setPositionController(&this->positionController);
 
     // Initialize atomic flags
-    aiThreadRunning = true;
-    markerThreadRunning = false;
-    poopDetected = false;
+    aiThreadRunning.store(true);
+    markerThreadRunning.store(false);
+    poopDetected.store(false);
 
     // Start the AI processing thread
     aiThread = std::thread(&robotController::aiProcessingLoop, this);
@@ -616,8 +616,8 @@ void robotController::aiSetup()
     // Set the camera angle to 160 degrees
     this->serial.setCameraAngle(160);
 
-    markerThreadRunning = false;
-    aiThreadRunning = true;
+    markerThreadRunning.store(false);
+    aiThreadRunning.store(true);
 
     // Set the robot state to move and detect
     this->setRobotState(RobotState::MOVE_AND_DETECT);
@@ -628,10 +628,10 @@ void robotController::aiSetup()
 void robotController::markerSetup()
 {
     // Set the camera angle to 100 degrees
-    this->serial.setCameraAngle(100);
+    this->serial.setCameraAngle(80);
 
-    aiThreadRunning = false;
-    markerThreadRunning = true;
+    aiThreadRunning.store(false);
+    markerThreadRunning.store(true);
 
     // Set the robot state to search for marker
     this->setRobotState(RobotState::SEARCH_FOR_MARKER);
@@ -893,7 +893,7 @@ void robotController::delay(int ms)
 // It runs in a separate thread to prevent blocking the main thread as the AI is slow
 void robotController::aiProcessingLoop()
 {
-    while (aiThreadRunning && !markerThreadRunning)
+    while (aiThreadRunning.load() && !markerThreadRunning.load())
     {
         // Capture an image from the camera
         cv::Mat frame;
@@ -986,7 +986,7 @@ cv::Mat robotController::preprocessFrameForMarker(const cv::Mat &frame)
 
 void robotController::markerLoop()
 {
-    while (markerThreadRunning && !aiThreadRunning)
+    while (markerThreadRunning.load() && !aiThreadRunning.load())
     {
         // Capture an image from the camera
         cv::Mat frame;
