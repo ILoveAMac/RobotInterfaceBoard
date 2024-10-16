@@ -37,6 +37,20 @@
 #define MIN_LINEAR -0.25
 #define MAX_LINEAR 0.25
 
+// Controller parameters for marker angular allignment
+#define KP_MARKER_ROTATE 0.2
+#define KI_MARKER_ROTATE 0.01
+#define KD_MARKER_ROTATE 0
+#define MIN_MARKER_ROTATE -0.15
+#define MAX_MARKER_ROTATE 0.15
+
+// Controller parameters for marker linear allignment
+#define KP_MARKER_LINEAR 0.3
+#define KI_MARKER_LINEAR 0.02
+#define KD_MARKER_LINEAR 0
+#define MIN_MARKER_LINEAR -0.25
+#define MAX_MARKER_LINEAR 0.25
+
 #include "pid.h"
 #include "positionController.h"
 
@@ -84,6 +98,11 @@ private:
     PID pidController;
 
     PID linearController;
+
+    // Marker allignment controller
+    PID markerRotateController;
+
+    PID markerLinearController;
 
     // current servoing state
     servoingState currentState;

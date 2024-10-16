@@ -1,7 +1,9 @@
 #include "visualServoing.h"
 
 visualServoing::visualServoing(float imageHeight, float imageWidth) : pidController(KP_POOP, KI_POOP, KD_POOP, MIN_POOP, MAX_POOP, true),
-                                                                      linearController(KP_LINEAR, KI_LINEAR, KD_LINEAR, MIN_LINEAR, MAX_LINEAR, true)
+                                                                      linearController(KP_LINEAR, KI_LINEAR, KD_LINEAR, MIN_LINEAR, MAX_LINEAR, true),
+                                                                      markerRotateController(KP_MARKER_ROTATE, KI_MARKER_ROTATE, KD_MARKER_ROTATE, MIN_MARKER_ROTATE, MAX_MARKER_ROTATE, true),
+                                                                      markerLinearController(KP_MARKER_LINEAR, KI_MARKER_LINEAR, KD_MARKER_LINEAR, MIN_MARKER_LINEAR, MAX_MARKER_LINEAR, true)
 {
     this->imageHeight = imageHeight;
     this->imageWidth = imageWidth;
@@ -150,7 +152,10 @@ std::vector<float> visualServoing::markerRotateState(std::tuple<std::vector<doub
     std::cout << "Error in yaw: " << delta_yaw << std::endl;
 
     // Calculate the rotation speed based on the error in yaw
-    float rotation_speed = this->pidController.compute(delta_yaw, 0);
+    float rotation_speed = this->markerRotateController.compute(delta_yaw, 0);
+
+    // Print the rotation speed
+    std::cout << "Rotation speed: " << rotation_speed << std::endl;
 
     // Check if the rotation speed is small enough to move forward
     if (std::fabs(rotation_speed) < 0.05)
