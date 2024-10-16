@@ -496,7 +496,7 @@ bool perspectiveSolver::areSolutionsSimilar(const GrunertSolution &a, const Grun
     }
 
     // Compare translation vectors
-    if (cv::norm(a.translationVector - b.translationVector) > EQUAL_TOLERANCE)
+    if (cv::norm(a.translationVector - b.translationVector) > TRANSLATION_EQUAL_TOL)
     {
         return false;
     }

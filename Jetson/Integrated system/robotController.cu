@@ -604,7 +604,6 @@ void robotController::navigateToMarker()
             }
             else
             {
-                std::cout << "!" << std::endl;
                 // We are close to the marker, transition to the allign to marker state
                 this->setRobotState(RobotState::ALLIGN_TO_MARKER);
                 this->updateRobotPosition();
