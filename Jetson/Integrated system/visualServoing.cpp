@@ -142,7 +142,7 @@ std::vector<float> visualServoing::markerRotateState(std::tuple<std::vector<doub
     // We'll use the yaw to rotate the robot
 
     // Extract the yaw from the marker's estimated roll, pitch, and yaw
-    float yaw = std::get<1>(markerVectors[2]);
+    float yaw = std::get<1>(markerVectors)[2];
 
     // Calculate the error in the yaw direction
     float delta_yaw = yaw - robotCurrentPosition[2]; // Error in radians from the robot's current heading
