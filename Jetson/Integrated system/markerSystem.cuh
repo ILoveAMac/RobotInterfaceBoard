@@ -24,11 +24,11 @@
 #define KERNEL_SIZE 9
 
 // Min threshold for the Canny edge detector
-#define MIN_THRESHOLD 0.3f
+#define MIN_THRESHOLD 0.2f
 // Max threshold for the Canny edge detector
-#define MAX_THRESHOLD 0.8f
+#define MAX_THRESHOLD 0.7f
 // Non-maximum suppression lower threshold
-#define NMS_LOW 5.0f
+#define NMS_LOW 3.0f
 
 // === Grey conversion ===
 
