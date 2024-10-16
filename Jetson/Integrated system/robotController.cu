@@ -592,7 +592,7 @@ void robotController::navigateToMarker()
                 this->visualServoing.resetState();
 
                 // Move to the drop off state
-                this->setRobotState(RobotState::DROP_OFF);
+                // this->setRobotState(RobotState::DROP_OFF);
                 return;
             }
 
