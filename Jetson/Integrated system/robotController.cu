@@ -576,6 +576,7 @@ void robotController::navigateToMarker()
 
         if (!detectionAvailable)
         {
+            std::cout << "No new marker detection results yet, waiting" << std::endl;
             // No new detection results yet, wait briefly
             this->delay(DELAY_TIME);
             this->updateRobotPosition();
