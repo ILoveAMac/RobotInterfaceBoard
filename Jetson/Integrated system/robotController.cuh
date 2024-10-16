@@ -60,7 +60,9 @@ enum class RobotState
     NAVIGATE_TO_MARKER,                  // In this state the robot navigates to the marker
     ALLIGN_TO_MARKER,                    // In this state the robot alligns itself to the marker
     DROP_OFF,                            // In this state the robot drops off the poop
-    ROTATE_AWAY_FROM_MARKER              // In this state the robot rotates away from the marker
+    ROTATE_AWAY_FROM_MARKER,             // In this state the robot rotates away from the marker
+    AI_SETUP,                            // In this state the robot sets up the AI (Starting the AI thread)
+    MARKER_SETUP,                        // In this state the robot sets up the marker system (Starting the marker thread)
 };
 
 class robotController
@@ -91,6 +93,8 @@ private:
     void allignToMarker();
     void dropOff();
     void rotateAwayFromMarker();
+    void aiSetup();
+    void markerSetup();
 
     // === Helper Functions ===
     std::vector<float> getRobotPosition(); // Function uses the serial helper to get the robot position

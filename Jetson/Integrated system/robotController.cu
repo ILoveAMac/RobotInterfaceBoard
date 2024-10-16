@@ -69,8 +69,8 @@ robotController::robotController() : aiHelper(),
     navigation.setPositionController(&this->positionController);
 
     // Initialize atomic flags
-    aiThreadRunning = false;
-    markerThreadRunning = true;
+    aiThreadRunning = true;
+    markerThreadRunning = false;
     poopDetected = false;
 
     // Start the AI processing thread
@@ -138,6 +138,14 @@ void robotController::update()
         break;
     case RobotState::DROP_OFF:
         dropOff();
+    case RobotState::ROTATE_AWAY_FROM_MARKER:
+        rotateAwayFromMarker();
+        break;
+    case RobotState::AI_SETUP:
+        aiSetup();
+        break;
+    case RobotState::MARKER_SETUP:
+        markerSetup();
         break;
     default:
         break;
@@ -287,8 +295,6 @@ void robotController::moveAndDetect()
     std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
     this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
 
-    // Update the robot position
-    // this->updateRobotPosition();
     delay(DELAY_TIME);
 }
 
@@ -474,8 +480,16 @@ void robotController::moveBackToPositionBeforePickup()
         // disable reverse mode
         this->positionController.setReverseMode(false);
 
-        // Set the robot state to move and detect
-        this->setRobotState(RobotState::MOVE_AND_DETECT);
+        // Set the robot state to move and detect if the maximum number of poops have not been collected
+        if (this->numPoopsCollected < MAX_POOPS_COLLECTED)
+        {
+            this->setRobotState(RobotState::MOVE_AND_DETECT);
+        }
+        else
+        {
+            // Set the robot state to marker setup, it will then search for the marker
+            this->setRobotState(RobotState::MARKER_SETUP);
+        }
     }
     else
     {
@@ -488,11 +502,58 @@ void robotController::moveBackToPositionBeforePickup()
     }
 }
 
+// This state will be very similar to the move and detect state
+// The robot will navigate using the navigation algorithm to cover an area
+// The Robot will not detect poop but rather search for the marker
+// Once the marker is found it will transition to the navigate to marker state
 void robotController::searchForMarker()
 {
-    // Set the atomic flags such that the marker thread can run and the AI thread stops
-    markerThreadRunning = true;
-    aiThreadRunning = false;
+    // If the position controller is rotating the robot, skip marker detection
+    State pcState = positionController.getState();
+    if (pcState == State::ROTATE_TO_GOAL || pcState == State::ROTATE_TO_GOAL_ORIENTATION)
+    {
+        this->updateRobotPosition();
+        this->delay(DELAY_TIME);
+        return;
+    }
+
+    // Check if marker has been detected by the marker thread
+    if (markerDetected.load())
+    {
+        // Transition to the navigate to marker state
+        this->setRobotState(RobotState::NAVIGATE_TO_MARKER);
+
+        // Set the goal to the current position
+        this->updateRobotPosition();
+
+        this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], this->robotPosition[2]);
+        this->positionController.setState(State::IDLE);
+        return;
+    }
+
+    // if the robot is still moving dont get a new goal position
+    if (pcState == State::MOVE_TO_GOAL)
+    {
+        this->updateRobotPosition();
+        // Check if an obstacle has been detected, if so we need to call the explore function to get a new setpoint
+        if (!canMoveForwards())
+        {
+            std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
+            this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
+            this->positionController.setState(State::ROTATE_TO_GOAL_ORIENTATION);
+        }
+
+        this->delay(DELAY_TIME);
+        return;
+    }
+
+    this->updateRobotPosition();
+
+    // No marker detected, proceed with navigation
+    std::vector<float> goalPosition = this->navigation.explore(this->robotPosition, this->distanceMeasurements);
+    this->positionController.setGoal(goalPosition[0], goalPosition[1], goalPosition[2]);
+
+    delay(DELAY_TIME);
 }
 
 void robotController::navigateToMarker()
@@ -546,6 +607,34 @@ void robotController::rotateAwayFromMarker()
         this->updateRobotPosition();
         this->delay(DELAY_TIME);
     }
+}
+
+// This state simply sets the AI thread to run and the marker thread to stop
+// It then transitions to the move and detect state
+void robotController::aiSetup()
+{
+    // Set the camera angle to 160 degrees
+    this->serial.setCameraAngle(160);
+
+    markerThreadRunning = false;
+    aiThreadRunning = true;
+
+    // Set the robot state to move and detect
+    this->setRobotState(RobotState::MOVE_AND_DETECT);
+}
+
+// This state simply sets the marker thread to run and the AI thread to stop
+// It then transitions to the search for marker state
+void robotController::markerSetup()
+{
+    // Set the camera angle to 100 degrees
+    this->serial.setCameraAngle(100);
+
+    aiThreadRunning = false;
+    markerThreadRunning = true;
+
+    // Set the robot state to search for marker
+    this->setRobotState(RobotState::SEARCH_FOR_MARKER);
 }
 
 std::vector<float> robotController::getRobotPosition()
@@ -937,6 +1026,7 @@ void robotController::markerLoop()
                 this->latestFrame = preprocessedFrame.clone(); // Store the original frame
                 // Set empty vectors to indicate no marker was detected
                 this->detectedMarker = std::make_tuple(std::vector<double>(), std::vector<double>());
+                markerDetected = false;
             }
         }
 
