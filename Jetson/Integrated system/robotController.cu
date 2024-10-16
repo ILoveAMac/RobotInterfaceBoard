@@ -709,7 +709,7 @@ void robotController::aiSetup()
 void robotController::markerSetup()
 {
     // Set the camera angle to 100 degrees
-    this->serial.setCameraAngle(40);
+    this->serial.setCameraAngle(30);
 
     // Stop the AI processing thread if it is running
     if (aiThreadRunning.load())
