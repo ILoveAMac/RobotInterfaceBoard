@@ -151,21 +151,18 @@ std::vector<float> visualServoing::markerRotateState(std::tuple<std::vector<doub
     // Print the error in yaw
     std::cout << "Error in yaw: " << delta_yaw << std::endl;
 
-    // Calculate the rotation speed based on the error in yaw
-    float rotation_speed = this->markerRotateController.compute(delta_yaw, 0);
-
-    // Print the rotation speed
-    std::cout << "Rotation speed: " << rotation_speed << std::endl;
-
-    // Check if the rotation speed is small enough to move forward
-    if (std::fabs(rotation_speed) < 0.05)
+    // Check if the update is sufficiently low
+    if (std::fabs(delta_yaw) < 0.05)
     {
         this->currentState = servoingState::MOVE_FORWARD; // State transition
         return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2]};
     }
 
+    // Calculate the correction, we dont use a pid here, we use the error directly
+    float corrected_yaw = robotCurrentPosition[2] + yaw * -1.0f;
+
     // Update only the robot's theta (rotation), keep x and y the same
-    return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2] + rotation_speed};
+    return {robotCurrentPosition[0], robotCurrentPosition[1], corrected_yaw};
 }
 
 std::vector<float> visualServoing::markerMoveForwardState(std::tuple<std::vector<double>, std::vector<double>> markerVectors, std::vector<float> robotCurrentPosition, positionController &controller)
