@@ -588,10 +588,10 @@ void robotController::navigateToMarker()
 
             float distance = std::get<0>(markerVectors)[2];
             std::cout << "Distance to marker: " << distance << std::endl;
-            if (distance > 1.0f)
+            // calculate the distance to move forwards
+            float distanceToMove = distance - 1.0f;
+            if (distance > 1.0f || distanceToMove < 0.3)
             {
-                // calculate the distance to move forwards
-                float distanceToMove = distance - 1.0f;
                 // Move the robot forwards in it current orientation
                 this->updateRobotPosition();
                 std::vector<float> newRobotPosition = this->robotPosition;
@@ -605,7 +605,7 @@ void robotController::navigateToMarker()
             else
             {
                 // We are close to the marker, transition to the allign to marker state
-                // this->setRobotState(RobotState::ALLIGN_TO_MARKER);
+                this->setRobotState(RobotState::ALLIGN_TO_MARKER);
                 this->updateRobotPosition();
                 this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], this->robotPosition[2]);
                 this->updateRobotPosition();
