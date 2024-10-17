@@ -807,7 +807,12 @@ void robotController::markerSetup()
 
 void robotController::moveToDropPosition()
 {
-    // TODO!
+    if (this->positionController.getState() == State::MOVE_TO_GOAL || this->positionController.getState() == State::ROTATE_TO_GOAL || this->positionController.getState() == State::ROTATE_TO_GOAL_ORIENTATION)
+    {
+        this->updateRobotPosition();
+        this->delay(DELAY_TIME);
+        return;
+    }
 }
 
 void robotController::rotateForTranslation()
