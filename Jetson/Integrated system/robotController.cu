@@ -830,7 +830,7 @@ void robotController::rotateForTranslation()
     }
     else
     {
-        float newAngle = this->robotPosition[2] - (M_PI / 2);
+        float newAngle = this->robotPosition[2] - (M_PI / 2) + this->calculatedYaw;
         // Normalize the angle
         newAngle = fmod(newAngle + M_PI, 2 * M_PI) - M_PI;
 
@@ -858,8 +858,8 @@ void robotController::markerTranslation()
     this->updateRobotPosition();
 
     // Move the robot forwards by the distance calculated in the direction that the robot is facing
-    float new_x = this->robotPosition[0] + this->distanceToTranslate * std::cos(this->robotPosition[2]);
-    float new_y = this->robotPosition[1] + this->distanceToTranslate * std::sin(this->robotPosition[2]);
+    float new_x = this->robotPosition[0] + fabs(this->distanceToTranslate) * std::cos(this->robotPosition[2]);
+    float new_y = this->robotPosition[1] + fabs(this->distanceToTranslate) * std::sin(this->robotPosition[2]);
 
     this->positionController.setGoal(new_x, new_y, this->robotPosition[2]);
 
