@@ -686,7 +686,7 @@ void robotController::allignToMarker()
     }
 
     this->calculatedYaw = yaw;
-    this->distanceFromMarker std::get<0>(markerVectors)[2];
+    this->distanceFromMarker = std::get<0>(markerVectors)[2];
     this->distanceToTranslate = this->distanceFromMarker * std::tan(yaw);
 
     // 3. If we are not in allignment, we have to translate the robot horozontally
