@@ -823,16 +823,29 @@ void robotController::rotateForTranslation()
     {
         float newAngle = this->robotPosition[2] + (M_PI / 2) - this->calculatedYaw;
         // Normalize the angle
-        newAngle = fmod(newAngle + M_PI, 2 * M_PI) - M_PI;
+        while (newAngle > M_PI)
+        {
+            newAngle -= 2 * M_PI;
+        }
+        while (newAngle < -M_PI)
+        {
+            newAngle += 2 * M_PI;
+        }
 
         this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], newAngle);
     }
     else
     {
-        std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
-        float newAngle = this->robotPosition[2] - (M_PI / 2) + this->calculatedYaw;
+        float newAngle = this->robotPosition[2] - (M_PI / 2) - this->calculatedYaw;
         // Normalize the angle
-        newAngle = fmod(newAngle + M_PI, 2 * M_PI) + M_PI;
+        while (newAngle > M_PI)
+        {
+            newAngle -= 2 * M_PI;
+        }
+        while (newAngle < -M_PI)
+        {
+            newAngle += 2 * M_PI;
+        }
 
         this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], newAngle);
     }
