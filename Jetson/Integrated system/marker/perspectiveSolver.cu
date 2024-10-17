@@ -94,51 +94,42 @@ std::vector<double> perspectiveSolver::getEulerAngles(cv::Mat R)
 {
     std::vector<double> eulerAngles(3, 0.0); // Output: [phi, theta, psi]
 
-    // // Check if gimbal lock condition (R(2, 0) != ±1)
-    // if (fabs(R.at<double>(2, 0)) != 1)
-    // {
-    //     // General case
-    //     const double theta1 = -asin(R.at<double>(2, 0)); // theta1 = -asin(R31)
-    //     const double theta2 = P_PI - theta1;             // theta2 = pi - theta1
+    // Check if gimbal lock condition (R(2, 0) != ±1)
+    if (fabs(R.at<double>(2, 0)) != 1)
+    {
+        // General case
+        const double theta1 = -asin(R.at<double>(2, 0)); // theta1 = -asin(R31)
+        const double theta2 = P_PI - theta1;             // theta2 = pi - theta1
 
-    //     // Compute corresponding phi1 and psi1
-    //     const double psi1 = atan2(R.at<double>(2, 1) / cos(theta1), R.at<double>(2, 2) / cos(theta1));
-    //     const double phi1 = atan2(R.at<double>(1, 0) / cos(theta1), R.at<double>(0, 0) / cos(theta1));
+        // Compute corresponding phi1 and psi1
+        const double psi1 = atan2(R.at<double>(2, 1) / cos(theta1), R.at<double>(2, 2) / cos(theta1));
+        const double phi1 = atan2(R.at<double>(1, 0) / cos(theta1), R.at<double>(0, 0) / cos(theta1));
 
-    //     // Optionally, compute the second solution (phi2, psi2) using theta2
-    //     double psi2 = atan2(R.at<double>(2, 1) / cos(theta2), R.at<double>(2, 2) / cos(theta2));
-    //     double phi2 = atan2(R.at<double>(1, 0) / cos(theta2), R.at<double>(0, 0) / cos(theta2));
+        // Optionally, compute the second solution (phi2, psi2) using theta2
+        double psi2 = atan2(R.at<double>(2, 1) / cos(theta2), R.at<double>(2, 2) / cos(theta2));
+        double phi2 = atan2(R.at<double>(1, 0) / cos(theta2), R.at<double>(0, 0) / cos(theta2));
 
-    //     // Select the first set of angles (you could choose to return both solutions if needed)
-    //     eulerAngles[0] = phi2;   // phi
-    //     eulerAngles[1] = theta2; // theta
-    //     eulerAngles[2] = psi2;   // psi
-    // }
-    // else
-    // {
-    //     // Gimbal lock condition: R31 = ±1
-    //     eulerAngles[0] = 0; // Set phi to 0 as it's arbitrary in this case
+        // Select the first set of angles (you could choose to return both solutions if needed)
+        eulerAngles[0] = phi2;   // phi
+        eulerAngles[1] = theta2; // theta
+        eulerAngles[2] = psi2;   // psi
+    }
+    else
+    {
+        // Gimbal lock condition: R31 = ±1
+        eulerAngles[0] = 0; // Set phi to 0 as it's arbitrary in this case
 
-    //     if (R.at<double>(2, 0) == -1)
-    //     {
-    //         eulerAngles[1] = P_PI / 2;                                      // theta = pi/2
-    //         eulerAngles[2] = atan2(R.at<double>(0, 1), R.at<double>(0, 2)); // psi = atan2(R12, R13)
-    //     }
-    //     else
-    //     {
-    //         eulerAngles[1] = -P_PI / 2;                                       // theta = -pi/2
-    //         eulerAngles[2] = atan2(-R.at<double>(0, 1), -R.at<double>(0, 2)); // psi = atan2(-R12, -R13)
-    //     }
-    // }
-
-    // Extract components of the normal vector
-    double nx = R.at<double>(0, 2); // R13
-    double ny = R.at<double>(1, 2); // R23
-
-    // Calculate the yaw angle using atan2
-    double yaw = atan2(ny, nx);
-
-    eulerAngles[2] = yaw;
+        if (R.at<double>(2, 0) == -1)
+        {
+            eulerAngles[1] = P_PI / 2;                                      // theta = pi/2
+            eulerAngles[2] = atan2(R.at<double>(0, 1), R.at<double>(0, 2)); // psi = atan2(R12, R13)
+        }
+        else
+        {
+            eulerAngles[1] = -P_PI / 2;                                       // theta = -pi/2
+            eulerAngles[2] = atan2(-R.at<double>(0, 1), -R.at<double>(0, 2)); // psi = atan2(-R12, -R13)
+        }
+    }
 
     return eulerAngles;
 }
