@@ -677,7 +677,7 @@ void robotController::allignToMarker()
     if (!std::get<0>(markerVectors).empty())
     {
         // Get the yaw
-        yaw = std::get<0>(markerVectors)[2];
+        yaw = std::get<1>(markerVectors)[2];
     }
 
     if (yaw < 0.1745 && yaw > -0.1745)
