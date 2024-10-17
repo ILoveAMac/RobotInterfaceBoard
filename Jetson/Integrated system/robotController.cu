@@ -913,7 +913,7 @@ void robotController::rotateToFaceMarker()
     this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], newAngle);
 
     // Transition to the move to drop position state
-    this->setRobotState(RobotState::MOVE_TO_DROP_POSITION);
+    this->setRobotState(RobotState::ALLIGN_TO_MARKER);
 
     this->delay(DELAY_TIME);
     this->updateRobotPosition();
