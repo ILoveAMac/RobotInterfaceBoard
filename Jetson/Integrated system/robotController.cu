@@ -604,7 +604,7 @@ void robotController::navigateToMarker()
             std::cout << "Distance to marker: " << distance << std::endl;
             // calculate the distance to move forwards
             float distanceToMove = distance - 1.0f;
-            if (distance > 1.0f && distanceToMove > 0.3)
+            if (distance > 0.5f && distanceToMove > 0.3)
             {
                 // Move the robot forwards in it current orientation
                 this->updateRobotPosition();
@@ -822,7 +822,7 @@ void robotController::rotateForTranslation()
     // Rotate the robot in the direction of the sign of the yaw
     if (this->calculatedYaw > 0)
     {
-        float newAngle = this->robotPosition[2] + (M_PI / 2);
+        float newAngle = this->robotPosition[2] + (M_PI / 2) - this->calculatedYaw;
         // Normalize the angle
         newAngle = fmod(newAngle + M_PI, 2 * M_PI) - M_PI;
 
@@ -885,7 +885,7 @@ void robotController::rotateToFaceMarker()
 
     // Rotate the robot to face the marker
     // 90 - yaw
-    float newAngle = this->robotPosition[2] - ((M_PI / 2) - this->calculatedYaw);
+    float newAngle = this->robotPosition[2] - ((M_PI / 2) + this->calculatedYaw);
 
     // Normalize the angle, between -pi and pi
     newAngle = fmod(newAngle + M_PI, 2 * M_PI) - M_PI;
