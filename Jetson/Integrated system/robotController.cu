@@ -818,6 +818,7 @@ void robotController::moveToDropPosition()
 void robotController::rotateForTranslation()
 {
     std::cout << "Rotating for translation" << std::endl;
+    std::cout << "Yaw: " << this->calculatedYaw << std::endl;
     // Check the sign of the yaw
     // Rotate the robot in the direction of the sign of the yaw
     if (this->calculatedYaw > 0)
