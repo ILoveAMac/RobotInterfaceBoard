@@ -72,6 +72,8 @@ robotController::robotController() : aiHelper(),
     aiThreadRunning.store(false);
     markerThreadRunning.store(false);
     poopDetected.store(false);
+
+    delay(1000);
 }
 
 robotController::~robotController()
@@ -773,8 +775,8 @@ void robotController::aiSetup()
 // It then transitions to the search for marker state
 void robotController::markerSetup()
 {
-    // Set the camera angle to 100 degrees
-    this->serial.setCameraAngle(30);
+    // Set the camera angle to 10 degrees
+    this->serial.setCameraAngle(10);
 
     // Stop the AI processing thread if it is running
     if (aiThreadRunning.load())
