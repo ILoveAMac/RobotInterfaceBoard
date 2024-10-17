@@ -812,6 +812,7 @@ void robotController::moveToDropPosition()
 
 void robotController::rotateForTranslation()
 {
+    std::cout << "Rotating for translation" << std::endl;
     // Check the sign of the yaw
     // Rotate the robot in the direction of the sign of the yaw
     if (this->calculatedYaw > 0)
@@ -840,6 +841,7 @@ void robotController::rotateForTranslation()
 
 void robotController::markerTranslation()
 {
+    std::cout << "Distance to translate: " << this->distanceToTranslate << std::endl;
     // While the robot is moving to the goal or rotating, just update the robot position
     if (this->positionController.getState() == State::MOVE_TO_GOAL || this->positionController.getState() == State::ROTATE_TO_GOAL || this->positionController.getState() == State::ROTATE_TO_GOAL_ORIENTATION)
     {
@@ -865,6 +867,7 @@ void robotController::markerTranslation()
 
 void robotController::rotateToFaceMarker()
 {
+    std::cout << "Rotating to face marker" << std::endl;
     // While the robot is moving to the goal or rotating, just update the robot position
     if (this->positionController.getState() == State::MOVE_TO_GOAL || this->positionController.getState() == State::ROTATE_TO_GOAL || this->positionController.getState() == State::ROTATE_TO_GOAL_ORIENTATION)
     {
