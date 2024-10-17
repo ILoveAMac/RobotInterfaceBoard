@@ -669,6 +669,13 @@ void robotController::allignToMarker()
         return;
     }
 
+    if (std::get<0>(markerVectors).empty())
+    {
+        this->delay(DELAY_TIME);
+        this->updateRobotPosition();
+        return;
+    }
+
     // 2. Check if we are within allignment
     //    -- The yaw axes of the marker must be within say 10 degrees with respect to the robot
     //    -- If we are in allignment, we go to a state where we move the robot forwards untill we can drop off
