@@ -898,7 +898,7 @@ void robotController::rotateToFaceMarker()
 
     // Rotate the robot to face the marker
     // 90 * sign of yaw
-    float yawSign = this->calculatedYaw > 0 ? 1 : -1;
+    float yawSign = this->calculatedYaw > 0 ? -1 : 1;
     float newAngle = this->robotPosition[2] + (M_PI / 2) * yawSign;
 
     // Normalize the angle, between -pi and pi
