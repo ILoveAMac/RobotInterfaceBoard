@@ -113,9 +113,9 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
             // Define 3D points of the coordinate axes in the object's coordinate system
             std::vector<cv::Point3f> axisPoints;
             axisPoints.push_back(cv::Point3f(0, 0, 0));     // Origin
-            axisPoints.push_back(cv::Point3f(0.05f, 0, 0)); // X-axis (5 cm)
-            axisPoints.push_back(cv::Point3f(0, 0.05f, 0)); // Y-axis (5 cm)
-            axisPoints.push_back(cv::Point3f(0, 0, 0.05f)); // Z-axis (5 cm)
+            axisPoints.push_back(cv::Point3f(0.10f, 0, 0)); // X-axis (5 cm)
+            axisPoints.push_back(cv::Point3f(0, 0.10f, 0)); // Y-axis (5 cm)
+            axisPoints.push_back(cv::Point3f(0, 0, 0.10f)); // Z-axis (5 cm)
 
             // Project the 3D points onto the image plane
             std::vector<cv::Point2f> imagePoints;
