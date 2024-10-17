@@ -829,7 +829,7 @@ void robotController::rotateForTranslation()
     }
     else
     {
-        float newAngle = this->robotPosition[2] - (M_PI / 2) - this->calculatedYaw;
+        float newAngle = this->robotPosition[2] + (M_PI / 2) + this->calculatedYaw;
         // Normalize the angle
         newAngle = fmod(newAngle + M_PI, 2 * M_PI) + M_PI;
 
