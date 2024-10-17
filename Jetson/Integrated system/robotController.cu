@@ -682,7 +682,6 @@ void robotController::allignToMarker()
     //    -- 2 degrees in radians is 0.0349066
     float yaw = std::get<1>(markerVectors)[2];
     std::cout << "Yaw: " << yaw << std::endl;
-    return;
 
     if (yaw < 0.0349066 && yaw > -0.0349066)
     {
