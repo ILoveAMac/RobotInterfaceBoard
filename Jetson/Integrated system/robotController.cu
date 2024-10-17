@@ -683,7 +683,7 @@ void robotController::allignToMarker()
     if (yaw < 0.1745 && yaw > -0.1745)
     {
         // Transition to the drop off state
-        this->setRobotState(RobotState::DROP_OFF);
+        this->setRobotState(RobotState::MOVE_TO_DROP_POSITION);
         return;
     }
 
@@ -776,7 +776,7 @@ void robotController::aiSetup()
 void robotController::markerSetup()
 {
     // Set the camera angle to 10 degrees
-    this->serial.setCameraAngle(10);
+    this->serial.setCameraAngle(0);
 
     // Stop the AI processing thread if it is running
     if (aiThreadRunning.load())
