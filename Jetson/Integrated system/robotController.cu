@@ -817,6 +817,7 @@ void robotController::moveToDropPosition()
 
 void robotController::rotateForTranslation()
 {
+    std::cout << "Calculated yaw: " << this->calculatedYaw << std::endl;
     std::cout << "Rotating for translation" << std::endl;
     // Check the sign of the yaw
     // Rotate the robot in the direction of the sign of the yaw
@@ -830,7 +831,7 @@ void robotController::rotateForTranslation()
     }
     else
     {
-        float newAngle = this->robotPosition[2] + (M_PI / 2) + this->calculatedYaw;
+        float newAngle = this->robotPosition[2] - (M_PI / 2) - this->calculatedYaw;
         // Normalize the angle
         newAngle = fmod(newAngle + M_PI, 2 * M_PI) - M_PI;
 
