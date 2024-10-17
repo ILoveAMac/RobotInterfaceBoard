@@ -821,7 +821,7 @@ void robotController::rotateForTranslation()
     // Rotate the robot in the direction of the sign of the yaw
     if (this->calculatedYaw > 0)
     {
-        float newAngle = this->robotPosition[2] - (M_PI / 2) - this->calculatedYaw;
+        float newAngle = this->robotPosition[2] + (M_PI / 2) - this->calculatedYaw;
         // Normalize the angle
         newAngle = fmod(newAngle + M_PI, 2 * M_PI) - M_PI;
 
