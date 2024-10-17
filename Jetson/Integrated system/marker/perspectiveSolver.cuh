@@ -19,7 +19,7 @@
 
 // Grunert's Method Parameters
 #define REAL_TOLERANCE 1e-3
-#define EQUAL_TOLERANCE 0.05
+#define EQUAL_TOLERANCE 0.2
 #define TRANSLATION_EQUAL_TOL 0.2
 
 // Un-Distortion parameters

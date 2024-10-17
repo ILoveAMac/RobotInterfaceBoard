@@ -105,8 +105,6 @@ std::vector<double> perspectiveSolver::getEulerAngles(cv::Mat R)
         const double psi1 = atan2(R.at<double>(2, 1) / cos(theta1), R.at<double>(2, 2) / cos(theta1));
         const double phi1 = atan2(R.at<double>(1, 0) / cos(theta1), R.at<double>(0, 0) / cos(theta1));
 
-        std::cout << "psi1: " << psi1 << std::endl;
-
         // Optionally, compute the second solution (phi2, psi2) using theta2
         double psi2 = atan2(R.at<double>(2, 1) / cos(theta2), R.at<double>(2, 2) / cos(theta2));
         double phi2 = atan2(R.at<double>(1, 0) / cos(theta2), R.at<double>(0, 0) / cos(theta2));
