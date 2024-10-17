@@ -191,17 +191,17 @@ void robotController::update()
     }
 
     // Print the detected marker vectors
-    // if (!std::get<0>(markerVectors).empty())
-    // {
-    //     std::cout << "Translation: ";
-    //     printVector(std::get<0>(markerVectors));
-    //     std::cout << std::endl;
+    if (!std::get<0>(markerVectors).empty())
+    {
+        std::cout << "Translation: ";
+        printVector(std::get<0>(markerVectors));
+        std::cout << std::endl;
 
-    //     // Printing Euler Angles Vector
-    //     std::cout << "Euler Angles: ";
-    //     printVector(std::get<1>(markerVectors));
-    //     std::cout << std::endl;
-    // }
+        // Printing Euler Angles Vector
+        std::cout << "Euler Angles: ";
+        printVector(std::get<1>(markerVectors));
+        std::cout << std::endl;
+    }
 
     // Handle keyboard input or other events
     char key = cv::waitKey(1);
@@ -682,10 +682,7 @@ void robotController::allignToMarker()
     //    -- 2 degrees in radians is 0.0349066
     float yaw = std::get<1>(markerVectors)[2];
     std::cout << "Yaw: " << yaw << std::endl;
-
-    while (true)
-    {
-    }
+    return;
 
     if (yaw < 0.0349066 && yaw > -0.0349066)
     {
