@@ -681,7 +681,6 @@ void robotController::allignToMarker()
     //    -- If we are in allignment, we go to a state where we move the robot forwards untill we can drop off
     //    -- 2 degrees in radians is 0.0349066
     float yaw = std::get<1>(markerVectors)[2];
-    std::cout << "Yaw: " << yaw << std::endl;
 
     if (yaw < 0.0349066 && yaw > -0.0349066)
     {
@@ -836,7 +835,7 @@ void robotController::rotateForTranslation()
     }
     else
     {
-        float newAngle = this->robotPosition[2] - (M_PI / 2) - this->calculatedYaw;
+        float newAngle = this->robotPosition[2] - (M_PI / 2) + this->calculatedYaw;
         // Normalize the angle
         while (newAngle > M_PI)
         {
