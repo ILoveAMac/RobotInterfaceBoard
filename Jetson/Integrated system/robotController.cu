@@ -143,6 +143,18 @@ void robotController::update()
     case RobotState::MARKER_SETUP:
         markerSetup();
         break;
+    case RobotState::MOVE_TO_DROP_POSITION:
+        moveToDropPosition();
+        break;
+    case RobotState::ROTATE_FOR_TRANSLATION:
+        rotateForTranslation();
+        break;
+    case RobotState::MARKER_TRANSLATION:
+        markerTranslation();
+        break;
+    case RobotState::ROTATE_TO_FACE_MARKER:
+        rotateToFaceMarker();
+        break;
     default:
         break;
     }
@@ -633,7 +645,60 @@ void robotController::navigateToMarker()
 
 void robotController::allignToMarker()
 {
-    // TODO! Once alligned to the marker, transition to the drop off state
+    // 1. Get the lastest marker detection
+    // Check if new marker detection results are available
+    bool detectionAvailable = false;
+    std::tuple<std::vector<double>, std::vector<double>> markerVectors;
+    {
+        std::lock_guard<std::mutex> lock(dataMutex);
+        detectionAvailable = newMarkerAvailable; // A flag set by the marker thread
+        if (detectionAvailable)
+        {
+            markerVectors = detectedMarker;
+            newMarkerAvailable = false; // Reset the flag
+        }
+    }
+
+    if (!detectionAvailable)
+    {
+        // No new detection results yet, wait briefly
+        this->delay(DELAY_TIME);
+        this->updateRobotPosition();
+        return;
+    }
+
+    // 2. Check if we are within allignment
+    //    -- The yaw axes of the marker must be within say 10 degrees with respect to the robot
+    //    -- If we are in allignment, we go to a state where we move the robot forwards untill we can drop off
+    //    -- 10 degrees in radians is 0.1745
+    float yaw = 0;
+    if (!std::get<0>(markerVectors).empty())
+    {
+        // Get the yaw
+        yaw = std::get<0>(markerVectors)[2];
+    }
+
+    if (yaw < 0.1745 && yaw > -0.1745)
+    {
+        // Transition to the drop off state
+        this->setRobotState(RobotState::DROP_OFF);
+        return;
+    }
+
+    this->calculatedYaw = yaw;
+    this->distanceFromMarker std::get<0>(markerVectors)[2];
+    this->distanceToTranslate = this->distanceFromMarker * std::tan(yaw);
+
+    // 3. If we are not in allignment, we have to translate the robot horozontally
+    //    -- Translate by distanceFromMarker * tan(yaw)
+    //    -- after translation rotate by 90 - yaw degrees
+    // Translation direction is dependent on the sign of yaw
+    // Rotation direction is also dependent on sign of yaw
+    // Positive: left ccw
+    // Negative: right cw
+
+    // Transition to the rotate for translation state
+    this->setRobotState(RobotState::ROTATE_FOR_TRANSLATION);
 }
 
 void robotController::dropOff()
@@ -727,6 +792,92 @@ void robotController::markerSetup()
 
     // Set the robot state to search for marker
     this->setRobotState(RobotState::SEARCH_FOR_MARKER);
+}
+
+void robotController::moveToDropPosition()
+{
+    // TODO!
+}
+
+void robotController::rotateForTranslation()
+{
+    // Check the sign of the yaw
+    // Rotate the robot in the direction of the sign of the yaw
+    if (this->calculatedYaw > 0)
+    {
+        float newAngle = this->robotPosition[2] + (M_PI / 2);
+        // Normalize the angle
+        newAngle = fmod(newAngle + M_PI, 2 * M_PI) - M_PI;
+
+        this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], newAngle);
+    }
+    else
+    {
+        float newAngle = this->robotPosition[2] - (M_PI / 2);
+        // Normalize the angle
+        newAngle = fmod(newAngle + M_PI, 2 * M_PI) - M_PI;
+
+        this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], newAngle);
+    }
+
+    // Transition to the marker translation state
+    this->setRobotState(RobotState::MARKER_TRANSLATION);
+
+    this->delay(DELAY_TIME);
+    this->updateRobotPosition();
+}
+
+void robotController::markerTranslation()
+{
+    // While the robot is moving to the goal or rotating, just update the robot position
+    if (this->positionController.getState() == State::MOVE_TO_GOAL || this->positionController.getState() == State::ROTATE_TO_GOAL || this->positionController.getState() == State::ROTATE_TO_GOAL_ORIENTATION)
+    {
+        this->updateRobotPosition();
+        this->delay(DELAY_TIME);
+        return;
+    }
+
+    this->updateRobotPosition();
+
+    // Move the robot forwards by the distance calculated in the direction that the robot is facing
+    float new_x = this->robotPosition[0] + this->distanceToTranslate * std::cos(this->robotPosition[2]);
+    float new_y = this->robotPosition[1] + this->distanceToTranslate * std::sin(this->robotPosition[2]);
+
+    this->positionController.setGoal(new_x, new_y, this->robotPosition[2]);
+
+    // Transition to the rotate to face marker state
+    this->setRobotState(RobotState::ROTATE_TO_FACE_MARKER);
+
+    this->delay(DELAY_TIME);
+    this->updateRobotPosition();
+}
+
+void robotController::rotateToFaceMarker()
+{
+    // While the robot is moving to the goal or rotating, just update the robot position
+    if (this->positionController.getState() == State::MOVE_TO_GOAL || this->positionController.getState() == State::ROTATE_TO_GOAL || this->positionController.getState() == State::ROTATE_TO_GOAL_ORIENTATION)
+    {
+        this->updateRobotPosition();
+        this->delay(DELAY_TIME);
+        return;
+    }
+
+    this->updateRobotPosition();
+
+    // Rotate the robot to face the marker
+    // 90 - yaw
+    float newAngle = this->robotPosition[2] + (M_PI / 2) - this->calculatedYaw;
+
+    // Normalize the angle, between -pi and pi
+    newAngle = fmod(newAngle + M_PI, 2 * M_PI) - M_PI;
+
+    this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], newAngle);
+
+    // Transition to the move to drop position state
+    this->setRobotState(RobotState::MOVE_TO_DROP_POSITION);
+
+    this->delay(DELAY_TIME);
+    this->updateRobotPosition();
 }
 
 std::vector<float> robotController::getRobotPosition()
@@ -910,7 +1061,6 @@ void robotController::updateSystemStateString()
         mainRobotState = "MOVE_AND_DETECT";
         break;
     case RobotState::DETECTION_ALLIGNMENT:
-
         mainRobotState = "DETECTION_ALLIGNMENT";
         break;
     case RobotState::PICKUP:
@@ -930,6 +1080,27 @@ void robotController::updateSystemStateString()
         break;
     case RobotState::DROP_OFF:
         mainRobotState = "DROP_OFF";
+        break;
+    case RobotState::ROTATE_AWAY_FROM_MARKER:
+        mainRobotState = "ROTATE_AWAY_FROM_MARKER";
+        break;
+    case RobotState::AI_SETUP:
+        mainRobotState = "AI_SETUP";
+        break;
+    case RobotState::MARKER_SETUP:
+        mainRobotState = "MARKER_SETUP";
+        break;
+    case RobotState::MOVE_TO_DROP_POSITION:
+        mainRobotState = "MOVE_TO_DROP_POSITION";
+        break;
+    case RobotState::ROTATE_FOR_TRANSLATION:
+        mainRobotState = "ROTATE_FOR_TRANSLATION";
+        break;
+    case RobotState::MARKER_TRANSLATION:
+        mainRobotState = "MARKER_TRANSLATION";
+        break;
+    case RobotState::ROTATE_TO_FACE_MARKER:
+        mainRobotState = "ROTATE_TO_FACE_MARKER";
         break;
     default:
         mainRobotState = "UNKNOWN";

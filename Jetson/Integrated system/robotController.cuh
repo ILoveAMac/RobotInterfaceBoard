@@ -63,6 +63,10 @@ enum class RobotState
     ROTATE_AWAY_FROM_MARKER,             // In this state the robot rotates away from the marker
     AI_SETUP,                            // In this state the robot sets up the AI (Starting the AI thread)
     MARKER_SETUP,                        // In this state the robot sets up the marker system (Starting the marker thread)
+    MOVE_TO_DROP_POSITION,               // Robot is alligned with marker, moves closer for dropoff
+    ROTATE_FOR_TRANSLATION,              // Robot is not alligned and must rotate itself for translation
+    MARKER_TRANSLATION,                  // Robot is busy translating
+    ROTATE_TO_FACE_MARKER,               // Robot is rotating back such that is faces the marker again
 };
 
 class robotController
@@ -95,6 +99,10 @@ private:
     void rotateAwayFromMarker();
     void aiSetup();
     void markerSetup();
+    void moveToDropPosition();
+    void rotateForTranslation();
+    void markerTranslation();
+    void rotateToFaceMarker();
 
     // === Helper Functions ===
     std::vector<float> getRobotPosition(); // Function uses the serial helper to get the robot position
@@ -153,6 +161,10 @@ private:
     int numPoopsCollected;
 
     std::string stateString;
+
+    float calculatedYaw;
+    float distanceToTranslate;
+    float distanceFromMarker;
 
     // === Objects ===
 
