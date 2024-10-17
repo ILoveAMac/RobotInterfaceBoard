@@ -690,7 +690,9 @@ void robotController::allignToMarker()
         return;
     }
 
-    this->calculatedYaw = yaw;
+    float translate_sign = std::get<0>(markerVectors)[0] > 0 ? 1 : -1;
+
+    this->calculatedYaw = fabs(yaw) * translate_sign;
     this->distanceFromMarker = std::get<0>(markerVectors)[2];
     this->distanceToTranslate = this->distanceFromMarker * std::tan(yaw);
 
