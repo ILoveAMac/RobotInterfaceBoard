@@ -488,7 +488,7 @@ void robotController::moveBackToPositionBeforePickup()
         this->positionController.setReverseMode(false);
 
         // Set the robot state to move and detect if the maximum number of poops have not been collected
-        if (this->numPoopsCollected < MAX_POOP)
+        if (this->numPoopsCollected < MAX_POOPS)
         {
             this->setRobotState(RobotState::MOVE_AND_DETECT);
         }
