@@ -654,5 +654,5 @@ std::vector<std::vector<double>> perspectiveSolver::reorderPoints(const std::vec
                   return computeAngle(a, centroid) < computeAngle(b, centroid);
               });
 
-    return points;
+    return sortedPoints;
 }
