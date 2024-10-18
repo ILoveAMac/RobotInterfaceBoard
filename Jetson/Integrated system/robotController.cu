@@ -357,6 +357,7 @@ void robotController::detectionAllignment()
             // Go back to search pattern, it seems we have lost the poop
             std::cout << "Lost poop, going back to search pattern" << std::endl;
             // Set the goal position to the position before pickup
+            this->updateRobotPosition();
             this->positionController.setGoal(this->robotPositionBeforePickup[0],
                                              this->robotPositionBeforePickup[1],
                                              this->robotPositionBeforePickup[2]);
