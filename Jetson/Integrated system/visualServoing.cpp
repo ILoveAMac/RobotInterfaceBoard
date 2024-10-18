@@ -81,7 +81,6 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
     // disable reverse mode
     controller.setReverseMode(false);
 
-    // Check if the rotation error is small enough to move forward, if not go back to the rotation state
     // Extract bounding box center
     float x_b = boundingBox[0]; // x is the center of the box
 
@@ -90,6 +89,7 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
 
     // float rotation_speed = -0.0025 * delta_x;
     float rotation_speed = this->pidController.compute(delta_x, 0);
+    std::cout << "Rotation speed: " << rotation_speed << std::endl;
 
     // check if the rotation speed is sufficently low and transition to the vertical allignment state
     if (std::fabs(rotation_speed) > 0.06)
