@@ -570,6 +570,7 @@ void robotController::searchForMarker()
 // The robot will allign itself to the marker
 void robotController::navigateToMarker()
 {
+    this->calculatedYaw = 0;
     // Check if the position controller is busy with a rotation
     if (positionController.getState() != State::ROTATE_TO_GOAL &&
         positionController.getState() != State::ROTATE_TO_GOAL_ORIENTATION &&
@@ -681,6 +682,15 @@ void robotController::allignToMarker()
     //    -- If we are in allignment, we go to a state where we move the robot forwards untill we can drop off
     //    -- 2 degrees in radians is 0.0349066
     float yaw = std::get<1>(markerVectors)[2];
+
+    this->calculatedYaw += yaw;
+    // Take 100 samples of yaw
+    if (this->calculatedYawSamples < 100)
+    {
+        this->delay(DELAY_TIME);
+        return;
+    }
+    this->calculatedYaw /= 100;
 
     if (yaw < 0.0349066 && yaw > -0.0349066)
     {
