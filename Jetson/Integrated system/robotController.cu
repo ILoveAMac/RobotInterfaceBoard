@@ -598,6 +598,8 @@ void robotController::navigateToMarker()
             return;
         }
 
+        return;
+
         if (!std::get<0>(markerVectors).empty())
         {
             // Get the distance from the marker, if the distance is greater than 1 meter, continue moving forwards
