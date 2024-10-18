@@ -704,7 +704,7 @@ void robotController::allignToMarker()
 
     this->calculatedYaw = yaw;
     this->distanceFromMarker = std::get<0>(markerVectors)[2];
-    this->distanceToTranslate = fabs(std::get<0>(markerVectors)[0]);
+    this->distanceToTranslate = fabs(this->distanceFromMarker * tan((M_PI / 2) - yaw));
 
     // 3. If we are not in allignment, we have to translate the robot horozontally
     //    -- Translate by distanceFromMarker * tan(yaw)
@@ -909,7 +909,7 @@ void robotController::rotateToFaceMarker()
     // Rotate the robot to face the marker
     // 90 * sign of yaw
     float yawSign = this->calculatedYaw > 0 ? -1 : 1;
-    float newAngle = this->robotPosition[2] + (M_PI / 2) + this->calculatedYaw;
+    float newAngle = this->robotPosition[2] + (M_PI / 2) + this->calculatedYaw * yawSign;
 
     // Normalize the angle, between -pi and pi
     while (newAngle > M_PI)
