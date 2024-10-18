@@ -693,7 +693,7 @@ void robotController::allignToMarker()
         return;
     }
     this->calculatedYawCounter = 0;
-    this->calculatedYaw /= 100;
+    this->calculatedYaw /= 20;
 
     if (yaw < 0.0349066 && yaw > -0.0349066)
     {
@@ -908,8 +908,8 @@ void robotController::rotateToFaceMarker()
 
     // Rotate the robot to face the marker
     // 90 * sign of yaw
-    float yawSign = this->calculatedYaw > 0 ? -1 : 1;
-    float newAngle = this->robotPosition[2] + (M_PI / 2) + this->calculatedYaw * yawSign;
+    float yawSign = this->calculatedYaw > 0 ? 1 : 1;
+    float newAngle = this->robotPosition[2] + (M_PI / 2) + this->calculatedYaw;
 
     // Normalize the angle, between -pi and pi
     while (newAngle > M_PI)
