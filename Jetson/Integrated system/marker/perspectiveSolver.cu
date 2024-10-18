@@ -139,7 +139,6 @@ GrunertSolution perspectiveSolver::solveP4P(const std::vector<std::vector<double
 
     return solution;
 }
-}
 
 std::vector<double> perspectiveSolver::getEulerAngles(cv::Mat R)
 {
