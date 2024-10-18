@@ -23,7 +23,7 @@ int main()
     robotController rController;
 
     // Set the controller state
-    rController.setRobotState(RobotState::MARKER_SETUP);
+    rController.setRobotState(RobotState::AI_SETUP);
     // Main loop
     while (true)
     {

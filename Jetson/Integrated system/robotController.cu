@@ -36,9 +36,6 @@ robotController::robotController() : aiHelper(),
     // Reset the position of the robot
     this->serial.resetPosition();
 
-    // Set the camera angle
-    this->serial.setCameraAngle(-10);
-
     this->robotPosition = {0, 0, 0};
 
     this->robotPositionBeforePickup = {0, 0, 0};
@@ -682,7 +679,7 @@ void robotController::allignToMarker()
     //    -- The yaw axes of the marker must be within say 10 degrees with respect to the robot
     //    -- If we are in allignment, we go to a state where we move the robot forwards untill we can drop off
     //    -- 2 degrees in radians is 0.0349066
-    float yaw = std::get<1>(markerVectors)[1];
+    float yaw = std::get<1>(markerVectors)[2];
 
     this->calculatedYaw += yaw;
     // Take 100 samples of yaw
