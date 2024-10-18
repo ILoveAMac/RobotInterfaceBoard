@@ -692,9 +692,9 @@ void robotController::allignToMarker()
     this->calculatedYaw = yaw;
     this->distanceFromMarker = std::get<0>(markerVectors)[2];
     this->distanceToTranslate = fabs(this->distanceFromMarker * std::tan(yaw) + fabs(std::get<0>(markerVectors)[0]));
-    if (this->distanceToTranslate < 0.2)
+    if (this->distanceToTranslate < 0.3)
     {
-        this->distanceToTranslate = 0.2;
+        this->distanceToTranslate = 0.3;
     }
 
     // 3. If we are not in allignment, we have to translate the robot horozontally
@@ -915,7 +915,7 @@ void robotController::rotateToFaceMarker()
     this->positionController.setGoal(this->robotPosition[0], this->robotPosition[1], newAngle);
 
     // Transition to the move to drop position state
-    this->setRobotState(RobotState::ALLIGN_TO_MARKER);
+    this->setRobotState(RobotState::MOVE_TO_DROP_POSITION);
 
     this->delay(DELAY_TIME);
     this->updateRobotPosition();
