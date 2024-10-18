@@ -281,7 +281,7 @@ std::vector<GrunertSolution> perspectiveSolver::grunertsMethod(const std::vector
         }
 
         // Apply Horn's method to find the rotation matrix R and translation vector t
-        std::pair<cv::Mat, cv::Mat> result = horn(P_world, P_cam);
+        std::pair<cv::Mat, cv::Mat> result = arun(P_world, P_cam);
 
         // Explicitly extract R and t
         cv::Mat R = result.first;
