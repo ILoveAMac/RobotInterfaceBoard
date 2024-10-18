@@ -598,8 +598,6 @@ void robotController::navigateToMarker()
             return;
         }
 
-        return;
-
         if (!std::get<0>(markerVectors).empty())
         {
             // Get the distance from the marker, if the distance is greater than 1 meter, continue moving forwards
@@ -684,7 +682,7 @@ void robotController::allignToMarker()
     //    -- The yaw axes of the marker must be within say 10 degrees with respect to the robot
     //    -- If we are in allignment, we go to a state where we move the robot forwards untill we can drop off
     //    -- 2 degrees in radians is 0.0349066
-    float yaw = std::get<1>(markerVectors)[2];
+    float yaw = std::get<1>(markerVectors)[1];
 
     this->calculatedYaw += yaw;
     // Take 100 samples of yaw
