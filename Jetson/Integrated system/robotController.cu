@@ -604,7 +604,7 @@ void robotController::navigateToMarker()
             std::cout << "Distance to marker: " << distance << std::endl;
             // calculate the distance to move forwards
             float distanceToMove = distance - 1.0f;
-            if (distance > 0.5f && distanceToMove > 0.3)
+            if (distance > 1.0f && distanceToMove > 0.3)
             {
                 // Move the robot forwards in it current orientation
                 this->updateRobotPosition();
@@ -691,7 +691,11 @@ void robotController::allignToMarker()
 
     this->calculatedYaw = yaw;
     this->distanceFromMarker = std::get<0>(markerVectors)[2];
-    this->distanceToTranslate = this->distanceFromMarker * std::tan(yaw) + std::get<0>(markerVectors)[0];
+    this->distanceToTranslate = fabs(this->distanceFromMarker * std::tan(yaw) + fabs(std::get<0>(markerVectors)[0]));
+    if (this->distanceToTranslate < 0.2)
+    {
+        this->distanceToTranslate = 0.2;
+    }
 
     // 3. If we are not in allignment, we have to translate the robot horozontally
     //    -- Translate by distanceFromMarker * tan(yaw)
