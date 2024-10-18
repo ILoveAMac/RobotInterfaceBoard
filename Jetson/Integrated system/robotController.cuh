@@ -163,6 +163,7 @@ private:
     std::string stateString;
 
     float calculatedYaw;
+    int calculatedYawCounter;
     float distanceToTranslate;
     float distanceFromMarker;
 
