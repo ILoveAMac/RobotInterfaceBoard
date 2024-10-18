@@ -52,9 +52,9 @@ std::tuple<std::vector<double>, std::vector<double>> markerSystem::detectMarkers
         // Define world points
         std::vector<cv::Point3d> worldPoints = {
             {0.0, 0.0, 0.0},     // Point 1
-            {0.0, 0.130, 0.0},   // Point 2
-            {0.130, 0.130, 0.0}, // Point 3
-            {0.130, 0.0, 0.0},   // Point 4
+            {0.130, 0.0, 0.0},   // Point 2
+            {0.0, 0.130, 0.0},   // Point 3
+            {0.130, 0.130, 0.0}, // Point 4
         };
 
         // Prepare world points in the required format
