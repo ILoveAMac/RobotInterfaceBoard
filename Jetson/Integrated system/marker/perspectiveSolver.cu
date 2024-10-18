@@ -15,129 +15,129 @@ perspectiveSolver::~perspectiveSolver()
 GrunertSolution perspectiveSolver::solveP4P(const std::vector<std::vector<double>> &worldPoints,
                                             const std::vector<std::vector<double>> &imagePoints)
 {
-    // // Check if there are exactly 4 world points and 4 image points
-    // if (worldPoints.size() != 4 || imagePoints.size() != 4)
-    // {
-    //     throw std::invalid_argument("A unique solution requires exactly 4 points.");
-    // }
-
-    // std::vector<std::vector<double>> reorderedPoints = reorderPoints(imagePoints);
-
-    // std::vector<std::vector<double>> undistortedNormalizedPoints = removeDistortion(reorderedPoints);
-
-    // // Compute unit direction vectors from undistorted normalized coordinates
-    // std::vector<std::vector<double>> directionVectors;
-    // for (const auto &point : undistortedNormalizedPoints)
-    // {
-    //     double x_u = point.at(0);
-    //     double y_u = point.at(1);
-    //     double z_u = 1.0;
-    //     double norm = std::sqrt(x_u * x_u + y_u * y_u + z_u * z_u);
-    //     double j_x = x_u / norm;
-    //     double j_y = y_u / norm;
-    //     double j_z = z_u / norm;
-    //     directionVectors.push_back({j_x, j_y, j_z});
-    // }
-
-    // // Generate all combinations of three points out of four
-    // std::vector<std::array<int, 3>> combinations = {
-    //     {0, 1, 2}, {0, 1, 3}, {0, 2, 3}, {1, 2, 3}};
-
-    // std::vector<GrunertSolution> solutionSets[4];
-
-    // for (int i = 0; i < static_cast<int>(combinations.size()); ++i)
-    // {
-    //     std::vector<std::vector<double>> subsetWorldPoints;
-    //     std::vector<std::vector<double>> subsetDirectionVectors;
-
-    //     for (int idx : combinations[i])
-    //     {
-    //         subsetWorldPoints.push_back(worldPoints[idx]);
-    //         subsetDirectionVectors.push_back(directionVectors[idx]);
-    //     }
-
-    //     solutionSets[i] = grunertsMethod(subsetWorldPoints, subsetDirectionVectors);
-    // }
-
-    // // Now compare all solution sets to find overlapping solutions
-    // GrunertSolution overlappingSolution;
-    // bool foundOverlap = false;
-
-    // for (int i = 0; i < 4 && !foundOverlap; ++i)
-    // {
-    //     for (int j = i + 1; j < 4 && !foundOverlap; ++j)
-    //     {
-    //         for (const auto &sol1 : solutionSets[i])
-    //         {
-    //             for (const auto &sol2 : solutionSets[j])
-    //             {
-    //                 if (areSolutionsSimilar(sol1, sol2))
-    //                 {
-    //                     overlappingSolution = sol1;
-    //                     foundOverlap = true;
-    //                     break;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-    // if (!foundOverlap)
-    // {
-    //     // throw std::runtime_error("No overlapping solution found.");
-    // }
-
-    // return overlappingSolution;
-
     // Check if there are exactly 4 world points and 4 image points
     if (worldPoints.size() != 4 || imagePoints.size() != 4)
     {
         throw std::invalid_argument("A unique solution requires exactly 4 points.");
     }
 
-    // Convert world points and image points to OpenCV Mat format
-    cv::Mat worldMat(4, 3, CV_64F);
-    cv::Mat imageMat(4, 2, CV_64F);
+    std::vector<std::vector<double>> reorderedPoints = reorderPoints(imagePoints);
 
-    for (int i = 0; i < 4; ++i)
+    std::vector<std::vector<double>> undistortedNormalizedPoints = removeDistortion(reorderedPoints);
+
+    // Compute unit direction vectors from undistorted normalized coordinates
+    std::vector<std::vector<double>> directionVectors;
+    for (const auto &point : undistortedNormalizedPoints)
     {
-        worldMat.at<double>(i, 0) = worldPoints[i][0];
-        worldMat.at<double>(i, 1) = worldPoints[i][1];
-        worldMat.at<double>(i, 2) = worldPoints[i][2];
-
-        imageMat.at<double>(i, 0) = imagePoints[i][0];
-        imageMat.at<double>(i, 1) = imagePoints[i][1];
+        double x_u = point.at(0);
+        double y_u = point.at(1);
+        double z_u = 1.0;
+        double norm = std::sqrt(x_u * x_u + y_u * y_u + z_u * z_u);
+        double j_x = x_u / norm;
+        double j_y = y_u / norm;
+        double j_z = z_u / norm;
+        directionVectors.push_back({j_x, j_y, j_z});
     }
 
-    // Camera intrinsic matrix K
-    cv::Mat cameraMatrix = (cv::Mat_<double>(3, 3) << FX, 0, CX,
-                            0, FY, CY,
-                            0, 0, 1);
+    // Generate all combinations of three points out of four
+    std::vector<std::array<int, 3>> combinations = {
+        {0, 1, 2}, {0, 1, 3}, {0, 2, 3}, {1, 2, 3}};
 
-    // Distortion coefficients
-    cv::Mat distCoeffs = (cv::Mat_<double>(1, 5) << K1, K2, 0, 0, 0);
+    std::vector<GrunertSolution> solutionSets[4];
 
-    // Output rotation and translation vectors
-    cv::Mat rvec, tvec;
-
-    // Use OpenCV solvePnP to find the pose
-    bool success = cv::solvePnP(worldMat, imageMat, cameraMatrix, distCoeffs, rvec, tvec);
-
-    if (!success)
+    for (int i = 0; i < static_cast<int>(combinations.size()); ++i)
     {
-        throw std::runtime_error("solvePnP failed to find a solution.");
+        std::vector<std::vector<double>> subsetWorldPoints;
+        std::vector<std::vector<double>> subsetDirectionVectors;
+
+        for (int idx : combinations[i])
+        {
+            subsetWorldPoints.push_back(worldPoints[idx]);
+            subsetDirectionVectors.push_back(directionVectors[idx]);
+        }
+
+        solutionSets[i] = grunertsMethod(subsetWorldPoints, subsetDirectionVectors);
     }
 
-    // Convert rotation vector to rotation matrix
-    cv::Mat rotationMatrix;
-    cv::Rodrigues(rvec, rotationMatrix);
+    // Now compare all solution sets to find overlapping solutions
+    GrunertSolution overlappingSolution;
+    bool foundOverlap = false;
 
-    // Populate the GrunertSolution struct
-    GrunertSolution solution;
-    solution.rotationMatrix = rotationMatrix;
-    solution.translationVector = tvec;
+    for (int i = 0; i < 4 && !foundOverlap; ++i)
+    {
+        for (int j = i + 1; j < 4 && !foundOverlap; ++j)
+        {
+            for (const auto &sol1 : solutionSets[i])
+            {
+                for (const auto &sol2 : solutionSets[j])
+                {
+                    if (areSolutionsSimilar(sol1, sol2))
+                    {
+                        overlappingSolution = sol1;
+                        foundOverlap = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
-    return solution;
+    if (!foundOverlap)
+    {
+        // throw std::runtime_error("No overlapping solution found.");
+    }
+
+    return overlappingSolution;
+
+    // // Check if there are exactly 4 world points and 4 image points
+    // if (worldPoints.size() != 4 || imagePoints.size() != 4)
+    // {
+    //     throw std::invalid_argument("A unique solution requires exactly 4 points.");
+    // }
+
+    // // Convert world points and image points to OpenCV Mat format
+    // cv::Mat worldMat(4, 3, CV_64F);
+    // cv::Mat imageMat(4, 2, CV_64F);
+
+    // for (int i = 0; i < 4; ++i)
+    // {
+    //     worldMat.at<double>(i, 0) = worldPoints[i][0];
+    //     worldMat.at<double>(i, 1) = worldPoints[i][1];
+    //     worldMat.at<double>(i, 2) = worldPoints[i][2];
+
+    //     imageMat.at<double>(i, 0) = imagePoints[i][0];
+    //     imageMat.at<double>(i, 1) = imagePoints[i][1];
+    // }
+
+    // // Camera intrinsic matrix K
+    // cv::Mat cameraMatrix = (cv::Mat_<double>(3, 3) << FX, 0, CX,
+    //                         0, FY, CY,
+    //                         0, 0, 1);
+
+    // // Distortion coefficients
+    // cv::Mat distCoeffs = (cv::Mat_<double>(1, 5) << K1, K2, 0, 0, 0);
+
+    // // Output rotation and translation vectors
+    // cv::Mat rvec, tvec;
+
+    // // Use OpenCV solvePnP to find the pose
+    // bool success = cv::solvePnP(worldMat, imageMat, cameraMatrix, distCoeffs, rvec, tvec);
+
+    // if (!success)
+    // {
+    //     throw std::runtime_error("solvePnP failed to find a solution.");
+    // }
+
+    // // Convert rotation vector to rotation matrix
+    // cv::Mat rotationMatrix;
+    // cv::Rodrigues(rvec, rotationMatrix);
+
+    // // Populate the GrunertSolution struct
+    // GrunertSolution solution;
+    // solution.rotationMatrix = rotationMatrix;
+    // solution.translationVector = tvec;
+
+    // return solution;
 }
 
 std::vector<double> perspectiveSolver::getEulerAngles(cv::Mat R)
