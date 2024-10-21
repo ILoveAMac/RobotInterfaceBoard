@@ -54,6 +54,33 @@ std::vector<float> visualServoing::calculateControlPositionMarker(std::tuple<std
 
 std::vector<float> visualServoing::rotateState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition)
 {
+    controller.setReverseMode(false);
+
+    // ========== FORWARD CHECK ==========
+    // Check if we are tool close, if so move back
+    // Too close is when the error for forward movement is negative
+    float y_b = boundingBox[1];   // y is the vertical center of the box
+    y_b += boundingBox[2] / 2.0f; // We add half the width of the bounding box to the center to get the front of the box
+
+    // Calculate the error in the y direction
+    float delta_y = y_b - (CY_VS + 30); // Error in pixels from the image center vertically
+
+    // Calculate the forward/backward speed based on delta_y
+    // Here we will use the pixel difference for now, but eventually, you'll switch to a distance-based control
+    float forward_speed = this->linearController.compute(delta_y, 0);
+
+    if (forward_speed < 0 && std::fabs(forward_speed) > 0.2)
+    {
+        controller.setReverseMode(true);
+        float theta = robotCurrentPosition[2]; // Assume theta is the third element (in radians)
+        float new_x = robotCurrentPosition[0] + forward_speed * std::cos(theta);
+        float new_y = robotCurrentPosition[1] + forward_speed * std::sin(theta);
+
+        // Return the updated position with the new x, y, and unchanged theta
+        return {new_x, new_y, theta};
+    }
+
+    // ========== ROTATION CHECK ==========
     // Extract bounding box center
     float x_b = boundingBox[0]; // x is the center of the box
 
@@ -78,6 +105,8 @@ std::vector<float> visualServoing::rotateState(std::vector<float> boundingBox, s
 std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, positionController &controller)
 {
     std::cout << "Moving forward" << std::endl;
+
+    // ========== ROTATION CHECK ==========
     // disable reverse mode
     controller.setReverseMode(false);
 
@@ -98,12 +127,13 @@ std::vector<float> visualServoing::moveForwardState(std::vector<float> boundingB
         return {robotCurrentPosition[0], robotCurrentPosition[1], robotCurrentPosition[2]};
     }
 
+    // ========== FORWARD CHECK ==========
     // Extract bounding box center
     float y_b = boundingBox[1];   // y is the vertical center of the box
     y_b += boundingBox[2] / 2.0f; // We add half the width of the bounding box to the center to get the front of the box
 
     // Calculate the error in the y direction
-    float delta_y = y_b - (CY_VS + 20); // Error in pixels from the image center vertically
+    float delta_y = y_b - (CY_VS + 30); // Error in pixels from the image center vertically
 
     // Calculate the forward/backward speed based on delta_y
     // Here we will use the pixel difference for now, but eventually, you'll switch to a distance-based control
