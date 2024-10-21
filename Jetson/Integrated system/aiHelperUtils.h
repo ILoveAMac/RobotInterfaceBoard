@@ -11,7 +11,7 @@
 
 #define NUM_BOXES 2
 #define GRID_SIZE 7
-#define CONF_THRESH 0.4
+#define CONF_THRESH 0.5
 #define IOU_NMS_THRESH 0.4
 #define IMG_HEIGHT 448
 #define IMG_WIDTH 448
