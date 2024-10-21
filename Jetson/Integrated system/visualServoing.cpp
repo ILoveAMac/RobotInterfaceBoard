@@ -19,7 +19,7 @@ std::vector<float> visualServoing::calculateControlPosition(std::vector<float> b
     switch (this->currentState)
     {
     case servoingState::ROTATE:
-        return this->rotateState(boundingBox, robotCurrentPosition);
+        return this->rotateState(boundingBox, robotCurrentPosition, controller);
         break;
     case servoingState::MOVE_FORWARD:
         return this->moveForwardState(boundingBox, robotCurrentPosition, controller);
@@ -38,7 +38,7 @@ std::vector<float> visualServoing::calculateControlPositionMarker(std::tuple<std
     switch (this->currentState)
     {
     case servoingState::ROTATE:
-        return this->markerRotateState(markerVectors, robotCurrentPosition, positionController & controller);
+        return this->markerRotateState(markerVectors, robotCurrentPosition, controller);
         break;
     case servoingState::MOVE_FORWARD:
         return this->markerMoveForwardState(markerVectors, robotCurrentPosition, controller);
