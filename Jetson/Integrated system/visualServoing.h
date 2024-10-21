@@ -80,7 +80,7 @@ public:
 
 private:
     // Function for angular allignment
-    std::vector<float> rotateState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition);
+    std::vector<float> rotateState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, positionController &controller);
 
     // function for linear allignment
     std::vector<float> moveForwardState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, positionController &controller);

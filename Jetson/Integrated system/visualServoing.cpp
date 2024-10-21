@@ -38,7 +38,7 @@ std::vector<float> visualServoing::calculateControlPositionMarker(std::tuple<std
     switch (this->currentState)
     {
     case servoingState::ROTATE:
-        return this->markerRotateState(markerVectors, robotCurrentPosition);
+        return this->markerRotateState(markerVectors, robotCurrentPosition, positionController & controller);
         break;
     case servoingState::MOVE_FORWARD:
         return this->markerMoveForwardState(markerVectors, robotCurrentPosition, controller);
@@ -52,7 +52,7 @@ std::vector<float> visualServoing::calculateControlPositionMarker(std::tuple<std
     }
 }
 
-std::vector<float> visualServoing::rotateState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition)
+std::vector<float> visualServoing::rotateState(std::vector<float> boundingBox, std::vector<float> robotCurrentPosition, positionController &controller)
 {
     controller.setReverseMode(false);
 
