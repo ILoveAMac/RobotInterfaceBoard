@@ -316,6 +316,8 @@ void robotController::detectionAllignment()
         positionController.getState() != State::ROTATE_TO_GOAL_ORIENTATION &&
         positionController.getState() != State::MOVE_TO_GOAL)
     {
+        this->positionController.setReverseMode(false);
+
         // Check if new AI detection results are available
         bool detectionAvailable = false;
         std::vector<std::vector<float>> bboxes;
@@ -397,6 +399,7 @@ void robotController::detectionAllignment()
             else
             {
                 // Back up by 20 cm
+                this->positionController.setReverseMode(true);
                 float new_x = this->robotPosition[0] - 0.21 * std::cos(this->robotPosition[2]);
                 float new_y = this->robotPosition[1] - 0.21 * std::sin(this->robotPosition[2]);
                 this->positionController.setGoal(new_x, new_y, this->robotPosition[2]);
