@@ -1242,6 +1242,8 @@ std::vector<float> robotController::computeBoundingBoxAverage()
     averageBox[2] /= this->boxesToAverage.size();
     averageBox[3] /= this->boxesToAverage.size();
     averageBox[4] /= this->boxesToAverage.size();
+
+    return averageBox;
 }
 
 void robotController::delay(int ms)
