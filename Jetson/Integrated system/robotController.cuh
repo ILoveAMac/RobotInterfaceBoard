@@ -21,7 +21,10 @@
 #include "markerSystem.cuh"
 
 // Max Poops that the robot can collect
-#define MAX_POOPS 2
+#define MAX_POOPS 3
+
+// Detections average, the number of detections that are averaged before poop is collected
+#define DETECTION_AVERAGE 5
 
 // Delay Time (ms)
 #define DELAY_TIME 25
@@ -120,6 +123,12 @@ private:
     void openBucket(); // Function opens the bucket for 5 seconds then closes it
 
     void updateSystemStateString(); // Function updates the system state string
+
+    // Bounding box average variables
+    std::vector<std::vector<float>> boxesToAverage;
+
+    // Function to compute the average of the bounding boxes
+    std::vector<float> computeBoundingBoxAverage();
 
     void delay(int ms);
 

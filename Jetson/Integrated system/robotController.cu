@@ -70,6 +70,8 @@ robotController::robotController() : aiHelper(),
     markerThreadRunning.store(false);
     poopDetected.store(false);
 
+    boxesToAverage = std::vector<std::vector<float>>();
+
     delay(1000);
 }
 
@@ -337,6 +339,22 @@ void robotController::detectionAllignment()
         {
             std::vector<float> bbox = aiHelperUtils::getBoindingBoxWithLargestArea(bboxes);
 
+            // Puch the bounding box to the list of boxes to average
+            this->boxesToAverage.push_back(bbox);
+
+            // If we do not have 5 boxes to average yet, update the robot position and return
+            if (this->boxesToAverage.size() < 5)
+            {
+                this->updateRobotPosition();
+                this->delay(DELAY_TIME);
+                return;
+            }
+
+            //  Set the bbox to the average of the last 5 boxes
+            bbox = this->computeBoundingBoxAverage();
+            // Clear the boxes to average
+            this->boxesToAverage.clear();
+
             this->updateRobotPosition();
             // Use the visual servoing algorithm to compute the updated desired robot position and orientation
             std::vector<float> updatedPosition = this->visualServoing.calculateControlPosition(bbox, this->robotPosition, this->positionController);
@@ -356,6 +374,8 @@ void robotController::detectionAllignment()
         }
         else
         {
+            this->boxesToAverage.clear();
+
             // Go back to search pattern, it seems we have lost the poop
             std::cout << "Lost poop, going back to search pattern" << std::endl;
             // Set the goal position to the position before pickup
@@ -1195,6 +1215,33 @@ void robotController::updateSystemStateString()
     }
 
     this->stateString = "RS: " + mainRobotState + " | PC: " + positionControllerState + " | VS: " + visualServoingState;
+}
+
+std::vector<float> robotController::computeBoundingBoxAverage()
+{
+    // Use this->boxesToAverage, and compute a new box that is the average of all the boxes
+    // There will always be at least one box in this->boxesToAverage
+    // Format is [x, y, w, h, confidence]
+
+    // Initialize the average box
+    std::vector<float> averageBox = this->boxesToAverage[0];
+
+    // Loop through the rest of the boxes and add them to the average box
+    for (int i = 1; i < this->boxesToAverage.size(); i++)
+    {
+        averageBox[0] += this->boxesToAverage[i][0];
+        averageBox[1] += this->boxesToAverage[i][1];
+        averageBox[2] += this->boxesToAverage[i][2];
+        averageBox[3] += this->boxesToAverage[i][3];
+        averageBox[4] += this->boxesToAverage[i][4];
+    }
+
+    // Divide by the number of boxes to get the average
+    averageBox[0] /= this->boxesToAverage.size();
+    averageBox[1] /= this->boxesToAverage.size();
+    averageBox[2] /= this->boxesToAverage.size();
+    averageBox[3] /= this->boxesToAverage.size();
+    averageBox[4] /= this->boxesToAverage.size();
 }
 
 void robotController::delay(int ms)
