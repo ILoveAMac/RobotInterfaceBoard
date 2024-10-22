@@ -347,7 +347,6 @@ void robotController::detectionAllignment()
             // If we do not have 5 boxes to average yet, update the robot position and return
             if (this->boxesToAverage.size() < 2)
             {
-                this->updateRobotPosition();
                 this->delay(DELAY_TIME);
                 return;
             }
