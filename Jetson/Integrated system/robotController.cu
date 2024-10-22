@@ -394,6 +394,13 @@ void robotController::detectionAllignment()
                 this->poopLostCounter = 0;
                 return;
             }
+            else
+            {
+                // Back up by 20 cm
+                float new_x = this->robotPosition[0] - 0.21 * std::cos(this->robotPosition[2]);
+                float new_y = this->robotPosition[1] - 0.21 * std::sin(this->robotPosition[2]);
+                this->positionController.setGoal(new_x, new_y, this->robotPosition[2]);
+            }
 
             // Else simply update the robot position
         }
