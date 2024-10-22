@@ -24,7 +24,10 @@
 #define MAX_POOPS 3
 
 // Detections average, the number of detections that are averaged before poop is collected
-#define DETECTION_AVERAGE 5
+#define DETECTION_AVERAGE 2
+
+// Poop lost counter, the number of frames the poop can be lost before the robot moves back to the position before the pickup
+#define POOP_LOST_COUNTER 5
 
 // Delay Time (ms)
 #define DELAY_TIME 25
@@ -129,6 +132,8 @@ private:
 
     // Function to compute the average of the bounding boxes
     std::vector<float> computeBoundingBoxAverage();
+
+    int poopLostCounter;
 
     void delay(int ms);
 

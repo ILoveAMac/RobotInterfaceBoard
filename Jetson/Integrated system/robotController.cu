@@ -72,6 +72,8 @@ robotController::robotController() : aiHelper(),
 
     boxesToAverage = std::vector<std::vector<float>>();
 
+    poopLostCounter = 0;
+
     delay(1000);
 }
 
@@ -370,21 +372,31 @@ void robotController::detectionAllignment()
 
             // Set the setpoint for the position controller
             this->positionController.setGoal(updatedPosition[0], updatedPosition[1], updatedPosition[2]);
-            this->updateRobotPosition();
         }
         else
         {
             this->boxesToAverage.clear();
 
-            // Go back to search pattern, it seems we have lost the poop
-            std::cout << "Lost poop, going back to search pattern" << std::endl;
-            // Set the goal position to the position before pickup
-            this->updateRobotPosition();
-            this->positionController.setGoal(this->robotPositionBeforePickup[0],
-                                             this->robotPositionBeforePickup[1],
-                                             this->robotPositionBeforePickup[2]);
+            // Check if the poop has been lost for more than 5 frames
+            this->poopLostCounter++;
 
-            this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
+            if (this->poopLostCounter > 5)
+            {
+                // Go back to search pattern, it seems we have lost the poop
+                std::cout << "Lost poop, going back to search pattern" << std::endl;
+                // Set the goal position to the position before pickup
+                this->updateRobotPosition();
+                this->positionController.setGoal(this->robotPositionBeforePickup[0],
+                                                 this->robotPositionBeforePickup[1],
+                                                 this->robotPositionBeforePickup[2]);
+
+                this->setRobotState(RobotState::MOVE_BACK_TO_POSITION_BEFORE_PICKUP);
+
+                this->poopLostCounter = 0;
+                return;
+            }
+
+            // Else simply update the robot position
         }
 
         // Update the robot position
