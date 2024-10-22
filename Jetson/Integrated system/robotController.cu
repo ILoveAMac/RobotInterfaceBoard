@@ -337,6 +337,7 @@ void robotController::detectionAllignment()
         {
             std::vector<float> bbox = aiHelperUtils::getBoindingBoxWithLargestArea(bboxes);
 
+            this->updateRobotPosition();
             // Use the visual servoing algorithm to compute the updated desired robot position and orientation
             std::vector<float> updatedPosition = this->visualServoing.calculateControlPosition(bbox, this->robotPosition, this->positionController);
 
@@ -351,6 +352,7 @@ void robotController::detectionAllignment()
 
             // Set the setpoint for the position controller
             this->positionController.setGoal(updatedPosition[0], updatedPosition[1], updatedPosition[2]);
+            this->updateRobotPosition();
         }
         else
         {
